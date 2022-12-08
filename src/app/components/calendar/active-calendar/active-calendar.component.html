@@ -1,0 +1,19 @@
+<div class="header">
+    <button mat-raised-button class="modify-calendar" (click)="addMoreEventClick()">
+        <mat-icon style="margin-right: 3%;">add</mat-icon>
+        <span style="font-size: 15px;">Add Event</span>
+    </button> 
+</div>
+<div class="calendar">
+    <div class="active-calendar">
+        <mat-card>
+            <mat-card-content>
+                    <full-calendar 
+                    [options]='calendarOptions'>
+                    </full-calendar> 
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+</div>   
+<router-outlet></router-outlet>

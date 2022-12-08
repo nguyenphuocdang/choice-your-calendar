@@ -1,0 +1,22 @@
+<mat-toolbar style ="background-color:#EBFFFB">
+  <span class = 'title'>
+    <img src = 'assets/images/logo.png' class = 'logo'>
+    <div style="color: #0902CB; font-size: larger; margin-top: 10px;">
+      TimeChoice
+    </div>
+  </span>
+  
+  <div class = 'spacer'>
+
+  </div> 
+    <!-- <div class = 'drop-down' *ngIf='isUserLoggedIn'>
+        Welcome back, {{userName}}
+        <img src = 'assets/images/profile.png' class = 'profile-picture'>
+    </div> -->
+
+    <a mat-raised-button (click)="onLoginPopup()" class = 'login-button' *ngIf='!isUserLoggedIn'
+    >Login</a> 
+    <a mat-raised-button (click)="onAuthPopup()" class = 'auth-button' *ngIf='!isUserLoggedIn'>Register</a> 
+
+</mat-toolbar>
+

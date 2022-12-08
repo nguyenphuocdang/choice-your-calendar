@@ -1,0 +1,35 @@
+<div class="public-calendar" style="width: 100%; height: 70%;">
+    <h2 mat-dialog-title style="width: 100%">{{modalTitle}}</h2>
+    <div>
+        <mat-card>
+            <mat-card-content>
+                <!-- <span>Choose Start Date:</span> -->
+                <div class = 'start-date' style="margin-bottom: 2%; margin-top: 2%;">
+                    <mat-form-field color="accent" appearance="fill" style="width: 100%">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="picker"/>
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <!-- <span>Choose End Date:</span> -->
+                <div class="end-date" style="margin-top: 5%">
+                    <mat-form-field color="accent" appearance="fill" style="width: 100%">
+                        <mat-label>End Date</mat-label>
+                        <input matInput [matDatepicker]="picker2"/>
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div style="display: flex; flex-direction: row; gap: 10%; justify-content: center; margin-top: 5%;">
+        <button mat-flat-button color="primary">Submit</button>
+        <button mat-flat-button color="warn">Cancel</button>
+    </div>
+</div>

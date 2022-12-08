@@ -1,0 +1,76 @@
+<div class="shared-calendars">
+
+    <div class="content">
+        <mat-card>
+            <mat-card-content>
+                <div *ngIf="sharedCalendars.length > 0" class="selected-calendar">
+                    <h1 [(ngModel)]="selectedCalendar" ngDefaultControl style="font-weight: 500; width: 100%">
+                        {{selectedCalendar.title}}
+                    </h1>
+
+                    <div class = 'selected-calendar-element'>
+                        <mat-icon>perm_contact_calendar</mat-icon>
+                        <span>To: {{selectedCalendar.ownerNotifyEmail}}</span>
+                    </div>
+
+                    <div class = 'selected-calendar-element'>
+                        <mat-icon>schedule</mat-icon>
+                        <span>At: {{selectedCalendar.notifyDate}}</span>
+                    </div>
+
+                    <div class = 'selected-calendar-element'>
+                        <span>
+                            <button mat-icon-button [cdkCopyToClipboard]="selectedCalendar.notifyLink" style="width: fit-content">
+                                <mat-icon>filter_none</mat-icon>
+                            </button>
+                        </span>
+                        <span>Partner's calendar URL for booking: 
+                            <a href="{{selectedCalendar.notifyLink}}" #url>
+                            {{selectedCalendar.notifyLink}}</a>
+                        </span> 
+                    </div>
+
+                    <div>
+                        <img src = 'assets/images/slogan.png' class="image">
+                    </div>
+
+
+                </div>
+
+                <div *ngIf="sharedCalendars.length == 0 && hasNoData" style="margin: auto">
+                    <div class="card text-center" style="width: 90%; margin: auto; border: 2px solid #bba9a9;" id="errorMessage">
+                        <h1> You haven't receive any shared calendar yet </h1>
+                    </div>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class="notification">
+        <mat-card>
+            <mat-card-content>
+                <div class="title">
+                    Shared With Me
+                </div>
+                <div *ngIf="sharedCalendars.length > 0">
+                    <ul style="list-style-type: none; padding-left: 3%;">
+                        <li *ngFor="let calendar of sharedCalendars; let i = index">
+                            <img src = 'assets/images/calendar-icon.png'>
+                            <div class="notification-content" (click)="onClickNotification(i)">
+                                <span style="font-weight: 500;">{{calendar.notifyDate}}</span>
+                                <span>{{calendar.title}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div *ngIf="sharedCalendars.length == 0 && hasNoData">
+                    <div class="card text-center" style="padding:20px; width: 88%; margin-top: 5%;" id="errorMessage">
+                        <h1> You haven't receive any shared calendar yet </h1>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

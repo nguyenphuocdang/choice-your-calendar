@@ -1,0 +1,104 @@
+<div class="calendar"> 
+  <div class="calendar-list">
+    <mat-card>
+      <mat-card-content>
+        <div class="calendar-table">
+          <div class="mat-elevation-z1">  
+          
+            <div class='filter'>
+              <div style="margin: auto 0 auto 0">
+                <button mat-button [matMenuTriggerFor]="menu">
+                  <mat-icon>sort</mat-icon>
+                  Sort
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>All</button>
+                  <button mat-menu-item>Latest Created</button>
+                </mat-menu>
+              </div>
+
+              <div>
+                <mat-paginator 
+                #matPaginator
+                [length]="totalElements"
+                [pageSizeOptions]="pageSizeOptions"
+                (page)="onChangedPage($event)"
+                aria-label="Select page"
+              >
+              </mat-paginator>
+              </div>
+            </div>
+
+            <table mat-table [dataSource]="dataSource" matSort>
+              <!-- ID Column -->
+              <ng-container matColumnDef="ID">
+                <th mat-header-cell *matHeaderCellDef>No.</th>
+                <td mat-cell *matCellDef="let element">{{element.id}}</td>
+              </ng-container>
+        
+                <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element">{{element.name}}</td>
+              </ng-container>
+        
+                <!-- Brief Column -->
+              <ng-container matColumnDef="brief">
+                <th mat-header-cell *matHeaderCellDef>Brief</th>
+                <td mat-cell *matCellDef="let element">{{element.brief}}</td>
+              </ng-container> 
+      
+                <!-- View Column -->        
+              <ng-container matColumnDef="view">
+                <th mat-header-cell *matHeaderCellDef> View Details</th>
+                <td mat-cell *matCellDef="let element" class="left-text">  
+                    <button mat-stroked-button color="primary" (click)="viewScheduleDetail(element.id)"> 
+                      <mat-icon>open_in_new</mat-icon>
+                    </button>
+                </td>
+              </ng-container>
+      
+              <!-- <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef> Delete</th>
+                <td mat-cell *matCellDef="let element" class="left-text">  
+                  <button mat-stroked-button color="warn"> 
+                    <mat-icon>delete_outline</mat-icon>
+                    Remove
+                  </button>
+                </td>
+              </ng-container> -->
+      
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status</th>
+                <td mat-cell *matCellDef="let element" class="left-text">  
+                  <!-- <button mat-stroked-button style="color: #1CBCFF;"> 
+                    <mat-icon>public</mat-icon>
+                    Public
+                  </button> -->
+                  {{element.active}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="startDate">
+                <th mat-header-cell *matHeaderCellDef>Start Date</th>
+                <td mat-cell *matCellDef="let element">{{element.effectiveDate}}</td>
+              </ng-container> 
+
+              <ng-container matColumnDef="endDate">
+                <th mat-header-cell *matHeaderCellDef>End Date</th>
+                <td mat-cell *matCellDef="let element">{{element.expiriedDate}}</td>
+              </ng-container> 
+      
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              
+            </table>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card> 
+  </div>
+  <!-- <button mat-raised-button class = 'create-schedule-button' (click)="onCreateSchedulePopup()">Create Schedule</button>  -->
+</div>
+<!-- <router-outlet></router-outlet> -->

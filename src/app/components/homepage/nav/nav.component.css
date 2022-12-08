@@ -1,0 +1,39 @@
+.login-button
+{
+    margin-right: 20px;
+    background-color: #5BF985;
+    color: #202421;
+}
+.auth-button
+{
+    background-color: #F68AB2;
+    color: #202421;
+}
+.spacer
+{
+    flex: 1 1 auto;
+}
+.logo
+{
+    width: 8%;
+    height: 8%;
+}
+.title
+{
+    display: flex;
+    flex-direction: row; 
+}
+
+.profile-picture
+{
+    width: 4%;
+    height: 4%;
+    align-items: flex-end;
+}
+
+.drop-down 
+{
+    margin-left: auto; 
+    margin-right: 0;
+    text-align: right;
+}

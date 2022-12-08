@@ -1,0 +1,87 @@
+<div class="sidenav-wrapper">
+    <mat-sidenav-container autosize>
+        <mat-sidenav #sidenav mode="side" opened="isExpanded" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()"> 
+        <!-- <mat-sidenav #sidenav mode="side"> -->
+          <mat-nav-list>
+
+            <mat-list-item>
+            <!-- <mat-list-item (click)="isExpanded = !isExpanded"> -->
+              <!-- <mat-icon mat-list-icon class="chevron-button" [ngClass]="{ rotated: isExpanded}">
+                chevron_right
+              </mat-icon> -->
+            <!-- <h1 *ngIf="isExpanded" style="margin-top: 20px; font-size: 16px;"> 
+                Menu
+            </h1> -->
+              <mat-icon mat-list-icon>dashboard</mat-icon>
+              <span *ngIf="isExpanded" class="menu-item">Menu</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLink]="'create-calendar'">
+              <mat-icon mat-list-icon>build</mat-icon>
+              <span *ngIf="isExpanded" class="menu-item">Create New Calendar</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLink]="'active-calendar'">
+              <mat-icon mat-list-icon>calendar_today</mat-icon>
+              <span *ngIf="isExpanded" class="menu-item">Main Calendar</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLink]="'invite-partners'">
+              <mat-icon mat-list-icon>public</mat-icon>
+              <span *ngIf="isExpanded" class="menu-item">Invite Partners</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLink]="'all-schedule'">
+              <mat-icon mat-list-icon>collections</mat-icon>
+              <span *ngIf="isExpanded" class="menu-item">Calendar History</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLink]="'booking-events'">
+              <mat-icon mat-list-icon>voice_chat</mat-icon>
+              <span *ngIf="isExpanded" class="menu-item">Upcoming Bookings</span>
+            </mat-list-item>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-list-item>
+                    <span class="menu-item">Shared Calendar</span>
+                    <mat-icon mat-list-icon>people</mat-icon>
+                  </mat-list-item>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+          
+              <!-- <mat-list-item [routerLink]="'public'">
+                <mat-icon mat-list-icon>send</mat-icon>
+                <span *ngIf="isExpanded" class="menu-item">Recently Shared</span>
+              </mat-list-item> -->
+
+              <mat-list-item [routerLink]="'private'">
+                <mat-icon mat-list-icon>inbox</mat-icon>
+                <span *ngIf="isExpanded" class="menu-item">Shared With Me</span>
+              </mat-list-item>
+            </mat-expansion-panel>
+
+            <div class="profile" style="position: absolute; bottom: 0; border-top: 1px solid #e3dada;;">
+              <mat-list-item>
+                <mat-icon mat-list-icon>account_circle</mat-icon>
+                <span *ngIf="isExpanded" class="menu-item" style="display: flex; flex-direction: column" [(ngModel)]="user" name="user" ngDefaultControl>
+                  <span style="font-size: 15px; font-weight:500;">{{user.fullname}}</span>
+                  <span style="font-size: 11px">{{user.email}}</span>
+                </span>
+              </mat-list-item>
+            </div>
+      
+          </mat-nav-list>
+        </mat-sidenav>
+      
+        <!-- Content - rendered Content for the current router path into the <router-outlet>, e.g. /dashboard or /info-->
+        <mat-sidenav-content>
+          <router-outlet> </router-outlet>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+</div>
+
+
+
+

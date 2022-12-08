@@ -1,0 +1,69 @@
+<div class="invite-partners">
+    <div class="header">
+        <mat-card>
+          <mat-card-content>
+            <div class="header-title">
+              PUBLIC CALENDAR TO YOUR PARTNER
+            </div>
+          </mat-card-content>
+        </mat-card>
+    </div>   
+
+    <div class="public-body">
+      <div class="calendar">
+        <mat-card>
+          <mat-card-content>
+            <full-calendar 
+              [options]='calendarOptions'>
+            </full-calendar> 
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="invite">
+        <mat-card>
+          <mat-card-content>
+            <div style="display: flex; flex-direction: column; gap: 1%; margin: 4% auto 0 auto; width: 95%;">
+              <div>
+                Your email
+                <mat-form-field class='email' appearance="outline">
+                  <input matInput name="user-email" [readonly]="true" [(ngModel)]="emailAccount"/> 
+                </mat-form-field>
+              </div>
+
+              <div>
+                <span>Partner's email</span>
+                <mat-form-field class='email' appearance="outline">
+                  <input matInput placeholder = 'Example: nguyenminhdang@gmail.com' required name="partner-email" [(ngModel)]="partnerEmail"/>
+                  <!-- <mat-error *ngIf="name!.errors?.['required']"> Title is required </mat-error>
+                  <mat-error *ngIf="name!.errors?.['minlength']"> Title must be at least 5 characters long. </mat-error>
+                  <mat-error *ngIf="name!.errors?.['maxlength']"> Title must be less than 255 characters long. </mat-error> -->
+                </mat-form-field>
+              </div>
+
+              <div>
+                <span>Description</span>
+                <mat-form-field class='email' appearance="outline">
+                  <input matInput name="description" [readonly]="true" [(ngModel)]="description"/> 
+                </mat-form-field>
+              </div>
+
+              <span>Status</span>
+              <div style="display: flex; flex-direction: row; gap: 7%">
+                <mat-form-field class='status' appearance="outline">
+                  <input matInput name="status" [readonly]="true" [(ngModel)]="status"/> 
+                </mat-form-field>
+                  <button mat-flat-button color="primary" style="height: 50%; margin-top: 3%;" (click)="openPublicCalendarPopup()">Public Now</button>
+              </div>
+
+              <div class="button-field" style="margin: 0 auto 0 auto">
+                <button mat-flat-button color="warn">Share Calendar To Partner</button>
+              </div> 
+        
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+</div>

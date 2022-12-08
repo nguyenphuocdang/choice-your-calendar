@@ -1,0 +1,85 @@
+.calendar
+{
+    width:80%;
+    height:98%;
+}
+
+.calendar .calendar-list
+{
+    width: 90%;
+    height: 100%;
+    margin: auto;
+}
+
+.calendar .calendar-list mat-card-content
+{
+    /* width: 500px;
+    height: 200px; */
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid rgb(216, 201, 201);
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    background-color: white;
+}
+
+.calendar-table
+{
+    width: 97%;
+    height: 95%;
+    margin: auto;
+}
+
+.filter
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid rgb(229, 218, 218); 
+}
+
+table 
+{
+    width: 100%;
+    border: 1px solid rgb(229, 218, 218);
+}
+
+/* .spacer-top {
+    margin-top: 15px;
+}
+
+.calendar
+{
+    width:80%;
+    height:80%;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    justify-content: center; 
+    margin: auto;
+}
+.calendar-table 
+{
+    width:60%;
+    height:60%;
+}
+full-calendar
+{
+    width: 80%;
+    height: 80%;
+}
+.create-schedule-button
+{
+    background-color: #5BF985;
+    color: #202421;
+    height: 35px;   
+}
+
+table 
+{
+    width: 100%;
+}
+mat-header-cell, mat-cell {
+ justify-content: left;
+} */

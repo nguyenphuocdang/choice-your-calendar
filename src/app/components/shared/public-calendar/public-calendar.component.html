@@ -1,0 +1,113 @@
+<div class="calendar">
+    <div class="public-calendar">
+        <mat-card>
+            <mat-card-content>
+
+                <div class="partner-detail">
+                    <mat-icon>person</mat-icon>
+                    <span>Partner's Email: {{partnerEmail}}</span>
+                </div>
+
+                <div class="partner-detail">
+                    <mat-icon>date_range</mat-icon>
+                    <span>In Active For Booking From: {{fromDate}} - {{toDate}}</span>
+                </div>
+
+                <full-calendar 
+                    [options]='calendarOptions'>
+                </full-calendar> 
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class="booking">
+        <mat-card>
+            <mat-card-content>
+                <div class="header-title">
+                        BOOKING MEETING
+                </div>
+
+                <div class ='booking-form'>
+                    <div>
+                      <mat-form-field class='email' appearance="outline">
+                        <mat-label>Partner's Email</mat-label>
+                        <input matInput name="user-email" [readonly]="true" [(ngModel)]="partnerEmail"/> 
+                      </mat-form-field>
+                    </div>
+      
+                    <div>
+                      <mat-form-field class='title' appearance="outline">
+                        <mat-label>Event Title</mat-label>
+                        <input matInput placeholder = 'Event Meeting 01' required name="title" [(ngModel)]="bookingEvent.eventName"/>
+                      </mat-form-field>
+                    </div>
+      
+                    <div>
+                      <span>Description</span>
+                      <mat-form-field class='description' appearance="outline">
+                        <input matInput name="description" [(ngModel)]="bookingEvent.eventDescription"/> 
+                      </mat-form-field>
+                    </div>
+
+                    <div>
+                      <mat-form-field class='date' appearance="outline">
+                        <mat-label>Date</mat-label>
+                        <input matInput name="date" [(ngModel)]="date"/> 
+                      </mat-form-field>
+                    </div>
+
+                    <div>
+                      <mat-form-field class='start' appearance="outline">
+                        <mat-label>Start Time</mat-label>
+                        <input matInput name="start" [(ngModel)]="bookingEvent.startTime"/> 
+                      </mat-form-field>
+                    </div>
+
+                    <div>
+                      <mat-form-field class='end' appearance="outline">
+                        <mat-label>End Time</mat-label>
+                        <input matInput name="end" [(ngModel)]="bookingEvent.endTime"/> 
+                      </mat-form-field>
+                    </div>
+
+                    <!-- <div>
+                      <mat-form-field color="accent" appearance="fill" style="width: 90%">
+                          <mat-label>Booking Date</mat-label>
+                          <input matInput [matDatepicker]="picker2"  [(ngModel)]="date"/>
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                          <mat-datepicker #picker2></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div style="margin-top: 2%">
+                        Start Time:
+                        <mat-form-field appearance="outline">
+                          <input type="time" matInput name="startTime" [(ngModel)]="bookingEvent.startTime">
+                       </mat-form-field>
+                    </div>
+
+                    <div>
+                      End Time:
+                      <mat-form-field appearance="outline">
+                        <input type="time" matInput name="endTime" [(ngModel)]="bookingEvent.endTime">
+                     </mat-form-field>
+                  </div> -->
+
+                  <div style="margin-left: 25%">
+                    <button mat-flat-button color="warn" (click)="_addEvent()">Submit Booking</button>
+                  </div> 
+                
+                  </div>
+
+
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+
+</div>   
+<router-outlet></router-outlet>

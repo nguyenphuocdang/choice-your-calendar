@@ -1,0 +1,39 @@
+<div class="event-list">
+    <div class="header">
+        <div>
+            <button mat-raised-button>
+                <span style="font-size: 15px;">All Time</span>
+            </button> 
+        </div>
+
+    </div>
+
+    <div class="body">
+        <ul style="list-style-type: none;">
+            <li *ngFor="let event of eventList; let i = index">
+                <div class="event-element">
+                    <mat-card>
+                        <mat-card-content>
+                            <img src = 'assets/images/virtual-meeting.jpg'>
+                            <div class="event-content">
+                                <span style="font-weight: 450;">{{event.startTime}}</span>
+                                <span style="font-size: 17px; font-weight: 500;">{{event.eventName}}</span>
+                                <span>{{event.endTime}}</span>
+                                <span>Host: {{event.hostName}}</span>
+                                <span>Participant: {{event.partnerName}}</span>
+                            </div>
+                            <button mat-raised-button *ngIf="event.hostFlag" style=" border: 2px solid rgb(147, 22, 31); color: rgb(147, 22, 31); border-radius: 5px;">
+                                <div style="font-size: 15px; margin: auto;">As Host</div>
+                            </button> 
+
+                            <button mat-raised-button *ngIf="!event.hostFlag" style=" border: 2px solid rgb(33, 12, 140); color: rgb(33, 12, 140); border-radius: 5px;">
+                                <div style="font-size: 15px; margin: auto;">As Participant</div>
+                            </button> 
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div>

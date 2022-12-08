@@ -1,0 +1,12 @@
+.calendar
+{
+    width:800px;
+    height:700px;
+    justify-content: center;
+    margin: auto;
+}
+full-calendar
+{
+    width: 90%;
+    height: 90%;
+}

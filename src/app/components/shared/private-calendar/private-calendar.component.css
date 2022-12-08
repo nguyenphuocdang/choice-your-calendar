@@ -1,0 +1,114 @@
+.shared-calendars
+{
+    width: 95%;
+    height: 95%;
+    display: flex;
+    flex-direction: row;
+}
+
+.content
+{
+    height: 100%;
+    width: 60%;
+    float: left;
+    overflow: scroll;
+    overflow: hidden;
+    margin-top: 1%;
+}
+
+.content mat-card-content  
+{
+    display: flex;
+    border-radius: 10px;
+    width: 95%;
+    height: 100%;
+    border: 2px solid rgb(216, 201, 201);
+    background-color: white;
+    margin: auto;
+}
+
+.notification
+{
+    height: 105%;
+    width: 30%;
+    float: right;
+    overflow: scroll;
+    overflow: hidden;
+}
+
+.notification mat-card-content
+{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notification .title
+{
+    margin-top: 2%;
+    margin-left: 5%;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.notification mat-card-content img 
+{
+    height: 15%; 
+    width: 15%; 
+    margin-top: 2%;
+}
+
+.notification mat-card-content li 
+{
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+    border-bottom: 1px solid #e4d2d2;
+}
+
+.notification mat-card-content li:hover
+{
+    background-color: rgb(235, 222, 222);;
+}
+
+
+.notification-content
+{
+    margin: auto 0 auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1%;
+}
+
+.selected-calendar
+{
+    margin: 4% 0 0 4%; 
+}
+
+.selected-calendar
+{
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+}
+
+.selected-calendar-element
+{
+    display: flex; 
+    align-items: center; 
+    gap: 2%; 
+    font-size: 18px;
+}
+
+.image
+{
+    width: 95%;
+    height: 87%;
+    margin: 2% auto 0 auto;
+    border-radius: 10px;
+    border: 2px solid rgb(216, 201, 201);
+}
+
