@@ -37,7 +37,7 @@
     "angular-paginator": "^8.0.0",
     "bootstrap": "^5.2.2",
     "material-expansion-panel": "^1.0.0",
-    "ngx-bootstrap": "^9.0.0",
+    "ngx-bootstrap": "^8.0.0",
     "ngx-mat-timepicker": "^13.2.5",
     "ngx-material-timepicker": "^5.5.3",
     "ngx-toastr": "^14.3.0",
