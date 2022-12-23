@@ -7,6 +7,7 @@ import { ActivatedRoute, Params, Router, UrlSegment } from '@angular/router';
 import { LocalStorageService } from '../../../_services/local-storage.service';
 import { Location } from '@angular/common';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nav',
@@ -23,6 +24,7 @@ export class NavComponent implements OnInit {
   private Location:Location,
   private storageService: LocalStorageService,
   private route: ActivatedRoute,
+  private toastrService: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -46,13 +48,17 @@ export class NavComponent implements OnInit {
             this.isUserLoggedIn = result.isUserLoggedIn;
             if (result.userRole === 'ROLE_ADMIN')
             {
-              this.router.navigate(['/approve-dashboard']);
+              this.router.navigate(['/admin/admin-dashboard']);
             }
             else if (result.userRole === 'ROLE_BASIC_USER')
             {
               this.router.navigateByUrl('homepage/active-calendar');
             }
           }
+        }
+        else 
+        {
+          this.toastrService.error('Login Attemp Failed', 'Error');
         }
 
       })

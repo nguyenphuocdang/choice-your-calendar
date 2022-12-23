@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, of } from 'rxjs';
+import Utils from '../_utils/utils';
 
-const AUTH_API = 'http://localhost:8000/api/auth';
 const requestHeader = new HttpHeaders(
   {'Bearer-Token': 'Refresh'},
 )
@@ -14,7 +14,7 @@ export class AuthService {
   {}
   
   refreshToken(token: string) {
-    return this.http.get(AUTH_API + '/refresh-token', 
+    return this.http.get(Utils.AUTH_API + '/refresh-token', 
     {
       headers: requestHeader,
     }).pipe(

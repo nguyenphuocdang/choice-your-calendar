@@ -41,4 +41,6 @@ export class EventCreateRequest
     eventName!: string;
     partnerPathMapping!: string;
     startTime!: string;   
+    authorizationCode!: string;
+    redirecetUri!: string;
 }

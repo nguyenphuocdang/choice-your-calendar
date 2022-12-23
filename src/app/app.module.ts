@@ -28,6 +28,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatRadioModule} from '@angular/material/radio';
 
 //Bootstrap
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -37,7 +38,6 @@ import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { NavComponent } from './components/homepage/nav/nav.component';
 import { AuthComponent } from './components/authentication/register/auth.component';
 import { LoginComponent } from './components/authentication/login/login.component';
-import { ApproveDashboardComponent } from './approve-dashboard/approve-dashboard.component';
 import { HomeComponent } from './components/homepage/home/home.component';
 
 //Azure MSAL
@@ -101,7 +101,6 @@ const lang = 'en-US';
     NavComponent,
     AuthComponent,
     LoginComponent,
-    ApproveDashboardComponent,
     HomeComponent,
     ForbiddenComponent,
   ],
@@ -126,8 +125,7 @@ const lang = 'en-US';
     NgxMatNativeDateModule,
     MatFormFieldModule,
     MatExpansionModule,
-
-
+    MatRadioModule,
 
     BrowserModule,
     AppRoutingModule,

@@ -6,9 +6,9 @@
 
 .header 
 {
-    width: 70%;
+    width: 85%;
     height: 10%;
-    margin-left: 10%;
+    margin-left: 3%;
 }
 
 .header mat-card-content
@@ -34,9 +34,9 @@
 .public-body
 {
     margin-top: 1%;
-    width: 70%;
+    width: 90%;
     height: 90%;
-    margin-left: 10%;
+    margin-left: 3%;
     display: flex;
     flex-direction: row;
     gap: 2%;
@@ -44,8 +44,8 @@
 
 .calendar
 {
-    width: 60%;
-    height: 95%;
+    width: 66%;
+    height: 100%;
 }
 
 .calendar mat-card-content
@@ -68,8 +68,8 @@
 
 .invite
 {
-    width: 40%;
-    height: 95%;
+    width: 26%;
+    height: 99%;
 }
 
 .invite mat-card-content
@@ -95,3 +95,53 @@
     padding: auto; 
 }
 
+.no-bullets
+{
+    list-style-type: none;
+}
+
+.element-card mat-card-content
+{
+    display: flex;
+    border-radius: 5px;
+    /* border: 1px solid rgb(216, 201, 201); */
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    border-top: 7px solid rgba(33, 213, 210, 0.425);
+    background-color: rgba(234, 239, 248, 0.425);;
+}
+
+.element-card
+{
+    height: 100%;
+    width: 100%;
+}
+
+ul 
+{
+    display: grid;
+    grid-template-columns: repeat(3, 235px);
+    grid-template-rows: repeat(3, 100px);
+    grid-gap: 25px;
+    height: 100%;
+    width: 100%;
+    margin-top: 2%;
+}
+
+.slot
+{
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+}
+.slot-day
+{
+    margin-top: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 600;
+    margin-bottom: 5%;
+}

@@ -3,7 +3,7 @@
         <mat-card>
           <mat-card-content>
             <div class="header-title">
-              PUBLIC CALENDAR TO YOUR PARTNER
+              SHARE FREE-TIME SLOTS TO YOUR PARTNER
             </div>
           </mat-card-content>
         </mat-card>
@@ -13,9 +13,31 @@
       <div class="calendar">
         <mat-card>
           <mat-card-content>
-            <full-calendar 
-              [options]='calendarOptions'>
-            </full-calendar> 
+
+            <div style="width: 100%; height: 100%; margin-top: 1%;">
+              <ul class="no-bullets">
+                <li *ngFor="let slot of freeTimeScheduleSlots.listTimeWorkingDatas; let i = index;">
+                  <div class="element-card">
+                    <mat-card>
+                      <mat-card-content>
+                        <div class = 'slot'>
+                          <div class = 'slot-day'>
+                            {{slot.weekday}}
+                          </div>
+
+                          <div class ='slot-time-period'>
+                            {{slot.startTime}} - {{slot.endTime}}
+                          </div>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+                  </div>
+
+                </li>
+              </ul>              
+            </div>
+
+
           </mat-card-content>
         </mat-card>
       </div>
@@ -24,17 +46,31 @@
         <mat-card>
           <mat-card-content>
             <div style="display: flex; flex-direction: column; gap: 1%; margin: 4% auto 0 auto; width: 95%;">
-              <div>
+              <!-- <div>
                 Your email
                 <mat-form-field class='email' appearance="outline">
                   <input matInput name="user-email" [readonly]="true" [(ngModel)]="emailAccount"/> 
                 </mat-form-field>
-              </div>
+              </div> -->
 
-              <div>
-                <span>Partner's email</span>
+              <span>Partner's email (maximum 2 at a time)</span>
+              <!-- *ngFor="let mail of partnerEmails; let i = index;" -->
+              <div >
                 <mat-form-field class='email' appearance="outline">
-                  <input matInput placeholder = 'Example: nguyenminhdang@gmail.com' required name="partner-email" [(ngModel)]="partnerEmail"/>
+                  <input matInput 
+                  placeholder = 'Example: nguyenminhdang@gmail.com' 
+                  required name="partner-email" 
+                  [(ngModel)]="partnerEmails[0]"/>
+                  <!-- <mat-error *ngIf="name!.errors?.['required']"> Title is required </mat-error>
+                  <mat-error *ngIf="name!.errors?.['minlength']"> Title must be at least 5 characters long. </mat-error>
+                  <mat-error *ngIf="name!.errors?.['maxlength']"> Title must be less than 255 characters long. </mat-error> -->
+                </mat-form-field>
+
+                <mat-form-field class='email' appearance="outline">
+                  <input matInput 
+                  placeholder = 'Example: nguyenminhdang@gmail.com' 
+                  required name="partner-email" 
+                  [(ngModel)]="partnerEmails[1]"/>
                   <!-- <mat-error *ngIf="name!.errors?.['required']"> Title is required </mat-error>
                   <mat-error *ngIf="name!.errors?.['minlength']"> Title must be at least 5 characters long. </mat-error>
                   <mat-error *ngIf="name!.errors?.['maxlength']"> Title must be less than 255 characters long. </mat-error> -->
@@ -47,17 +83,33 @@
                   <input matInput name="description" [readonly]="true" [(ngModel)]="description"/> 
                 </mat-form-field>
               </div>
-
+<!-- 
               <span>Status</span>
               <div style="display: flex; flex-direction: row; gap: 7%">
                 <mat-form-field class='status' appearance="outline">
                   <input matInput name="status" [readonly]="true" [(ngModel)]="status"/> 
                 </mat-form-field>
                   <button mat-flat-button color="primary" style="height: 50%; margin-top: 3%;" (click)="openPublicCalendarPopup()">Public Now</button>
-              </div>
+              </div> -->
 
-              <div class="button-field" style="margin: 0 auto 0 auto">
-                <button mat-flat-button color="warn">Share Calendar To Partner</button>
+
+
+              <div style="width: 90%">
+                <span>Select Time Duration</span>
+                <mat-form-field appearance="fill">
+                  <select matNativeControl [(ngModel)]="duration">
+                    <option value="" selected></option>
+                    <option value="15-minute">15 minutes</option>
+                    <option value="30-minute">30 minutes</option>
+                    <option value="45-minute">45 minutes</option>
+                    <option value="60-minute">60 minutes</option>
+                  </select>
+                </mat-form-field>
+
+              </div>   
+
+              <div class="button-field" style="margin: 5% auto 0 auto">
+                <button mat-flat-button color="warn" (click)="onClickShareCalendar()">Share Calendar To Partner</button>
               </div> 
         
             </div>

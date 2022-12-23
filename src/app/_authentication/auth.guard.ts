@@ -6,8 +6,8 @@ import { UserService } from '../_services/user.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import Utils from '../_utils/utils';
 
-const AUTH_API = 'http://localhost:8000/api/auth';
 const requestHeader = new HttpHeaders(
   {'Bearer-Token': 'Refresh'},
 )
@@ -72,7 +72,7 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     try {
-      const response = await lastValueFrom(this.http.get(AUTH_API + "/refresh-token", 
+      const response = await lastValueFrom(this.http.get(Utils.AUTH_API + "/refresh-token", 
       {
         headers: requestHeader,
       }));

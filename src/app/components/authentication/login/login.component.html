@@ -14,9 +14,9 @@
               placeholder="Enter username" required
               name="username"
             />
-            <mat-error *ngIf="!loginForm.controls['username'].valid">
-                
-            </mat-error>
+            <mat-error *ngIf="username!.errors?.['required']"> Title is required </mat-error>
+            <mat-error *ngIf="username!.errors?.['minlength']"> Title must be at least 5 characters long. </mat-error>
+            <mat-error *ngIf="username!.errors?.['maxlength']"> Title must be less than 255 characters long. </mat-error>
           </mat-form-field>
         </div>
 
@@ -35,9 +35,9 @@
                 {{hide ? 'visibility_off' : 'visibility'}}
             </mat-icon>
             </button>
-            <mat-error *ngIf="!loginForm.controls['password'].valid">
-                Password is required
-            </mat-error>
+            <mat-error *ngIf="password!.errors?.['required']"> Password is required </mat-error>
+            <mat-error *ngIf="password!.errors?.['minlength']"> Password must be at least 8 characters long. </mat-error>
+            <mat-error *ngIf="password!.errors?.['maxlength']"> Password must be less than 255 characters long. </mat-error>
           </mat-form-field>
         </div>
         <button mat-flat-button

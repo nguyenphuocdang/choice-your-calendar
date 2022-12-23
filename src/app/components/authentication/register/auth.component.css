@@ -1,3 +1,9 @@
+.register-frame
+  {
+    width: 500px;
+    height: 600px;
+  }
+
 mat-card {
     width: 500px;
     margin: 2em auto;
@@ -7,11 +13,13 @@ mat-card {
   
   .header{
     text-align: center;
-    font-size: 20px;
-    font-weight:500
+    font-size: 25px;
+    font-weight:500;
+    margin-bottom: 5%;
   }
+
   .full-width {
-    width: 70%;
+    width: 90%;
   }
   
   .button-row {
@@ -43,3 +51,18 @@ mat-card {
     text-decoration: none;
   }
   
+  .button-field
+  {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 15px;
+  }
+
+  .verify
+  {
+    border: 3px solid rgb(12, 124, 171);
+    margin-left: 2%;
+    margin-bottom: 1%;
+    color: rgb(12, 124, 171);  
+  }

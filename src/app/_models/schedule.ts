@@ -5,6 +5,14 @@ export class Schedule
     listTimeWorkingDatas!: ListTimeWorkingDatas[];
 }
 
+export class FreeTimeScheduleSlots
+{
+    name!:string;
+    brief!:string;
+    freeScheduleFlag!: boolean;
+    listTimeWorkingDatas!: ListTimeWorkingDatas[];
+}
+
 export class ListTimeWorkingDatas
 {
     startTime!:string;
@@ -32,6 +40,21 @@ export class ModifyScheduleRequest
     listTimeWorkingDatas!: ListTimeWorkingDatas[];
 }
 
+export class ShareScheduleRequest
+{
+    endAvailabelDate!: string;
+    listPartnerEmail!: string[];
+    startAvailableDate!: string;
+    duration!:string;
+}
+
+export class BasicEvent
+{
+    title!: string;
+    weekday!: string;
+    startTime!: string;
+    endTime!: string;
+}
 
 
 

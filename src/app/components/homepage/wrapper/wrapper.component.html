@@ -16,6 +16,11 @@
               <span *ngIf="isExpanded" class="menu-item">Menu</span>
             </mat-list-item>
 
+            <mat-list-item [routerLink]="'admin-dashboard'" *ngIf="role == 'ROLE_ADMIN'">
+              <mat-icon mat-list-icon> beenhere</mat-icon>
+              <span *ngIf="isExpanded" class="menu-item">Admin Dashboard</span>
+            </mat-list-item>
+
             <mat-list-item [routerLink]="'create-calendar'">
               <mat-icon mat-list-icon>build</mat-icon>
               <span *ngIf="isExpanded" class="menu-item">Create New Calendar</span>
@@ -63,7 +68,7 @@
             </mat-expansion-panel>
 
             <div class="profile" style="position: absolute; bottom: 0; border-top: 1px solid #e3dada;;">
-              <mat-list-item>
+              <mat-list-item [routerLink]="'profile'">
                 <mat-icon mat-list-icon>account_circle</mat-icon>
                 <span *ngIf="isExpanded" class="menu-item" style="display: flex; flex-direction: column" [(ngModel)]="user" name="user" ngDefaultControl>
                   <span style="font-size: 15px; font-weight:500;">{{user.fullname}}</span>

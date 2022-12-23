@@ -1,1 +1,15 @@
-<p>popup-template works!</p>
+<div class="popup-template" style="width: 100%; height: 100%;">
+    <span>
+        <h2 mat-dialog-title>{{modalTitle}}</h2>
+    </span>
+
+    <div class="button-field" style="display: flex; flex-direction: row; gap: 10px; justify-content: center; margin-top: 30px;">
+        <button mat-flat-button color="primary" (click)="onConfirm()">Confirm</button>
+        <button mat-flat-button color="warn" (click)="onCancel()">Cancel</button>
+    </div> 
+
+</div>
+  
+
+  
+  

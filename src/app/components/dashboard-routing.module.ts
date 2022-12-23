@@ -10,6 +10,7 @@ import { CreateScheduleComponent } from './calendar/create-schedule/create-sched
 import { InvitePartnersComponent } from './shared/invite-partners/invite-partners.component';
 import { PublicCalendarComponent } from './shared/public-calendar/public-calendar.component';
 import { PrivateCalendarComponent } from './shared/private-calendar/private-calendar.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 const routes: Routes = [
     // Sidenav-Wrapper Component acts like a shell & the active child Component gets rendered into the <router-outlet>
     {
@@ -47,6 +48,15 @@ const routes: Routes = [
         {
           path: 'private',
           component: PrivateCalendarComponent,
+        }
+        ,
+        {
+          path: 'profile',
+          component: CreateBookingComponent,
+        },
+        {
+          path: 'admin-dashboard',
+          component: AdminDashboardComponent,
         }
       ],
       

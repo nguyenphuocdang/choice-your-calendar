@@ -1,0 +1,28 @@
+<div class="container mt-5" *ngIf="syncStatus == 'success'">
+    <div class="card text-center" style="padding:20px; border: 2px solid rgb(216, 201, 201);" id="errorMessage">
+        <h1> {{messageSuccess}} </h1>
+        <img src = 'assets/images/google_calendar.png' class="google-calendar">
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="syncStatus == 'error'">
+    <div class="card text-center" style="padding:20px; border: 2px solid rgb(216, 201, 201);" id="errorMessage">
+        <h1> {{messageError}} </h1>
+        <img src = 'assets/images/error.jpg' class="error">
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="syncStatus == 'isLoading'">
+    <div class="card text-center" style="padding:20px; border: 2px solid rgb(216, 201, 201);" id="errorMessage">
+        <h1>{{messageDefault}}</h1>
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="syncStatus == 'isBooked'">
+    <div class="card text-center" style="padding:20px; border: 2px solid rgb(216, 201, 201);" id="errorMessage">
+        <h1>Event Is Booked Successfully</h1>
+        <img src = 'assets/images/google_calendar.png' class="google-calendar">
+    </div>
+</div>
+
+

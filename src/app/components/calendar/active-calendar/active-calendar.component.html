@@ -3,7 +3,24 @@
         <mat-icon style="margin-right: 3%;">add</mat-icon>
         <span style="font-size: 15px;">Add Event</span>
     </button> 
+
+    <!-- <button mat-raised-button class="async-calendar" (click) = 'asyncGoogleCalendar()'>
+
+        <mat-icon style="margin-right: 3%;">calendar_today</mat-icon>
+        <span style="font-size: 15px;">Sync with Google Calendar</span>
+    </button>   -->
+
+    <button mat-raised-button class="async-calendar" (click) = 'asyncGoogleCalendar()'>
+        <mat-icon style="margin-right: 3%;">calendar_today</mat-icon>
+        <span style="font-size: 15px;">Sync with Google Calendar</span>
+    </button>
+
+    <button mat-raised-button class="add-free-slot" (click)="addMoreEventClick()">
+        <mat-icon style="margin-right: 3%;">add</mat-icon>
+        <span style="font-size: 15px;">Add Free Slots</span>
+    </button> 
 </div>
+
 <div class="calendar">
     <div class="active-calendar">
         <mat-card>
@@ -15,5 +32,41 @@
         </mat-card>
     </div>
 
-</div>   
+</div>
+
+<div class="free-calendar">
+    
+    <mat-card>
+        
+      <mat-card-content>
+        <div style="width: 100%; height: 100%; margin-top: 1%;">
+            <div class="header-title">
+                FREE-TIME SLOTS FOR BOOKING
+              </div>
+          <ul class="no-bullets">
+            <li *ngFor="let slot of freeTimeScheduleSlots.listTimeWorkingDatas; let i = index;">
+              <div class="element-card">
+                <mat-card>
+                  <mat-card-content>
+                    <div class = 'slot'>
+                      <div class = 'slot-day'>
+                        {{slot.weekday}}
+                      </div>
+
+                      <div class ='slot-time-period'>
+                        {{slot.startTime}} - {{slot.endTime}}
+                      </div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+
+            </li>
+          </ul>              
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+
 <router-outlet></router-outlet>

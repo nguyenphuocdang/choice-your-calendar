@@ -29,6 +29,7 @@
 {
     display: flex;
     flex-direction: column;
+    gap: 2%;
     border-radius: 10px;
     border: 2px solid rgb(216, 201, 201);
     width: 100%;
@@ -53,7 +54,7 @@
 full-calendar
 {
     width: 96%;
-    height: 85%;
+    height: 80%;
     margin: auto;
 }
 .create-schedule-button
@@ -81,8 +82,7 @@ full-calendar
     display: flex; 
     align-items: center; 
     gap: 1%; 
-    font-size: 18px;
-    margin-top: 1%;
+    font-size: 18px; 
     margin-left: 2%;
 }
 
@@ -108,4 +108,72 @@ full-calendar
 {
     width: 90%;
     margin: auto;
+}
+.merge-calendar
+{
+    border-radius: 15px;
+    border: 2px solid rgb(12, 124, 171);
+    margin: 0 auto 0 auto;
+    color: rgb(12, 124, 171);
+    width: 90%;
+}
+
+.all-time-slots
+{
+    border-radius: 15px;
+    border: 2px solid rgb(171, 12, 12);
+    margin: 0 auto 0 auto;
+    color: rgb(171, 12, 12);
+    width: 90%;
+}
+
+.no-bullets
+{
+    list-style-type: none;
+}
+
+.public-calendar .element-card mat-card-content
+{
+    display: flex;
+    border-radius: 5px;
+    /* border: 1px solid rgb(216, 201, 201); */
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    border-top: 7px solid rgba(33, 213, 210, 0.425);
+    background-color: rgba(234, 239, 248, 0.425);;
+}
+
+.element-card
+{
+    height: 100%;
+    width: 100%;
+}
+
+ul 
+{
+    display: grid;
+    grid-template-columns: repeat(3, 235px);
+    grid-template-rows: repeat(3, 100px);
+    grid-gap: 25px;
+    height: 100%;
+    width: 100%;
+    margin-top: 2%;
+}
+
+.slot
+{
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+}
+.slot-day
+{
+    margin-top: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 600;
+    margin-bottom: 5%;
 }

@@ -2,14 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, throwError } from 'rxjs';
 import { EventCreateRequest, EventDetail, EventSearchRequest, SharedCalendarDetails } from '../_models/event';
+import Utils from '../_utils/utils';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventService {
-
-  EVENT_API = 'http://localhost:8000/api/event'
-  NOTIFY_API = 'http://localhost:8000/api/notify'
+export class EventService 
+{
   eventList: EventDetail[] = [];
 
   selectedCalendar: SharedCalendarDetails = {
@@ -31,7 +30,7 @@ export class EventService {
   createNewEvent(requestBody: EventCreateRequest) : Observable<any>
   {
     debugger
-    return this.http.post(`${this.EVENT_API}/add`,requestBody)
+    return this.http.post(`${Utils.EVENT_API}/add`,requestBody)
     .pipe(
       map((response: any) => 
       {
@@ -61,7 +60,7 @@ export class EventService {
       partnerName: '',
       startTime: startTime,
     }
-    return this.http.post(`${this.EVENT_API}/list?page=${page}&size=${size}`, requestBody)
+    return this.http.post(`${Utils.EVENT_API}/list?page=${page}&size=${size}`, requestBody)
                     .pipe(map((response: any) => 
                       {
                         if (response.statusCode == 200 && response.data.content.length > 0)
@@ -87,7 +86,7 @@ export class EventService {
   getListOfSharedCalendars(size: number) : Observable<any>
   {
     let sharedCalendarList : SharedCalendarDetails[] = [];
-    return this.http.get(`${this.NOTIFY_API}/list?size=${size}`).pipe(
+    return this.http.get(`${Utils.NOTIFY_API}/list?size=${size}`).pipe(
       map((response: any)=>
       {
         if (response.statusCode === 200 && response.data.content.length > 0) 
@@ -111,5 +110,36 @@ export class EventService {
   updateNotification(data: SharedCalendarDetails)
   {
     this.$selectedNotification.next(data);
+  }
+
+  shareCalendar(data: any)
+  {
+    return this.http.post(`${Utils.SCHEDULE_API}/share-calendar`,data).
+    pipe(
+      map((response: any)=>
+      {
+        debugger
+        if (response.statusCode === 200) 
+        {
+          // response.data.content.forEach((element: any)=> {
+          //   let date = new Date(element.notifyDate);
+          //   element.notifyDate = date.toDateString() + ' at ' + date.toLocaleTimeString();
+          // });
+          // sharedCalendarList = response.data.content;
+          return response.data
+        }
+        else 
+        {
+          return 'error'
+        }
+        // return sharedCalendarList;
+
+      }),
+      catchError( err => 
+        {
+          debugger
+          return 'error'
+        })
+    )
   }
 }

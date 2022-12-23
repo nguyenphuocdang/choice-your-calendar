@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EventInput } from '@fullcalendar/angular';
+import { BehaviorSubject } from 'rxjs';
 
 const ROLE_KEY = 'role'
 const ACCESS_TOKEN_KEY = 'accessToken'
 const REFRESH_TOKEN_KEY = 'refreshToken'
 const EMAIL = 'email'
 const ACTIVE_CALENDAR = 'activeCalendar'
+const AUTHORIZATION_CODE = 'authorizationCode';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,31 @@ export class LocalStorageService {
 
   constructor(private http: HttpClient) 
   {}
+
+  AUTHORIZATION_CODE = 'authorizationCode';
+
+  itemValue = new BehaviorSubject(this.AUTHORIZATION_CODE);
+
+  set theItem(value) 
+  {
+    this.itemValue.next(value!); // this will make sure to tell every subscriber about the change.
+    localStorage.setItem('theItem', value!);
+  }
+
+  get theItem() {
+    return localStorage.getItem('theItem');
+  }
+
+  public setAuthorizationCode(code: string)
+  {
+    this.itemValue.next(code);
+    localStorage.setItem(this.AUTHORIZATION_CODE, code);
+  }
+
+  public getAuthorizationCode()
+  {
+    return localStorage.getItem(this.AUTHORIZATION_CODE);
+  }
   
   public setAccessToken(accessToken: string)
   {

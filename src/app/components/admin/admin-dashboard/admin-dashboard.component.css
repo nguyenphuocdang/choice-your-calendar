@@ -1,0 +1,113 @@
+.admin-dashboard
+{
+    width:90%;
+    height:100%;
+}
+
+.all-account-table
+{
+    width: 80%;
+    height: 80%;
+    margin-left: 5%;
+}
+
+.all-account-table mat-card-content
+{
+    /* width: 500px;
+    height: 200px; */
+    display: flex;
+    border-radius: 10px;
+    border: 2px solid rgb(216, 201, 201);
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    background-color: white;
+}
+
+.account-table 
+{
+    width: 95%;
+    height: 90%;
+    margin: auto;
+    border: 1px solid rgb(228, 220, 220);
+}
+
+
+.account-table table 
+{
+    width: 100%;
+}
+
+
+.approve-account-table
+{
+    width: 80%;
+    height: 80%;
+    margin-left: 5%;
+}
+
+.approve-account-table mat-card-content
+{
+    /* width: 500px;
+    height: 200px; */
+    display: flex;
+    border-radius: 10px;
+    border: 2px solid rgb(216, 201, 201);
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    background-color: white;
+}
+
+.approve-table
+{
+    width: 95%;
+    height: 90%;
+    margin: auto;
+    border: 1px solid rgb(228, 220, 220);
+}
+
+.approve-table table 
+{
+    width: 100%;
+}
+
+.table-row{
+    height: 60px;
+  }
+
+  .mat-cell {
+    padding: 8px 8px 8px 0;
+  }
+
+.profile-image
+{
+    width: 35%;
+    height: 35%;
+}
+
+.filter
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid rgb(229, 218, 218); 
+}
+
+.all-account
+{
+    border-radius: 5px;
+    border: 2px solid rgb(12, 124, 171);
+    margin-left: 2%;
+    margin-bottom: 1%;
+    color: rgb(12, 124, 171);
+}
+
+.registered-account
+{
+    border-radius: 5px;
+    border: 2px solid rgb(190, 44, 14);
+    margin-left: 2%;
+    margin-bottom: 1%;
+    color: rgb(190, 44, 14);
+}

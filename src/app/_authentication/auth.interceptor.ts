@@ -6,6 +6,7 @@ import { BehaviorSubject, catchError, filter, lastValueFrom, Observable, switchM
 import { LocalStorageService } from '../_services/local-storage.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../_services/auth.service';
+import Utils from '../_utils/utils';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -136,7 +137,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
     private async refreshingTokens()
     {
-        const AUTH_API = 'http://localhost:8000/api/auth';
         const requestHeader = new HttpHeaders(
             {'Bearer-Token': 'Refresh'},
           )
@@ -148,7 +148,7 @@ export class AuthInterceptor implements HttpInterceptor {
         }
         try 
         {
-          const response = await lastValueFrom(this.http.get(AUTH_API + "/refresh-token", 
+          const response = await lastValueFrom(this.http.get(Utils.AUTH_API + "/refresh-token", 
           {
             headers: requestHeader,
           }));

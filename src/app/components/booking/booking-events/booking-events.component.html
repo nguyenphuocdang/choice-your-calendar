@@ -1,7 +1,7 @@
 <div class="event-list">
     <div class="header">
         <div>
-            <button mat-raised-button>
+            <button mat-raised-button style="margin-top:2%">
                 <span style="font-size: 15px;">All Time</span>
             </button> 
         </div>
@@ -20,7 +20,14 @@
                                 <span style="font-size: 17px; font-weight: 500;">{{event.eventName}}</span>
                                 <span>{{event.endTime}}</span>
                                 <span>Host: {{event.hostName}}</span>
-                                <span>Participant: {{event.partnerName}}</span>
+                                <span>Participant: {{event.partnerName}}</span> 
+                                <span>Meeting Link:
+                                    <a href="{{event.appointmentUrl}}" #url>
+                                        {{event.appointmentUrl}}</a>
+                                </span> 
+
+
+
                             </div>
                             <button mat-raised-button *ngIf="event.hostFlag" style=" border: 2px solid rgb(147, 22, 31); color: rgb(147, 22, 31); border-radius: 5px;">
                                 <div style="font-size: 15px; margin: auto;">As Host</div>

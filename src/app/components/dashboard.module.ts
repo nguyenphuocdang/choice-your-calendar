@@ -26,6 +26,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatRadioModule} from '@angular/material/radio';
 
 // import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import {
@@ -62,6 +63,9 @@ import { PublicCalendarComponent } from './shared/public-calendar/public-calenda
 import { PrivateCalendarComponent } from './shared/private-calendar/private-calendar.component';
 import { ModifyEventComponent } from './popup/modify-event/modify-event.component';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import { GoogleAuthenComponent } from './authentication/google-authen/google-authen.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { FreeSlotsComponent } from './calendar/free-slots/free-slots.component';
 
 const lang = 'en-US';
 
@@ -87,7 +91,10 @@ FullCalendarModule.registerPlugins([
     PublicPopupComponent,
     PopupTemplateComponent,
     PublicCalendarComponent,
-    ModifyEventComponent
+    ModifyEventComponent,
+    GoogleAuthenComponent,
+    AdminDashboardComponent,
+    FreeSlotsComponent
   ],
   imports: [
     FormsModule,
@@ -115,6 +122,7 @@ FullCalendarModule.registerPlugins([
     MatFormFieldModule,
     MatExpansionModule,
     ClipboardModule,
+    MatRadioModule,
     
     // Full Calendar
     FullCalendarModule,

@@ -4,12 +4,11 @@ import { catchError, lastValueFrom, map, Observable, of } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { throwError } from 'rxjs';
 import { ActiveCalendar } from '../_models/active-calendar';
-import { Schedule, ScheduleResponse } from '../_models/schedule';
+import { ModifyScheduleRequest, Schedule, ScheduleResponse } from '../_models/schedule';
 import { EventInput } from '@fullcalendar/angular';
 import { PaginatedResult } from '../_models/pagination';
+import Utils from '../_utils/utils';
 
-const PUBLIC_API = 'http://localhost:8000/api/public/schedule';
-const SCHEDULE_API = 'http://localhost:8000/api/schedule';
 const requestHeader = new HttpHeaders(
   {'No-Auth': 'True'},
 )
@@ -25,12 +24,9 @@ export class CalendarService {
     private storageService: LocalStorageService
   ) 
   {}
-
-  
-
   create(requestData: Schedule) : Observable<any>
   {
-    return this.http.post(SCHEDULE_API + '/add', 
+    return this.http.post(Utils.SCHEDULE_API + '/add', 
       requestData,     
     ).pipe(
       map((response: any) => 
@@ -45,7 +41,7 @@ export class CalendarService {
   getListSchedules() : Observable<any>
   {
     return this.http.get(
-      SCHEDULE_API + '/list',
+      Utils.SCHEDULE_API + '/list',
     ).pipe(
       map((response: any) => 
       {
@@ -61,7 +57,7 @@ export class CalendarService {
 
   getListSchedulesPagination(page: number, size: number) : Observable<any>
   {
-    return this.http.get(`${SCHEDULE_API}/list/?page=${page}&size=${size}`,).pipe(
+    return this.http.get(`${Utils.SCHEDULE_API}/list/?page=${page}&size=${size}`,).pipe(
       map((response: any) => { 
         this.paginatedResult.result = response.data.content;
         this.paginatedResult.pagination = {
@@ -81,7 +77,7 @@ export class CalendarService {
   getScheduleDetail(id: any)
   {
     return this.http.get(
-      SCHEDULE_API + '/detail/' + id,
+      Utils.SCHEDULE_API + '/detail/' + id,
     ).pipe(
       map((response: any) => 
       {
@@ -100,7 +96,7 @@ export class CalendarService {
   getCalendarPublic(pathMapping: string, fromDate: string, toDate: string)
   {
     return this.http.get(
-      PUBLIC_API + '/calendar-info/' + `${pathMapping}` + `?fromDate=${fromDate}&toDate=${toDate}`,
+      Utils.PUBLIC_API + '/calendar-info/' + `${pathMapping}` + `?fromDate=${fromDate}&toDate=${toDate}`,
     ).pipe(
       map((response: any) => 
       {
@@ -112,12 +108,26 @@ export class CalendarService {
           return err  
         })      
     )
+  }
+
+  async getScheduleDetailPromise(id: any)
+  {
+    try 
+    {
+      const requestApi = `${Utils.SCHEDULE_API}/detail/${id}`
+      const response = await lastValueFrom(this.http.get(requestApi));
+      return response;
+    } 
+    catch (error) 
+    {
+      return 'error';
+    }
   }
 
   getActiveCalendar() 
   {
     return this.http.get(
-      SCHEDULE_API + '/calendar-info' + '?fromDate=2022-11-01&toDate=2022-12-01',
+      Utils.SCHEDULE_API + '/calendar-info' + '?fromDate=2022-11-01&toDate=2022-12-01',
     ).pipe(
       map((response: any) => 
       {
@@ -131,16 +141,28 @@ export class CalendarService {
     )
   }
 
-  updateCalendar()
+  updateCalendar(requestBody: ModifyScheduleRequest)
   {
-    
+    return this.http.put(
+      Utils.SCHEDULE_API + '/edit', requestBody
+    ).pipe(
+      map((response: any) => 
+      {
+        return response;
+      }),
+      catchError(
+        err => 
+        {
+          return err  
+        })      
+    )
   }
 
   async getActiveCalendarUsingPromise(fromDate: string, toDate: string): Promise<any>
   { 
     try 
     {
-      const requestApi = `${SCHEDULE_API}/calendar-info/?fromDate=${fromDate}&toDate=${toDate}`
+      const requestApi = `${Utils.SCHEDULE_API}/calendar-info/?fromDate=${fromDate}&toDate=${toDate}`
       const response = await lastValueFrom(this.http.get(requestApi));
       return response;
     } 
@@ -154,7 +176,7 @@ export class CalendarService {
   { 
     try 
     {
-      const requestApi = `${PUBLIC_API}/calendar-info/${pathMapping}?fromDate=${fromDate}&toDate=${toDate}`
+      const requestApi = `${Utils.PUBLIC_API}/calendar-info/${pathMapping}?fromDate=${fromDate}&toDate=${toDate}`
       const response = await lastValueFrom(this.http.get(requestApi));
       return response;
     } 
@@ -164,10 +186,67 @@ export class CalendarService {
     }
   }
 
+  async getPublicFreeTimeUsingPromise(pathMapping: string, fromDate: string, toDate: string, freeScheduleFlag: boolean): Promise<any>
+  { 
+    try 
+    {
+      const requestApi = `${Utils.PUBLIC_API}/calendar-info/${pathMapping}?fromDate=${fromDate}&toDate=${toDate}&freeScheduleFlag=${freeScheduleFlag}`
+      const response = await lastValueFrom(this.http.get(requestApi));
+      return response;
+    } 
+    catch (error) 
+    {
+      return 'error';
+    }
+  }
 
+  async getFreeTimeSlotsPromise(fromDate: string, toDate: string, freeScheduleFlag: boolean) : Promise<any>
+  {
+    try 
+    {
+      const requestApi = `${Utils.SCHEDULE_API}/calendar-info/?fromDate=${fromDate}&toDate=${toDate}&freeScheduleFlag=${freeScheduleFlag}`
+      const response = await lastValueFrom(this.http.get(requestApi));
+      return response;
+    } 
+    catch (error) 
+    {
+      return 'error';
+    }
+  }
 
+  async getComparedCalendarPromise(pathMapping: string, fromDate: string, toDate: string, freeScheduleFlag: boolean): Promise<any>
+  { 
+    try 
+    {
+      const requestApi = `${Utils.SCHEDULE_API}/compare-with-my-calendar/${pathMapping}?fromDate=${fromDate}&toDate=${toDate}&freeScheduleFlag=${freeScheduleFlag}`
+      const response = await lastValueFrom(this.http.get(requestApi));
+      return response;
+    } 
+    catch (error) 
+    {
+      return 'error';
+    }
+  
+  }
 
+  asyncGoogleCalendar(code: string)
+  {
 
-
-
+    return this.http.get(
+      `${Utils.SCHEDULE_API}/sync-google-calendar?authorizationCode=${code}&redirectUri=${Utils.CALLBACK_AUTH_SYNC}` 
+    ).pipe
+    (
+      map((response: any) => 
+      {
+        debugger
+        return response;
+      }),
+      catchError(
+      err => 
+      {
+        debugger
+        return err  
+      })  
+    )
+  }
 }

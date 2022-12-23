@@ -1,0 +1,207 @@
+<div class="admin-dashboard"> 
+
+  <button mat-raised-button class="all-account" (click)="switchToAllAccounts()">
+    <span style="font-size: 15px;">All Accounts</span>
+  </button> 
+
+  <button mat-raised-button class="registered-account" (click)="switchToNonRegisteredAccounts()">
+    <span style="font-size: 15px;">Non-approved Accounts</span>
+  </button> 
+
+    <div class="all-account-table" *ngIf="!switchToNonRegisteredAccountsFlag">
+      <mat-card>
+        <mat-card-content>
+          <div class ='account-table'>
+            <div class="mat-elevation-z1">  
+
+              <div class='filter'>
+                <div style="margin: auto 0 auto 0">
+                  <!-- <button mat-button [matMenuTriggerFor]="menu">
+                    <mat-icon>sort</mat-icon>
+                    Sort
+                  </button> -->
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>All</button>
+                    <button mat-menu-item>Latest Created</button>
+                  </mat-menu>
+                </div>
+  
+                <div>
+                  <mat-paginator 
+                  #matPaginator
+                  [length]="totalElements"
+                  [pageSizeOptions]="pageSizeOptions"
+                  aria-label="Select page"
+                >
+                </mat-paginator>
+                </div>
+              </div>           
+              <table mat-table [dataSource]="dataSource" matSort>
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>No.</th>
+                  <td mat-cell *matCellDef="let element">{{element.id}}</td>
+                </ng-container>
+          
+                  <!-- Name Column -->
+                <ng-container matColumnDef="fullname">
+                  <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                  <td mat-cell *matCellDef="let element">{{element.fullname}}</td>
+                </ng-container>
+          
+                  <!-- Email Column -->
+                <ng-container matColumnDef="email">
+                  <th mat-header-cell *matHeaderCellDef>Email</th>
+                  <td mat-cell *matCellDef="let element">{{element.email}}</td>
+                </ng-container> 
+
+                <ng-container matColumnDef="address">
+                  <th mat-header-cell *matHeaderCellDef>Address</th>
+                  <td mat-cell *matCellDef="let element">{{element.address}}</td>
+                </ng-container> 
+
+                <ng-container matColumnDef="gender">
+                  <th mat-header-cell *matHeaderCellDef>Gender</th>
+                  <td mat-cell *matCellDef="let element">{{element.gender}}</td>
+                </ng-container> 
+
+                <ng-container matColumnDef="pathMapping">
+                  <th mat-header-cell *matHeaderCellDef>Path Mapping</th>
+                  <td mat-cell *matCellDef="let element">{{element.pathMapping}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="startDate">
+                  <th mat-header-cell *matHeaderCellDef>Start Date</th>
+                  <td mat-cell *matCellDef="let element">{{element.effectiveDate}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="endDate">
+                  <th mat-header-cell *matHeaderCellDef>End Date</th>
+                  <td mat-cell *matCellDef="let element">{{element.expiredDate}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="image">
+                  <th mat-header-cell *matHeaderCellDef>Image</th>
+                  <td mat-cell *matCellDef="let element" style="width: 12%">
+                    <img src = {{element.imagePath}} class="profile-image">
+                  </td>
+                </ng-container>
+          
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+                
+              </table>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card> 
+    </div>
+
+    <div class="approve-account-table" *ngIf="switchToNonRegisteredAccountsFlag">
+      <mat-card>
+        <mat-card-content>
+          <div class ='approve-table'>
+            <div class="mat-elevation-z1">  
+
+              <div class='filter'>
+                <div style="margin: auto 0 auto 0">
+                  <!-- <button mat-button [matMenuTriggerFor]="menu">
+                    <mat-icon>sort</mat-icon>
+                    Sort
+                  </button> -->
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>All</button>
+                    <button mat-menu-item>Latest Created</button>
+                  </mat-menu>
+                </div>
+  
+                <div>
+                  <mat-paginator 
+                  #matPaginator
+                  [length]="totalElements"
+                  [pageSizeOptions]="pageSizeOptions"
+                  aria-label="Select page"
+                >
+                </mat-paginator>
+                </div>
+              </div>           
+              <table mat-table [dataSource]="dataSourceSecondMode" matSort>
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>No.</th>
+                  <td mat-cell *matCellDef="let element">{{element.id}}</td>
+                </ng-container>
+          
+                  <!-- Name Column -->
+                <ng-container matColumnDef="fullname">
+                  <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                  <td mat-cell *matCellDef="let element">{{element.fullname}}</td>
+                </ng-container>
+          
+                  <!-- Email Column -->
+                <ng-container matColumnDef="email">
+                  <th mat-header-cell *matHeaderCellDef>Email</th>
+                  <td mat-cell *matCellDef="let element">{{element.email}}</td>
+                </ng-container> 
+
+                <ng-container matColumnDef="address">
+                  <th mat-header-cell *matHeaderCellDef>Address</th>
+                  <td mat-cell *matCellDef="let element">{{element.address}}</td>
+                </ng-container> 
+
+                <ng-container matColumnDef="gender">
+                  <th mat-header-cell *matHeaderCellDef>Gender</th>
+                  <td mat-cell *matCellDef="let element">{{element.gender}}</td>
+                </ng-container> 
+
+                <ng-container matColumnDef="username">
+                  <th mat-header-cell *matHeaderCellDef>Username</th>
+                  <td mat-cell *matCellDef="let element">{{element.username}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="verifyFlag">
+                  <th mat-header-cell *matHeaderCellDef>Verify Status</th>
+                  <td mat-cell *matCellDef="let element">{{element.verifyFlag}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="approve">
+                  <th mat-header-cell *matHeaderCellDef> Approve</th>
+                  <td mat-cell *matCellDef="let element" class="left-text">  
+                      <button mat-stroked-button color="primary" (click)="approveAccount(element.id)"> 
+                        <mat-icon>check_circle_outline</mat-icon>
+                      </button>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="reject">
+                  <th mat-header-cell *matHeaderCellDef> Reject</th>
+                  <td mat-cell *matCellDef="let element" class="left-text">  
+                      <button mat-stroked-button color="warn" (click)="rejectAccount(element.id)"> 
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                  </td>
+                </ng-container>
+           
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsSecondMode; sticky: true"></tr>
+                <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsSecondMode;" class="table-row"></tr>
+                
+              </table>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card> 
+    </div>
+
+
+
+
+
+
+
+
+    <!-- <button mat-raised-button class = 'create-schedule-button' (click)="onCreateSchedulePopup()">Create Schedule</button>  -->
+  </div>
+  <!-- <router-outlet></router-outlet> -->
+  

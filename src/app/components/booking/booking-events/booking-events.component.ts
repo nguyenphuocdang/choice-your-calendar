@@ -10,6 +10,7 @@ import { EventService } from 'src/app/_services/event.service';
 })
 export class BookingEventsComponent implements OnInit {
   defaultDate: Date = new Date();
+  
   defaultStartTime: Date = new Date((this.defaultDate.setMonth(this.defaultDate.getMonth()-3)));
   defaultEndTime: Date = new Date((this.defaultDate.setMonth(this.defaultDate.getMonth()+3)));
   defaultPageIndex: number = 0;
@@ -24,19 +25,25 @@ export class BookingEventsComponent implements OnInit {
   ngOnInit(): void 
   {
     this.route.params.subscribe(() => {
-      this._searchListEvents(this.defaultStartTime.toISOString(),this.defaultEndTime.toISOString(),this.defaultPageIndex,this.defaultSize)
+      let date: Date = new Date();
+      date.setMonth(date.getMonth() + 3);
+      let defaultStartTime: Date = new Date(date);
+
+      this._searchListEvents(defaultStartTime.toISOString(),this.defaultEndTime.toISOString(),this.defaultPageIndex,this.defaultSize)
     })
     console.log(this.eventList);
   }
 
   _searchListEvents(startTime: string, endTime: string, page: number, size: number)
   {
-      this.eventService.searchListEvents(startTime,endTime,page,size).subscribe(
+    debugger
+      this.eventService.searchListEvents('2022-09-01T06:49:24.184Z','2022-12-31T06:49:24.184Z',page,size).subscribe(
         (response: EventDetail[]) =>
           {
             if (response.length > 0)
             {
               this.eventList = response;
+              console.log(this.eventList);
             }
           }
       )

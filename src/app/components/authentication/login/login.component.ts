@@ -11,6 +11,7 @@ import { UserService } from '../../../_services/user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LocalStorageService } from '../../../_services/local-storage.service';
 import { AuthComponent } from '../register/auth.component';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -36,12 +37,16 @@ export class LoginComponent implements OnInit {
     private storageService: LocalStorageService,
     @Optional() public dialogRef: MatDialogRef<LoginComponent>,
     @Optional() public dialog: MatDialog,
+    private toastrService: ToastrService,
     ) { }
+    
+    get username() { return this.loginForm.get('username'); }
+    get password() { return this.loginForm.get('password'); }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      username: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(255)]),
     })
 
 
@@ -66,21 +71,27 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSubmit(form: FormGroup)
-  {
+  {    
     this.loginRequestModel = form.value
     this.userService.login(this.loginRequestModel).subscribe(
-      (response: any) => {
-        if(response.data)
+      (response: any) => 
+      {
+        if(response.statusCode === 200 && response.data != null)
         {
           this.isUserLoggedIn = true;
           this.onLoginComplete.emit(this.isUserLoggedIn);
-          this.userService.getRole().pipe(take(1)).subscribe(
-            (roleResponse: any) => {
-              this.userRole = roleResponse.data[0].code;
+          this.userService.getRole().subscribe(
+            (response: any) => 
+            {
+              this.userRole = response.data[0].code;
               this.storageService.setRole(this.userRole);
               this.dialogRef.close({'isUserLoggedIn': this.isUserLoggedIn, 'userRole': this.userRole}); 
             },
           )        
+        }
+        else 
+        {
+          this.toastrService.error('Login Attemp Failed', 'Error');
         }
 
       }, 
