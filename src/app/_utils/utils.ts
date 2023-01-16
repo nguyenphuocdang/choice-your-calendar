@@ -4,9 +4,9 @@ export default class Utils
 {
     //static baseUrl: string = 'http://localhost:8000/api';
 
-    //static baseUrl: string = 'http://api.timechoice.solutions/api';
+    static baseUrl: string = 'http://api.timechoice.solutions/api';
 
-    static baseUrl: string = 'http://52.221.252.133:8000/api';
+    // static baseUrl: string = 'http://52.221.252.133:8000/api';
 
     static AUTH_API : string = Utils.baseUrl + '/auth';
     static SCHEDULE_API : string = Utils.baseUrl + '/schedule';
