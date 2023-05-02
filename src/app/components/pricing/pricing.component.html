@@ -1,0 +1,57 @@
+<app-layout></app-layout>
+<div class="container">
+    <div class='title'>
+        <h1>
+            EFFICIENT AND SIMPLE-TO-USE COMPANY SCHEDULING PLATFORM - Try It Free.
+        </h1>
+        <p>
+            Choose your plan and start inviting your partners.
+        </p>
+    </div>
+    <div class='pricing'>
+        <div class="free-usage">
+            <mat-card>
+                <mat-card-content appMaterialElevation>
+                    <ul>
+                        <li style="font-weight: 700; font-size: x-large; display: flex; align-items: center; gap: 2%;">
+                            <!-- <mat-icon>card_giftcard</mat-icon> -->
+                            Free Account
+                        </li>
+                        <li style="margin: 2% auto; ">Ideal Plan For Starter</li>
+                        <li style="font-weight: 700; font-size: xx-large; margin: 7% auto; height: 5%;">$0</li>
+                        <li class="select"><a mat-raised-button class="select-free-plan"
+                                (click)="onSelectPlanClick($event,freePlanType)">SELECT PLAN</a></li>
+                        <li class="free-user-benefit">
+                            <p><mat-icon>check</mat-icon> Manage Schedules</p>
+                            <p><mat-icon>check</mat-icon> Invite maximum to 10 partners</p>
+                            <p><mat-icon>check</mat-icon> Create events between partners</p>
+                        </li>
+                    </ul>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="cost-usage">
+            <mat-card>
+                <mat-card-content appMaterialElevation>
+                    <ul>
+                        <li style="font-weight: 700; font-size: x-large; display: flex; align-items: center; gap: 2%;">
+                            <!-- <mat-icon>business</mat-icon> -->
+                            Business Account
+                        </li>
+                        <li style="margin: 2% auto; ">Special Plan for Long Term Integration</li>
+                        <li style="font-weight: 700; font-size: xx-large; margin: 7% auto; height: 5%;">$25/month</li>
+                        <li class="select"><a mat-raised-button class="select-business-plan"
+                                (click)="onSelectPlanClick($event,costPlanType)">SELECT PLAN</a></li>
+                        <li class="business-user-benefit">
+                            <p><mat-icon>check</mat-icon> Manage Schedules</p>
+                            <p><mat-icon>check</mat-icon> Invite partners without limit</p>
+                            <p><mat-icon>check</mat-icon> Booking Resources</p>
+                            <p><mat-icon>check</mat-icon> Create events between partners & public user</p>
+                        </li>
+                    </ul>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,175 @@
+<div class="container">
+    <div class="booking-resource">
+        <mat-card>
+            <mat-card-content>
+                <div class="header">
+                    <span>
+                        Booking Resources Dashboard
+                    </span>
+                </div>
+                <div class="booking-info">
+                    <mat-card>
+                        <mat-card-content>
+                            <!-- <div class="check">
+                                <mat-checkbox></mat-checkbox>
+                            </div> -->
+                            <div class="resource-type select">
+                                <span>Resource Type</span>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>
+                                        Select type
+                                    </mat-label>
+                                    <mat-select multiple (selectionChange)="onResourceTypeSelectChangeAction($event)"
+                                        [formControl]="selectedResourceTypeFormControl">
+                                        <mat-select-trigger>
+                                            <span>
+                                                {{selectedResourceTypeFormControl.value?.[0]}}
+                                            </span>
+                                            <span *ngIf="(selectedResourceTypeFormControl.value?.length || 0) > 1"
+                                                class="additional-selection">
+                                                (+{{(selectedResourceTypeFormControl.value?.length || 0) - 1}}
+                                                {{selectedResourceTypeFormControl.value?.length === 2 ? 'other' :
+                                                'others'}})
+                                            </span>
+                                        </mat-select-trigger>
+                                        <ng-container>
+                                            <mat-option *ngFor="let type of resourceType" [value]="type.label">
+                                                {{type.label}}
+                                                <span>
+                                                    <mat-icon *ngIf="type.value =='ROOM'" style="color: #23a669">
+                                                        place</mat-icon>
+                                                    <mat-icon *ngIf="type.value =='DEVICE'"
+                                                        style="color: #23a669">computer</mat-icon>
+                                                    <mat-icon *ngIf="type.value=='PERSON'"
+                                                        style="color: #23a669">people</mat-icon>
+                                                </span>
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="resource-list select">
+                                <span>Resource Option</span>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Select an option</mat-label>
+                                    <mat-select multiple (selectionChange)="onResourceSelectionChangeAction($event)"
+                                        [formControl]="selectedResourceFormControl">
+                                        <mat-select-trigger>
+                                            <span>
+                                                {{(selectedResourceFormControl.value?.[0].deviceType != null)
+                                                ?selectedResourceFormControl.value?.[0].name :
+                                                selectedResourceFormControl.value?.[0].fullname}}
+                                            </span>
+                                            <span *ngIf="selectedResourceFormControl.value?.length > 1">
+                                                , {{(selectedResourceFormControl.value?.[1].deviceType != null)
+                                                ?selectedResourceFormControl.value?.[1].name :
+                                                selectedResourceFormControl.value?.[1].fullname}}
+                                            </span>
+                                            <span *ngIf="(selectedResourceFormControl.value?.length || 0) > 2"
+                                                class="additional-selection" matTooltipTrigger="hover"
+                                                matTooltipPosition="right" [matTooltip]="tooltipSelectedResources"
+                                                [matTooltipClass]="{'mat-tooltip-style': true}">
+                                                (+{{(selectedResourceFormControl.value?.length || 0) - 2}}
+                                                {{selectedResourceFormControl.value?.length === 3 ? 'other' :
+                                                'others'}})
+                                            </span>
+                                        </mat-select-trigger>
+                                        <ng-container>
+                                            <div class="resource-content"
+                                                [ngClass]="{'border-bottom-line': isSelectRoom}">
+                                                <ng-container *ngIf="isSelectRoom">
+                                                    <div class="resource-list-type-header">
+                                                        <mat-icon> place</mat-icon>
+                                                        <span>Room</span>
+                                                    </div>
+                                                    <div class="grid-container">
+                                                        <mat-option *ngFor="let element of selectedResourceRoom"
+                                                            [value]="element">
+                                                            <span class="grid-element">{{element.name}}</span>
+                                                        </mat-option>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                            <div class="resource-content"
+                                                [ngClass]="{'border-bottom-line': isSelectDevice}">
+                                                <ng-container *ngIf="isSelectDevice">
+                                                    <div class="resource-list-type-header">
+                                                        <mat-icon>computer</mat-icon>
+                                                        <span>Support Device</span>
+                                                    </div>
+                                                    <div class="grid-container">
+                                                        <mat-option *ngFor="let element of selectedResourceDevice"
+                                                            [value]="element">
+                                                            <span class="grid-element">{{element.name}}</span>
+                                                        </mat-option>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                            <div class="resource-content"
+                                                [ngClass]="{'border-bottom-line': isSelectPeople}">
+                                                <ng-container *ngIf="isSelectPeople">
+                                                    <div class="resource-list-type-header">
+                                                        <mat-icon>people</mat-icon>
+                                                        <span>People</span>
+                                                    </div>
+                                                    <div class="grid-container">
+                                                        <mat-option *ngFor="let element of selectedResourcePeople"
+                                                            [value]="element">
+                                                            <span class="grid-element">{{element.fullname}}</span>
+                                                        </mat-option>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="schedule-button">
+                                <button mat-raised-button class="book">
+                                    <mat-icon>today</mat-icon>
+                                    Schedule
+                                </button>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="event">
+                    <mat-card>
+                        <mat-card-content>
+                            <div class="event-data">
+                                <mat-tab-group [dynamicHeight]="true">
+                                    <mat-tab label="Upcoming Booking Events">
+                                        <div *ngIf="upcomingEvents.length === 0" class='unavailable-event'>
+                                            <span>No Upcoming Booking Event Found</span>
+                                            <img src="assets/images/no-event.png" class="image">
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab label="Pending Booking Events">
+                                        <div *ngIf="pendingEvents.length === 0" class='unavailable-event'>
+                                            <span>No Pending Booking Event Found</span>
+                                            <img src="assets/images/no-event.png" class="image">
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab label="Cancel Booking Events">
+                                        <div *ngIf="cancelEvents.length === 0" class='unavailable-event'>
+                                            <span>No Cancel Booking Event Found</span>
+                                            <img src="assets/images/no-event.png" class="image">
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab label="All Booking Events">
+                                        <div *ngIf="previousEvents.length === 0" class='unavailable-event'>
+                                            <span>No Booking Event Found</span>
+                                            <img src="assets/images/no-event.png" class="image">
+                                        </div>
+                                    </mat-tab>
+
+                                </mat-tab-group>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

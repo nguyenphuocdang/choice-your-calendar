@@ -1,0 +1,221 @@
+.container {
+  width: 82vw;
+  height: 100vh;
+  background-color: #eaeff2;
+  margin-left: 0;
+  padding: 1%;
+  display: flex;
+  justify-content: center;
+  .active-calendar {
+    width: 95%;
+    height: 95%;
+    display: flex;
+    margin: auto;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid #e4dcd9;
+    mwl-calendar-month-view {
+      margin: auto;
+      width: 96%;
+      height: 99%;
+    }
+  }
+  .sidenav {
+    position: relative;
+    z-index: 100;
+    ::ng-deep .mat-drawer-container {
+      z-index: 100;
+    }
+  }
+  .mat-sidenav {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20%; /* set the width to your desired value */
+    display: flex;
+    padding: 1%;
+    .title {
+      width: 100%;
+      height: 7%;
+      font-size: large;
+      font-weight: 500;
+      align-items: center;
+      display: flex;
+      span {
+        margin: auto;
+      }
+    }
+    .time {
+      display: flex;
+      flex-direction: column;
+      gap: 5%;
+      height: 90%;
+      .time-data {
+        display: flex;
+        flex-direction: column;
+        padding: 2%;
+        font-size: medium;
+        .time-element {
+          display: flex;
+          gap: 5%;
+          .item1 {
+            font-weight: 500;
+          }
+        }
+      }
+      .event {
+        border: 2px solid #bba818;
+        border-radius: 5px;
+        .time-title {
+          display: flex;
+          gap: 2.5%;
+          color: #8d7d05;
+          font-weight: 500;
+        }
+      }
+      .non-event {
+        border: 2px solid #0926b5;
+        border-radius: 5px;
+        .time-title {
+          display: flex;
+          gap: 2.5%;
+          color: #0926b5;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+// .spacer-top {
+//   margin-top: 15px;
+// }
+
+// .calendar {
+//   width: 80%;
+//   height: 92%;
+// }
+
+// .calendar .active-calendar {
+//   width: 90%;
+//   height: 90%;
+//   margin: auto;
+// }
+
+// .calendar .active-calendar mat-card-content {
+//   display: flex;
+//   border-radius: 10px;
+//   border: 2px solid rgb(216, 201, 201);
+//   width: 100%;
+//   height: 100%;
+//   margin: auto;
+//   background-color: white;
+// }
+
+// full-calendar {
+//   width: 95%;
+//   height: 90%;
+//   margin: auto;
+// }
+// .create-schedule-button {
+//   background-color: #5bf985;
+//   color: #202421;
+//   height: 35px;
+// }
+
+// .example-card {
+//   max-width: 200px;
+// }
+
+// .modify-calendar {
+//   border-radius: 15px;
+//   border: 2px solid rgb(12, 124, 171);
+//   margin-left: 2%;
+//   margin-bottom: 1%;
+//   color: rgb(12, 124, 171);
+// }
+
+// .async-calendar {
+//   border-radius: 15px;
+//   border: 2px solid rgb(159, 8, 21);
+//   margin-left: 2%;
+//   margin-bottom: 1%;
+//   color: rgb(159, 8, 21);
+// }
+
+// .add-free-slot {
+//   border-radius: 15px;
+//   border: 2px solid rgb(12, 171, 36);
+//   margin-left: 2%;
+//   margin-bottom: 1%;
+//   color: rgb(12, 171, 36);
+// }
+
+// .no-bullets {
+//   list-style-type: none;
+// }
+
+// .free-calendar .element-card mat-card-content {
+//   display: flex;
+//   border-radius: 5px;
+//   /* border: 1px solid rgb(216, 201, 201); */
+//   width: 100%;
+//   height: 100%;
+//   margin: auto;
+//   border-top: 7px solid rgba(33, 213, 210, 0.425);
+//   background-color: rgba(234, 239, 248, 0.425);
+// }
+
+// .free-calendar .element-card {
+//   height: 100%;
+//   width: 100%;
+// }
+
+// ul {
+//   display: grid;
+//   grid-template-columns: repeat(3, 235px);
+//   grid-template-rows: repeat(3, 100px);
+//   grid-gap: 25px;
+//   height: 100%;
+//   width: 100%;
+//   margin-top: 2%;
+// }
+
+// .slot {
+//   display: flex;
+//   flex-direction: column;
+//   margin-left: auto;
+//   margin-right: auto;
+//   font-size: 15px;
+// }
+// .slot-day {
+//   margin-top: 15%;
+//   margin-left: auto;
+//   margin-right: auto;
+//   font-weight: 600;
+//   margin-bottom: 5%;
+// }
+
+// .free-calendar {
+//   width: 70%;
+//   height: 45%;
+//   margin-left: 5%;
+// }
+
+// .free-calendar mat-card-content {
+//   display: flex;
+//   border-radius: 10px;
+//   border: 1px solid rgb(216, 201, 201);
+//   width: 100%;
+//   height: 100%;
+//   margin: auto;
+//   background-color: white;
+// }
+
+// .header-title {
+//   text-align: center;
+//   justify-content: center;
+//   font-size: 25px;
+//   font-weight: 500;
+//   margin: auto;
+// }

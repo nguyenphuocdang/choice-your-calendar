@@ -1,69 +1,81 @@
-<div class="login-frame">
-  <mat-card>
-    <mat-card-content>
-      <div class="header">
-        WELCOME BACK
-      </div>
-      <form (ngSubmit)="onLoginSubmit(loginForm)" name="loginForm" [formGroup]="loginForm">
-        <div class="emailInput">
-          <mat-form-field class ='full-width' appearance="outline">
-            <mat-label>Username</mat-label>
-            <input
-              formControlName="username"
-              matInput
-              placeholder="Enter username" required
-              name="username"
-            />
-            <mat-error *ngIf="username!.errors?.['required']"> Title is required </mat-error>
-            <mat-error *ngIf="username!.errors?.['minlength']"> Title must be at least 5 characters long. </mat-error>
-            <mat-error *ngIf="username!.errors?.['maxlength']"> Title must be less than 255 characters long. </mat-error>
-          </mat-form-field>
+<div class="container">
+  <div class="login-frame">
+    <mat-card>
+      <mat-card-content>
+        <div class="image">
+          <img src='assets/images/login-photo.png' class='logo'>
         </div>
+        <div class="content">
+          <div class="header">
+            Sign In
+          </div>
+          <form (ngSubmit)="onLoginSubmit(loginForm)" name="loginForm" [formGroup]="loginForm">
+            <div class="username default-textfield default-font">
+              <label for="username">Username</label>
+              <input formControlName="username" matInput placeholder="Enter your username" required name="username"
+                class="default-input" />
+              <!-- <mat-error *ngIf="username!.errors?.['required']"> Title is required </mat-error>
+                <mat-error *ngIf="username!.errors?.['minlength']"> Title must be at least 5 characters long. </mat-error>
+                <mat-error *ngIf="username!.errors?.['maxlength']"> Title must be less than 255 characters long.
+                </mat-error> -->
+            </div>
 
-        <div>
-          <mat-form-field class = 'full-width' appearance="outline">
-            <mat-label>Password</mat-label>
-            <input 
-            formControlName="password" 
-            matInput [type]=" hide ? 'password' : 'text'" 
-            required
-            name="password"
-             />
-            <button  mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide Password'"
-            [attr.aria-pressed]="hide">
-            <mat-icon>
-                {{hide ? 'visibility_off' : 'visibility'}}
-            </mat-icon>
-            </button>
-            <mat-error *ngIf="password!.errors?.['required']"> Password is required </mat-error>
-            <mat-error *ngIf="password!.errors?.['minlength']"> Password must be at least 8 characters long. </mat-error>
-            <mat-error *ngIf="password!.errors?.['maxlength']"> Password must be less than 255 characters long. </mat-error>
-          </mat-form-field>
+            <div class="default-textfield default-font">
+              <label for="password">Password</label>
+              <div class="password">
+                <input formControlName="password" matInput placeholder="Enter your password"
+                  [type]=" hide ? 'password' : 'text'" required name="password" />
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide Password'"
+                  [attr.aria-pressed]="hide">
+                  <mat-icon>
+                    {{hide ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="login-button">
+              <button mat-raised-button type="submit">
+                SIGN IN
+              </button>
+            </div>
+
+            <div class="default-font" style="font-size: medium !important; display: flex;
+            justify-content: center; margin-top: 5%;">
+              <span>
+                Not A Member Yet?
+              </span>
+              <a routerLink="/pricing" style="margin-left: 2%;">Contact us Now</a>
+            </div>
+
+            <!-- <div>
+              <mat-form-field class='full-width' appearance="outline">
+                <mat-label>Password</mat-label>
+                <input formControlName="password" matInput [type]=" hide ? 'password' : 'text'" required
+                  name="password" />
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide Password'"
+                  [attr.aria-pressed]="hide">
+                  <mat-icon>
+                    {{hide ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
+                </button>
+                <mat-error *ngIf="password!.errors?.['required']"> Password is required </mat-error>
+                <mat-error *ngIf="password!.errors?.['minlength']"> Password must be at least 8 characters long.
+                </mat-error>
+                <mat-error *ngIf="password!.errors?.['maxlength']"> Password must be less than 255 characters long.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+
+            <div class="register-option">
+              <h1>Don't have an account yet?</h1>
+              <a mat-raised-button class='register' (click)="switchToRegister()"
+                style="border-radius: 5px; height: 70%; width: 20%; text-align: center;">Sign Up</a>
+            </div>  -->
+          </form>
         </div>
-        <button mat-flat-button
-          color="primary"
-          style="border-radius: 5px; height: 70%; width: 70%;" 
-          [disabled]="loginForm.invalid"
-        >
-          SIGN IN
-        </button>
-
-        <div class="register-option">
-          <h1>Don't have an account yet?</h1>
-          <a 
-          mat-raised-button
-          class = 'register'
-          (click)="switchToRegister()"
-          style="border-radius: 5px; height: 70%; width: 20%; text-align: center;" 
-          >Sign Up</a>
-        </div>
-
-        <!-- <button mat-flat-button color="primary" *ngIf="isUserLoggedIn" (click)="onLogout()">Logout</button> -->
-      </form>
-    </mat-card-content>
-  </mat-card>
-
-
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
-
-

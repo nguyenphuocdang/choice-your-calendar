@@ -1,0 +1,305 @@
+.container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  background-color: #eaeff2;
+  .title {
+    width: 100%;
+    height: 5%;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    background-color: #36bb7c;
+    span {
+      font-size: medium;
+      font-weight: 500;
+      color: #ffffff;
+      display: flex;
+      margin: auto;
+      height: 100%;
+      align-items: center;
+      width: 98%;
+    }
+  }
+  .container-2 {
+    display: flex;
+    flex-direction: column;
+    width: 97%;
+    height: 88%;
+    background-color: white;
+    border-radius: 10px;
+    margin: auto;
+    .button {
+      display: flex;
+      flex-direction: row;
+      height: 15%;
+      width: 100%;
+      padding-left: 2%;
+      gap: 2%;
+      .add-employee-button {
+        display: flex;
+        align-items: center;
+        button {
+          height: 40%;
+          background-color: #d96f0c;
+          color: white;
+          font-size: medium;
+          border-radius: 7px;
+        }
+      }
+      .add-default-calendar-button {
+        display: flex;
+        align-items: center;
+        button {
+          height: 40%;
+          background-color: #0b8266;
+          color: white;
+          font-size: medium;
+          border-radius: 7px;
+        }
+      }
+    }
+    .employee {
+      width: 96%;
+      margin: 0 auto;
+      .employee-table {
+        // box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+        //   0 6px 6px rgba(0, 0, 0, 0.23);
+        border: 1px solid rgb(221, 212, 212);
+        width: 100%;
+        td {
+          padding-right: 2%;
+        }
+        .profile-image {
+          width: 50%;
+          height: 50%;
+        }
+        .header {
+          text-align: center;
+        }
+        .id {
+          width: 7%;
+        }
+        .mat-header-cell.mat-column-select,
+        .mat-cell.mat-column-select {
+          width: 7%;
+        }
+        .mat-header-cell.mat-column-id,
+        .mat-cell.mat-column-id {
+          width: 5%;
+        }
+        .mat-header-cell.mat-column-fullname,
+        .mat-cell.mat-column-fullname {
+          width: 15%;
+          padding: auto;
+        }
+        .mat-header-cell.mat-column-email,
+        .mat-cell.mat-column-email {
+          width: 25%;
+          padding: auto;
+          margin-right: 5%;
+        }
+        .mat-header-cell.mat-column-address,
+        .mat-cell.mat-column-address {
+          width: 25%;
+          padding: auto;
+        }
+        .mat-header-cell.mat-column-managerFlag,
+        .mat-cell.mat-column-managerFlag {
+          width: 7%;
+          padding: auto;
+        }
+        .mat-header-cell.mat-column-imagePath,
+        .mat-cell.mat-column-imagePath {
+          width: 5%;
+          padding: auto;
+        }
+        .mat-header-cell.mat-column-effectiveDate,
+        .mat-cell.mat-column-effectiveDate {
+          width: 10%;
+          padding: auto;
+        }
+        .mat-header-cell.mat-column-eventHosterFlag,
+        .mat-cell.mat-column-eventHosterFlag {
+          width: 7%;
+          padding: auto;
+        }
+        .mat-header-cell.mat-column-managerFlag,
+        .mat-cell.mat-column-managerFlag {
+          width: 7%;
+          padding: auto;
+        }
+      }
+      .mat-checkbox-frame {
+        border-color: #ff0000; /* replace with desired border color */
+      }
+    }
+  }
+
+  .template {
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      text-decoration: underline;
+      font-size: medium;
+      font-weight: 500;
+      color: blue;
+    }
+  }
+  .list-employee {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+      sans-serif;
+    font-size: medium;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    height: 30%;
+    width: 100%;
+    justify-content: center;
+    gap: 2%;
+    label {
+      font-weight: 600;
+      color: rgb(0, 0, 0);
+      margin: auto;
+    }
+    .import-button {
+      display: flex;
+      justify-content: center;
+      button {
+        background-color: #0e9974;
+        color: white;
+        font-size: medium;
+        border-radius: 7px;
+      }
+    }
+    input {
+      border-radius: 8px;
+      border: 2px solid rgb(221, 212, 212);
+      height: 20%;
+      width: 90%;
+      margin: auto;
+      user-select: none;
+      border: 2px solid #0e9974;
+      color: #0e9974;
+    }
+  }
+  .default-calendar {
+    width: 100%;
+    height: 100%;
+    .custom-textfield {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+        sans-serif;
+      font-size: medium;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      height: 15%;
+      width: 100%;
+      margin-top: 5%;
+      justify-content: center;
+      label {
+        font-weight: 600;
+        color: rgb(99, 97, 97);
+        margin-left: 5%;
+      }
+      input {
+        border-radius: 8px;
+        border: 2px solid rgb(221, 212, 212);
+        height: 50%;
+        width: 90%;
+        margin: auto;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+      }
+    }
+    .start-time {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 20%;
+      span {
+        font-weight: 500;
+        color: rgb(99, 97, 97);
+        margin-left: 5%;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        font-size: medium;
+      }
+      mat-form-field {
+        width: 92%;
+        margin: auto;
+      }
+    }
+  }
+  .sidenav {
+    position: relative;
+    z-index: 100;
+    ::ng-deep .mat-drawer-container {
+      z-index: 100;
+    }
+  }
+  .mat-sidenav {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20%;
+  }
+  .add-button {
+    height: 10%;
+    width: 60%;
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    margin: auto;
+    button {
+      height: 50%;
+      border-radius: 7px;
+    }
+  }
+}
+
+// .container::before {
+//   content: "";
+//   background-color: rgba(202, 192, 192, 0.5);
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   z-index: 99; /* Set a lower z-index value for the overlay */
+//   display: none; /* Hide the overlay by default */
+// }
+
+.overlay {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #8c8c8c;
+  opacity: 0.5; /* set opacity as desired */
+  z-index: 99; /* set z-index as desired */
+  display: none;
+  /* additional styles for overlay */
+}
+
+.overlay-active {
+  display: block;
+}
+
+.sidenav-active {
+  transform: translateX(0);
+}

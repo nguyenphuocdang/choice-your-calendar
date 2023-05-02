@@ -1,6 +1,6 @@
 import { AnimationMetadataType } from '@angular/animations';
 import { Component, OnInit, Optional, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Time } from 'src/app/_models/time';
 import { CalendarService } from 'src/app/_services/calendar.service';
@@ -16,8 +16,8 @@ import { ListTimeWorkingDatas, Schedule } from 'src/app/_models/schedule';
   styleUrls: ['./create-schedule.component.css']
 })
 export class CreateScheduleComponent implements OnInit {
-  formControlItem: FormControl = new FormControl('');
-  createScheduleForm!: FormGroup;
+  formControlItem: UntypedFormControl = new UntypedFormControl('');
+  createScheduleForm!: UntypedFormGroup;
   //list of schedules
   listTimeWorkingDatas: ListTimeWorkingDatas[] = []; 
 weekdays: string[] = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'];
@@ -28,7 +28,7 @@ isTimeNull: boolean = false;
 // private _isTimeNull = new BehaviorSubject<boolean>(false);
 
 constructor(
-  private fb: FormBuilder,
+  private fb: UntypedFormBuilder,
   private calendarService: CalendarService,
   private toastrService: ToastrService,
   @Optional() public dialogRef: MatDialogRef<CreateScheduleComponent>,
@@ -41,13 +41,13 @@ get timeData() { return this.createScheduleForm.get('timeData'); }
 ngOnInit(): void 
 {
   this.createScheduleForm = this.fb.group({
-    name: new FormControl('', 
+    name: new UntypedFormControl('', 
     [
       Validators.required,
       Validators.minLength(5),
       Validators.maxLength(255),
     ]),
-    brief: new FormControl('', 
+    brief: new UntypedFormControl('', 
     [
       Validators.required,
       Validators.minLength(5),
@@ -59,7 +59,7 @@ ngOnInit(): void
 
 }
 
-addNewSchedule(form: FormGroup) 
+addNewSchedule(form: UntypedFormGroup) 
 {
   const schedulesData: ListTimeWorkingDatas[] = [];
   for (let i = 0; i < this.timeArray.length; i++)
@@ -145,7 +145,7 @@ removeCurrentEvent(index: number, weekday: string)
   this.timeArray[index].splice(-1);
 }
 
-timeValidator(control: FormControl)
+timeValidator(control: UntypedFormControl)
 {
   // return (control: AbstractControl): ValidationErrors | null => 
   // {
@@ -309,7 +309,7 @@ copyEvents(index: number)
     }
 
     addSchedule(startTime = "", endTime = ""){
-      let schedule = this.createScheduleForm.get('listTimeWorkingDatas') as FormArray;
+      let schedule = this.createScheduleForm.get('listTimeWorkingDatas') as UntypedFormArray;
       schedule.push(this.fb.group({
         startTime : [startTime],
         endTime : [endTime]

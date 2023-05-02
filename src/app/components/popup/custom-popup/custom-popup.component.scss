@@ -1,0 +1,64 @@
+.popup-template
+{
+    display: flex;
+    flex-direction: column;
+    .logo
+    {
+        width: 5%;
+        height: 70%;
+        margin: auto;
+    }
+    span
+    {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        height: 40;
+        h2
+        {
+            width: 80%;
+            margin: auto;
+        }
+    }
+    .proceed-payment
+    {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        button
+        {
+            height: 50%;
+            margin: auto;
+            color:#ffffff;
+            background-color: #3434da;
+            font-weight: 500;
+            font-size: 17px;
+        }
+    }
+    .proceed-login
+    {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        button
+        {
+            background-color: rgb(89, 56, 207);
+            color: white;
+            font-size:20px;
+            user-select: none;
+            height: 45%;
+            border-radius: 10px;
+        }
+    }
+}
+.custom-dialog
+{
+    border-radius: 20px;
+    padding: 0;
+}
+
+::ng-deep .mat-dialog-container {
+    padding: 0 !important;
+    border-radius: 10px;
+  }

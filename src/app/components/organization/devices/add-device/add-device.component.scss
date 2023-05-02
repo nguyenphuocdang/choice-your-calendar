@@ -1,0 +1,104 @@
+.container {
+  width: 81.25vw;
+  height: fit-content;
+  position: relative;
+  display: flex;
+  background-color: #eaeff2;
+  margin-left: 0;
+  padding: 1%;
+  .device-grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, auto);
+    gap: 10px;
+    width: fit-content;
+    height: fit-content;
+    background-color: rgb(255, 255, 255);
+    padding: 1%;
+    border-radius: 0.5rem;
+    .device-grid-item {
+      height: 14.6rem;
+      width: 14.6rem;
+      mat-card {
+        mat-card-content {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          width: 100%;
+
+          background-color: white;
+          border-radius: 5px;
+          border: 1px solid #e4dcd9;
+          padding: 4%;
+          gap: 5%;
+          .device-name {
+            display: flex;
+            justify-content: center;
+            border-radius: 5px;
+            border: 2px solid #e4dcd9;
+
+            padding: 2%;
+            height: fit-content;
+            font-size: medium;
+            font-weight: 500;
+          }
+          .icon {
+            height: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            mat-icon {
+              color: rgb(8, 98, 8);
+              font-size: 90px;
+              height: 90%;
+              width: fit-content;
+              margin: auto;
+              border-radius: 5px;
+            }
+          }
+          .code {
+            display: flex;
+            flex-direction: column;
+          }
+          .approver {
+            display: flex;
+            flex-direction: column;
+            gap: 5%;
+            span {
+              font-weight: 500;
+              color: rgb(99, 97, 97);
+            }
+            input {
+              font-size: medium;
+              padding: 2%;
+              border-radius: 5px;
+              color: rgb(99, 97, 97);
+              border: 2px solid #e4dcd9;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+    .create-button {
+      button {
+        width: 100%;
+        height: 100%;
+        background-color: rgb(6 140 10);
+        border-radius: 5px;
+        border: 0.25px solid rgb(6, 140, 10);
+        mat-icon {
+          font-size: 100px;
+          height: 50%;
+          width: 90%;
+          color: rgb(255, 255, 255);
+        }
+        span {
+          color: rgb(255, 255, 255);
+          font-weight: 500;
+          font-size: large;
+        }
+      }
+    }
+  }
+}

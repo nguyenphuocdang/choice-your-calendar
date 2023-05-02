@@ -1,22 +1,23 @@
-<mat-toolbar style ="background-color:#EBFFFB">
-  <span class = 'title'>
-    <img src = 'assets/images/logo.png' class = 'logo'>
-    <div style="color: #0902CB; font-size: larger; margin-top: 10px;">
+<mat-toolbar class="nav-web">
+  <div class='nav-web-title' (click)="redirectHomepage()">
+    <img src='assets/images/navbar-logo.png' class='nav-web-logo'>
+    <h1>
       TimeChoice
-    </div>
-  </span>
-  
-  <div class = 'spacer'>
+    </h1>
+  </div>
+  <div class='spacer'></div>
+  <div class="'dropdown-items">
+    <span>
 
-  </div> 
-    <!-- <div class = 'drop-down' *ngIf='isUserLoggedIn'>
+    </span>
+
+  </div>
+  <!-- <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon> -->
+  <a mat-raised-button class='contact-button' (click)="onContactPopup()">Contact Us</a>
+  <a mat-raised-button class='login-button' (click)="onLoginPopup()">Login</a>
+</mat-toolbar>
+<!-- <div class = 'drop-down' *ngIf='isUserLoggedIn'>
         Welcome back, {{userName}}
         <img src = 'assets/images/profile.png' class = 'profile-picture'>
     </div> -->
-
-    <a mat-raised-button (click)="onLoginPopup()" class = 'login-button' *ngIf='!isUserLoggedIn'
-    >Login</a> 
-    <a mat-raised-button (click)="onAuthPopup()" class = 'auth-button' *ngIf='!isUserLoggedIn'>Register</a> 
-
-</mat-toolbar>
-
+<!-- <a mat-raised-button (click)="onAuthPopup()" class='auth-button' *ngIf='!isUserLoggedIn'>Register</a> -->

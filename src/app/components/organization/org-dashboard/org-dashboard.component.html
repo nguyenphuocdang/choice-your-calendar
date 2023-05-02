@@ -1,0 +1,123 @@
+<div class="container">
+    <div class="overlay" [ngClass]="{ 'overlay-active' : isOverlay}"></div>
+    <div class="create-button">
+        <button mat-raised-button (click)="toggleSidenav()">
+            <span style="display: flex;"><mat-icon style="margin: auto;">add</mat-icon>
+                Organization</span>
+        </button>
+    </div>
+    <div class="container-2">
+        <div class="title">
+            <span>
+                Organization Information
+            </span>
+        </div>
+        <div class="name">
+            <mat-icon style="color: #0e9974;">check_circle</mat-icon>
+            <span>{{organizationData.name}}</span>
+        </div>
+        <div class="information">
+            <div class="column">
+                <div class="num-employee element-box">
+                    <span class="element-1"> 7</span>
+                    <span class="element-2"> Total Employees</span>
+                </div>
+            </div>
+            <div class="column">
+                <div class="code element-box">
+                    <span class="element-1"> {{organizationData.code}}</span>
+                    <span class="element-2"> Signature Code</span>
+                </div>
+            </div>
+            <div class="column">
+                <div class="type element-box">
+                    <span class="element-1"> {{organizationData.organizationType}}</span>
+                    <span class="element-2"> Organization Type</span>
+                </div>
+            </div>
+            <div class="column">
+                <div class="description element-box">
+                    <span style="font-size: large; font-weight: 500;"> {{organizationData.description}}</span>
+                    <span class="font-size: medium; font-weight: 500;"> Description</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-3">
+        <div class="title">
+            <span>
+                Time In Work
+            </span>
+        </div>
+        <!-- <mwl-calendar-month-view></mwl-calendar-month-view> -->
+        <div class="description">
+            <div>
+                <mat-icon style="color: #dbc560;">check_circle</mat-icon>
+                <span style="color: #b69812;">Morning Working Time</span>
+            </div>
+
+            <div>
+                <mat-icon style="color: #db8760;">check_circle</mat-icon>
+                <span style="color: #c34a12;">Afternoon Working Time</span>
+            </div>
+
+        </div>
+        <div class="calendar">
+
+            <mat-grid-list class='date' cols="8" rowHeight="55px" style="background-color: white;">
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile>Monday</mat-grid-tile>
+                <mat-grid-tile>Tuesday</mat-grid-tile>
+                <mat-grid-tile>Wednesday</mat-grid-tile>
+                <mat-grid-tile>Thursday</mat-grid-tile>
+                <mat-grid-tile>Friday</mat-grid-tile>
+                <mat-grid-tile>Saturday</mat-grid-tile>
+                <mat-grid-tile>Sunday</mat-grid-tile>
+            </mat-grid-list>
+            <mat-grid-list class='time' cols="8" rows="12" rowHeight="26px">
+                <ng-container *ngFor="let row of rows; let rowIndex = index">
+                    <mat-grid-tile *ngFor="let item of row" [colspan]="1" [rowspan]="1" [ngStyle]="{ 'background-color':
+                        item.status === 'start_working_morning' ? '#FDF1BA' :
+                        item.status === 'is_working_morning' ? '#FDF1BA' :
+                        item.status === 'start_working_afternoon' ? '#db8760' :
+                        item.status === 'is_working_afternoon' ? '#db8760' : ''
+                    }">
+                        <span>{{ item.value }}</span>
+                    </mat-grid-tile>
+                </ng-container>
+            </mat-grid-list>
+        </div>
+
+    </div>
+    <div class="sidenav">
+        <mat-sidenav-container>
+            <mat-sidenav #sidenav position="end" [opened]="isShowing">
+                <form action="" name="addOrganizationForm" [formGroup]="addOrganizationForm">
+                    <div class="custom-textfield">
+                        <label for="name">Company Name</label>
+                        <input type="text" id="name" formControlName="name" matInput
+                            placeholder="ex: The New York Times Company">
+                    </div>
+                    <div class="custom-textfield">
+                        <label for="code">Company Code</label>
+                        <input type="text" id="code" formControlName="code" matInput placeholder="ex: BTC">
+                    </div>
+                    <div class="custom-textfield">
+                        <label for="description">Description</label>
+                        <input type="" id="description" formControlName="description">
+                    </div>
+                </form>
+                <div class="create">
+                    <button mat-raised-button type="submit" style="background-color: #09ae8a; color: white;"
+                        (click)="onCreateOrganization()">
+                        Create
+                    </button>
+                    <button mat-raised-button type="submit" style="background-color: #e60303; color: white;"
+                        (click)="toggleSidenav()">
+                        Cancel
+                    </button>
+                </div>
+            </mat-sidenav>
+        </mat-sidenav-container>
+    </div>
+</div>

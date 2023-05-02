@@ -1,6 +1,19 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Inject, OnInit, Optional, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, NgForm } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnInit,
+  Optional,
+  Output,
+} from '@angular/core';
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  UntypedFormBuilder,
+  NgForm,
+} from '@angular/forms';
 // import { MsalBroadcastService, MsalGuardConfiguration, MsalService, MSAL_GUARD_CONFIG } from '@azure/msal-angular';
 // import { InteractionStatus, RedirectRequest } from '@azure/msal-browser';
 // import { RedirectHandler } from '@azure/msal-browser/dist/internals';
@@ -10,23 +23,24 @@ import { AuthService } from '../../../_services/auth.service';
 import { UserService } from '../../../_services/user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LocalStorageService } from '../../../_services/local-storage.service';
-import { AuthComponent } from '../register/auth.component';
+import { AuthComponent } from '../register/signup-google/auth.component';
 import { ToastrService } from 'ngx-toastr';
+import { PaymentService } from 'src/app/_services/payment.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   @Output() onLoginComplete = new EventEmitter<boolean>();
   hide: boolean = true;
   isUserLoggedIn: boolean = false;
-  userRole: string ='';
+  userRole: string = '';
   data: any;
   loginRequestModel: any = {};
-  loginForm!: FormGroup;
+  loginForm!: UntypedFormGroup;
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     // @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig : MsalGuardConfiguration,
     // private msalBroadCastService : MsalBroadcastService,
     // private msService : MsalService,
@@ -37,24 +51,34 @@ export class LoginComponent implements OnInit {
     private storageService: LocalStorageService,
     @Optional() public dialogRef: MatDialogRef<LoginComponent>,
     @Optional() public dialog: MatDialog,
-    private toastrService: ToastrService,
-    ) { }
-    
-    get username() { return this.loginForm.get('username'); }
-    get password() { return this.loginForm.get('password'); }
+    private toastrService: ToastrService
+  ) {}
+
+  get username() {
+    return this.loginForm.get('username');
+  }
+  get password() {
+    return this.loginForm.get('password');
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(255)]),
-    })
-
-
+      username: new UntypedFormControl('', [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(255),
+      ]),
+      password: new UntypedFormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(255),
+      ]),
+    });
 
     // this.msalBroadCastService.inProgress$.pipe
     // (
     //   filter(
-    //     (interactionStatus : InteractionStatus) => 
+    //     (interactionStatus : InteractionStatus) =>
     //     interactionStatus == InteractionStatus.None,
     //   )
     // ).subscribe(
@@ -65,53 +89,49 @@ export class LoginComponent implements OnInit {
     // );
   }
 
-  redirect(url: string)
-  {
-    this.router.navigate([url])
+  redirect(url: string) {
+    this.router.navigate([url]);
   }
 
-  onLoginSubmit(form: FormGroup)
-  {    
-    this.loginRequestModel = form.value
-    this.userService.login(this.loginRequestModel).subscribe(
-      (response: any) => 
-      {
-        if(response.statusCode === 200 && response.data != null)
-        {
-          this.isUserLoggedIn = true;
-          this.onLoginComplete.emit(this.isUserLoggedIn);
-          this.userService.getRole().subscribe(
-            (response: any) => 
-            {
-              this.userRole = response.data[0].code;
-              this.storageService.setRole(this.userRole);
-              this.dialogRef.close({'isUserLoggedIn': this.isUserLoggedIn, 'userRole': this.userRole}); 
-            },
-          )        
-        }
-        else 
-        {
-          this.toastrService.error('Login Attemp Failed', 'Error');
-        }
-
-      }, 
-      error =>
-      {
-        console.log(error)
-      }
-    )
-
-  if(this.isUserLoggedIn)
-  {
-    
-  }
+  onLoginSubmit(form: UntypedFormGroup) {
+    this.loginRequestModel = form.value;
+    try {
+      this.userService
+        .login(this.loginRequestModel)
+        .subscribe(async (response: any) => {
+          if (response.statusCode === 200 && response.data != null) {
+            const roleResponse: any = await this.userService.getRolePromise();
+            if (roleResponse.data[0].code === 'ROLE_ADMIN') {
+              this.storageService.setRole('ROLE_ADMIN');
+              this.toastrService.success(
+                `Welcome back ${this.loginForm.get('username')?.value}`,
+                'LOGIN SUCCESS'
+              );
+              this.router.navigate(['/admin/admin-dashboard']);
+            } else {
+              this.storageService.setRole('ROLE_BASIC_USER');
+              this.toastrService.success(
+                `Welcome back ${this.loginForm.get('username')?.value}`,
+                'LOGIN SUCCESS'
+              );
+              this.router.navigate(['/homepage/user-profile'], {
+                state: { username: this.loginForm.get('username')?.value },
+              });
+            }
+          } else {
+            this.toastrService.error(
+              response.errors[0].errorMessage,
+              'LOGIN ERROR'
+            );
+          }
+        });
+    } catch (error) {
+      debugger;
+    }
 
     // console.log(form.value);
     // form.reset;
 
-
-    
-    
     // this.redirect('calendar-dashboard')
     // this.authService.login(this.loginRequestModel).subscribe(response =>
     //   {
@@ -119,10 +139,10 @@ export class LoginComponent implements OnInit {
     //     //handle response
     //     this.isLoggedIn = true;
     //   },
-      // error => 
-      // {
-      //   console.log(error)
-      // }
+    // error =>
+    // {
+    //   console.log(error)
+    // }
     // )
     //this.router.navigateByUrl('/calendar-dashboard')
     // if (this.msalGuardConfig.authRequest)
@@ -130,29 +150,25 @@ export class LoginComponent implements OnInit {
     //   this.authService.loginRedirect(
     //     {...this.msalGuardConfig.authRequest}  as RedirectRequest
     //   );
-    // } 
+    // }
     // else
     // {
     //   this.msalGuardConfig.authRequest
     // }
     // this.http.post('https://choose-calendar-app.herokuapp.com/api/auth/basic-login',
     // {"password": "123",
-    // "username": "admin"}).subscribe(response => 
+    // "username": "admin"}).subscribe(response =>
     //   {
     //     this.data = response;
     //     console.log(this.data)
-    //   }           
+    //   }
     // );
-
-
   }
-  switchToRegister()
-  {
+  switchToRegister() {
     this.dialogRef.close(LoginComponent);
     this.dialog.open(AuthComponent);
   }
-  onLogout()
-  {
+  onLogout() {
     this.isUserLoggedIn = false;
     // this.msService.logoutRedirect()
   }

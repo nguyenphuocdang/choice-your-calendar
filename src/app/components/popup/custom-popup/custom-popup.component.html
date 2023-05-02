@@ -1,0 +1,34 @@
+<div class="popup-template" style="width: 100%; height: 100%;">
+    <div style="height: 25%; display: flex; justify-content: center;" *ngIf="!isAuthenticated">
+        <img src='assets/images/popup-logo.png' class='logo'>
+    </div>
+    <div *ngIf="isAuthenticated" style="display: flex; justify-content: center;">
+        <mat-icon style="color: rgb(31, 172, 31); font-size: 90px;
+        height: 100% ;
+        width: fit-content;">check_circle</mat-icon>
+    </div>
+
+    <span>
+        <h2 mat-dialog-title>{{modalTitle}}</h2>
+    </span>
+
+    <div class="button-field" *ngIf="isBasic"
+        style="display: flex; flex-direction: row; gap: 10px; justify-content: center; margin-top: 30px;">
+        <button mat-flat-button color="primary" (click)="onConfirm()">Confirm</button>
+        <button mat-flat-button color="warn" (click)="onCancel()">Cancel</button>
+    </div>
+
+    <div class="proceed-payment" *ngIf="isProceedPayment">
+        <button mat-raised-button (click)="onProceedPayment()">Proceed to Payment
+            <mat-icon style="color: white;">arrow_right_alt</mat-icon>
+        </button>
+    </div>
+
+    <div class="proceed-login" *ngIf="isAuthenticated">
+        <button mat-raised-button (click)="onProceedLogin()">
+            Go to Login now
+            <mat-icon style="color: white;">arrow_right_alt</mat-icon>
+        </button>
+    </div>
+
+</div>

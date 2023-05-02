@@ -1,14 +1,10 @@
-<div class="header">
+<!-- <div class="header">
     <button mat-raised-button class="modify-calendar" (click)="addMoreEventClick()">
         <mat-icon style="margin-right: 3%;">add</mat-icon>
         <span style="font-size: 15px;">Add Event</span>
-    </button> 
+    </button>
 
-    <!-- <button mat-raised-button class="async-calendar" (click) = 'asyncGoogleCalendar()'>
 
-        <mat-icon style="margin-right: 3%;">calendar_today</mat-icon>
-        <span style="font-size: 15px;">Sync with Google Calendar</span>
-    </button>   -->
 
     <button mat-raised-button class="async-calendar" (click) = 'asyncGoogleCalendar()'>
         <mat-icon style="margin-right: 3%;">calendar_today</mat-icon>
@@ -18,16 +14,16 @@
     <button mat-raised-button class="add-free-slot" (click)="addMoreEventClick()">
         <mat-icon style="margin-right: 3%;">add</mat-icon>
         <span style="font-size: 15px;">Add Free Slots</span>
-    </button> 
+    </button>
 </div>
 
 <div class="calendar">
     <div class="active-calendar">
         <mat-card>
             <mat-card-content>
-                    <full-calendar 
+                    <full-calendar
                     [options]='calendarOptions'>
-                    </full-calendar> 
+                    </full-calendar>
             </mat-card-content>
         </mat-card>
     </div>
@@ -35,9 +31,9 @@
 </div>
 
 <div class="free-calendar">
-    
+
     <mat-card>
-        
+
       <mat-card-content>
         <div style="width: 100%; height: 100%; margin-top: 1%;">
             <div class="header-title">
@@ -62,11 +58,41 @@
               </div>
 
             </li>
-          </ul>              
+          </ul>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
 
 
-<router-outlet></router-outlet>
+<router-outlet></router-outlet> -->
+<div class="container" (click)="toggleCloseNav()">
+  <div class="active-calendar">
+    <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" (dayClicked)="onDayClicked($event.day)">
+    </mwl-calendar-month-view>
+  </div>
+  <div class="sidenav">
+    <mat-sidenav-container>
+      <mat-sidenav #sidenav position="end" [opened]="isShowing">
+        <div class='title'><span>Activities</span></div>
+        <div class="time">
+          <div class="time-data" *ngFor="let event of eventsRendered" [ngClass]="event.event ? 'event' : 'non-event' ">
+            <span class="time-title">
+              <mat-icon>event_available</mat-icon>
+              {{event.title}}
+            </span>
+            <div class="time-element start">
+              <span class="item1">Start</span>
+              <span class="item2">{{event.startTime}}</span>
+            </div>
+            <div class="time-element end">
+              <span class="item1">End</span>
+              <span class="item2">{{event.endTime}}</span>
+            </div>
+          </div>
+        </div>
+
+      </mat-sidenav>
+    </mat-sidenav-container>
+  </div>
+</div>

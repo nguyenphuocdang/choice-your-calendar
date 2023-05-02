@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { UserProfile } from 'src/app/_models/user';
 import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { UserService } from 'src/app/_services/user.service';
@@ -8,14 +9,14 @@ import { UserService } from 'src/app/_services/user.service';
 @Component({
   selector: 'app-wrapper',
   templateUrl: './wrapper.component.html',
-  styleUrls: ['./wrapper.component.scss']
+  styleUrls: ['./wrapper.component.scss'],
 })
 export class WrapperComponent implements OnInit {
-
   isExpanded: boolean = true;
+  isSelected: boolean = false;
   role: string = '';
   user: UserProfile = {
-    id: 6,
+    id: 0,
     fullname: '',
     email: '',
     address: '',
@@ -25,26 +26,24 @@ export class WrapperComponent implements OnInit {
     effectiveDate: '',
     expiredDate: '',
     pathMapping: '',
-    autoApprovalEventFlag: true
+    autoApprovalEventFlag: true,
   };
   isShowing = false;
   showSubmenu: boolean = false;
 
   constructor(
     private http: HttpClient,
-    private router: ActivatedRoute,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private userService: UserService,
-    private storageService: LocalStorageService,
-  ) { }
+    private toastrService: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.role = this.router.snapshot.data['role'];
-    this.router.params.subscribe
-    (
-      () => {
-        this._getUserProfile();
-      }
-    )
+    this.role = this.activatedRoute.snapshot.data['role'];
+    this.activatedRoute.params.subscribe(() => {
+      this._getUserProfile();
+    });
   }
   mouseenter() {
     if (!this.isExpanded) {
@@ -57,19 +56,31 @@ export class WrapperComponent implements OnInit {
       this.isShowing = false;
     }
   }
-  _getUserProfile()
-  {
-    this.userService.getUserProfile().subscribe(
-      (response: UserProfile) =>
-      {
-        if (response.email != null || response.email != '')
-        {         
-          this.user = response;
-          this.storageService.setEmail(this.user.email);
+  _getUserProfile() {
+    try {
+      this.userService.getUserProfile().subscribe(async (response: any) => {
+        if (
+          response.statusCode === 200 &&
+          response.statusMessage === 'Successfully'
+        ) {
+          this.user = response.data;
+          const roleResponse: any = await this.userService.getRolePromise();
+          this.role = roleResponse.data[0].code;
+        } else {
+          this.toastrService.error(response.errors[0].errorMessage, 'ERROR');
         }
-      }
-    )
+      });
+    } catch (error) {
+      this.toastrService.error('Error getting user profile', 'ERROR');
+    }
+  }
+  redirectHomepage() {
+    this.router.navigate(['/*']);
   }
 
+  changeColor() {
+    this.isSelected = !this.isSelected;
+  }
 
+  profileMouseEnter() {}
 }

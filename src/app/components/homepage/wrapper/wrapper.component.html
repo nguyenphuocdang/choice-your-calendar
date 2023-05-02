@@ -1,92 +1,107 @@
 <div class="sidenav-wrapper">
-    <mat-sidenav-container autosize>
-        <mat-sidenav #sidenav mode="side" opened="isExpanded" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()"> 
-        <!-- <mat-sidenav #sidenav mode="side"> -->
-          <mat-nav-list>
+  <mat-sidenav-container autosize>
+    <mat-sidenav #sidenav mode="side" opened="isExpanded" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
+      <mat-nav-list>
 
-            <mat-list-item>
-            <!-- <mat-list-item (click)="isExpanded = !isExpanded"> -->
-              <!-- <mat-icon mat-list-icon class="chevron-button" [ngClass]="{ rotated: isExpanded}">
-                chevron_right
-              </mat-icon> -->
-            <!-- <h1 *ngIf="isExpanded" style="margin-top: 20px; font-size: 16px;"> 
-                Menu
-            </h1> -->
-              <mat-icon mat-list-icon>dashboard</mat-icon>
-              <span *ngIf="isExpanded" class="menu-item">Menu</span>
-            </mat-list-item>
+        <mat-list-item class="sidenav-web-logo">
+          <div class='web-title' (click)="redirectHomepage()">
+            <img src='assets/images/popup-logo.png' class='nav-web-logo'>
+            <h1>TIMECHOICE</h1>
+          </div>
+        </mat-list-item>
 
-            <mat-list-item [routerLink]="'admin-dashboard'" *ngIf="role == 'ROLE_ADMIN'">
-              <mat-icon mat-list-icon> beenhere</mat-icon>
-              <span *ngIf="isExpanded" class="menu-item">Admin Dashboard</span>
-            </mat-list-item>
+        <mat-list-item [routerLink]="'admin-dashboard'" *ngIf="role == 'ROLE_ADMIN'">
+          <!-- <mat-list-item [routerLink]="'admin-dashboard'" class="custom-list-item" (click)="changeColor()"> -->
+          <mat-icon mat-list-icon> beenhere</mat-icon>
+          <span *ngIf="isExpanded" class="menu-item">Admin Dashboard</span>
+        </mat-list-item>
 
-            <mat-list-item [routerLink]="'create-calendar'">
-              <mat-icon mat-list-icon>build</mat-icon>
-              <span *ngIf="isExpanded" class="menu-item">Create New Calendar</span>
-            </mat-list-item>
-
-            <mat-list-item [routerLink]="'active-calendar'">
-              <mat-icon mat-list-icon>calendar_today</mat-icon>
-              <span *ngIf="isExpanded" class="menu-item">Main Calendar</span>
-            </mat-list-item>
-
-            <mat-list-item [routerLink]="'invite-partners'">
-              <mat-icon mat-list-icon>public</mat-icon>
-              <span *ngIf="isExpanded" class="menu-item">Invite Partners</span>
-            </mat-list-item>
-
-            <mat-list-item [routerLink]="'all-schedule'">
-              <mat-icon mat-list-icon>collections</mat-icon>
-              <span *ngIf="isExpanded" class="menu-item">Calendar History</span>
-            </mat-list-item>
-
-            <mat-list-item [routerLink]="'booking-events'">
-              <mat-icon mat-list-icon>voice_chat</mat-icon>
-              <span *ngIf="isExpanded" class="menu-item">Upcoming Bookings</span>
-            </mat-list-item>
-
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-list-item>
-                    <span class="menu-item">Shared Calendar</span>
-                    <mat-icon mat-list-icon>people</mat-icon>
-                  </mat-list-item>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-          
-              <!-- <mat-list-item [routerLink]="'public'">
-                <mat-icon mat-list-icon>send</mat-icon>
-                <span *ngIf="isExpanded" class="menu-item">Recently Shared</span>
-              </mat-list-item> -->
-
-              <mat-list-item [routerLink]="'private'">
-                <mat-icon mat-list-icon>inbox</mat-icon>
-                <span *ngIf="isExpanded" class="menu-item">Shared With Me</span>
+        <mat-expansion-panel *ngIf="role == 'ROLE_BUSINESS_USER' || role == 'ROLE_BASIC_USER'">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-list-item class="panel-item">
+                <span class="organization-item">Business</span>
+                <mat-icon mat-list-icon>business_center</mat-icon>
               </mat-list-item>
-            </mat-expansion-panel>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-            <div class="profile" style="position: absolute; bottom: 0; border-top: 1px solid #e3dada;;">
-              <mat-list-item [routerLink]="'profile'">
-                <mat-icon mat-list-icon>account_circle</mat-icon>
-                <span *ngIf="isExpanded" class="menu-item" style="display: flex; flex-direction: column" [(ngModel)]="user" name="user" ngDefaultControl>
-                  <span style="font-size: 15px; font-weight:500;">{{user.fullname}}</span>
-                  <span style="font-size: 11px">{{user.email}}</span>
-                </span>
+          <mat-list-item [routerLink]="'organization-overview'" class="panel-item">
+            <mat-icon mat-list-icon>desktop_windows</mat-icon>
+            <span *ngIf="isExpanded" class="organization-item">Overview</span>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="'employee'" *ngIf="role == 'ROLE_BUSINESS_USER'">
+            <mat-icon mat-list-icon>people_outline</mat-icon>
+            <span *ngIf="isExpanded" class="organization-item">Employee</span>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="'device'">
+            <mat-icon mat-list-icon>devices</mat-icon>
+            <span *ngIf="isExpanded" class="organization-item">Device</span>
+          </mat-list-item>
+        </mat-expansion-panel>
+
+        <mat-list-item [routerLink]="'booking-resource'">
+          <mat-icon mat-list-icon>schedule</mat-icon>
+          <span *ngIf="isExpanded" class="organization-item">Book Resources</span>
+        </mat-list-item>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-list-item>
+                <span class="menu-item">Calendar</span>
+                <mat-icon mat-list-icon>calendar_today</mat-icon>
               </mat-list-item>
-            </div>
-      
-          </mat-nav-list>
-        </mat-sidenav>
-      
-        <!-- Content - rendered Content for the current router path into the <router-outlet>, e.g. /dashboard or /info-->
-        <mat-sidenav-content>
-          <router-outlet> </router-outlet>
-        </mat-sidenav-content>
-      </mat-sidenav-container>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list-item [routerLink]="'active-calendar'">
+            <mat-icon mat-list-icon>event_available</mat-icon>
+            <span *ngIf="isExpanded" class="menu-item">Main Calendar</span>
+          </mat-list-item>
+        </mat-expansion-panel>
+
+        <!-- <mat-list-item [routerLink]="'invite-partners'">
+            <mat-icon mat-list-icon>public</mat-icon>
+            <span *ngIf="isExpanded" class="menu-item">Invite Partners</span>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="'booking-events'">
+            <mat-icon mat-list-icon>voice_chat</mat-icon>
+            <span *ngIf="isExpanded" class="menu-item">Upcoming Bookings</span>
+          </mat-list-item>
+
+          <mat-list-item [routerLink]="'private'">
+            <mat-icon mat-list-icon>inbox</mat-icon>
+            <span *ngIf="isExpanded" class="menu-item">Shared With Me</span>
+          </mat-list-item> -->
+
+
+        <div class="profile" (click)="profileMouseEnter()" [mat-menu-trigger-for]="menu">
+          <mat-list-item>
+            <mat-icon mat-list-icon>account_circle</mat-icon>
+            <span *ngIf="isExpanded" class="menu-item" style="display: flex; flex-direction: column" [(ngModel)]="user"
+              name="user" ngDefaultControl>
+              <span style="font-size: 15px; font-weight:500;">{{user.fullname}}</span>
+              <span style="font-size: 11px">{{user.email}}</span>
+              <!-- <span style="font-size: 15px; font-weight:500;">anakin9472</span>
+              <span style="font-size: 11px">anakin9472@gmail.com</span> -->
+            </span>
+          </mat-list-item>
+        </div>
+
+        <mat-menu #menu="matMenu" style="border-radius: 10px;">
+          <button mat-menu-item [routerLink]="'user-profile'">Your Profile</button>
+          <button mat-menu-item>Change Password</button>
+          <button mat-menu-item>Log Out</button>
+        </mat-menu>
+
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet> </router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>
-
-
-
-

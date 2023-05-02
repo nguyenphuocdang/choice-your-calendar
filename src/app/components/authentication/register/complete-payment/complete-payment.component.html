@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="announcement" *ngIf="isAuthenticated">
+        <mat-card>
+            <mat-card-content>
+                <div
+                    style="display: flex; flex-direction: column; gap: 10px; justify-content: center;  align-items: center; height: 60%;">
+                    <div>
+                        <mat-icon style="color: rgb(31, 172, 31); font-size: 80px;
+                        height: 70px ;
+                        width: 70px;">check_circle</mat-icon>
+                    </div>
+                    <span class="default-font">Your account is ready to go. You can login now.</span>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; flex: 1">
+                    <button mat-raised-button>
+                        <span>
+                            Go to Login now
+                        </span>
+                        <mat-icon style="color: white;">arrow_right_alt</mat-icon>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

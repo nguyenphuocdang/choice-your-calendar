@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="user-profile">
+        <mat-card>
+            <mat-card-content>
+                <div class="profile">
+                    <div style="width: 100%; height: 30%; display: flex; justify-content: center;">
+                        <img src={{user.imagePath}} class="profile-image">
+                    </div>
+                    <span class="fullname default-font">
+                        {{user.fullname}}
+                    </span>
+                    <div class="role default-font">
+                        {{role}}
+                    </div>
+                    <div class="email default-font">
+                        <mat-icon> mail_outline</mat-icon>
+                        <span>
+                            {{user.email}}
+                        </span>
+                    </div>
+                    <div class="address default-font">
+                        <mat-icon> location_on</mat-icon>
+                        <span>
+                            {{user.address}}
+                        </span>
+                    </div>
+                    <div class="date default-font">
+                        <mat-icon>date_range</mat-icon>
+                        <span>
+                            Start using at {{user.effectiveDate}}
+                        </span>
+                    </div>
+                    <div class="date default-font">
+                        <mat-icon>payment</mat-icon>
+                        <span>
+                            License activated to {{user.expiredDate}}
+                        </span>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

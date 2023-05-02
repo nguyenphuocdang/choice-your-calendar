@@ -1,0 +1,111 @@
+<div class="container">
+    <div class="provide-info">
+        <mat-card>
+            <mat-card-content>
+                <div class="web-title">
+                    <img src='assets/images/register-logo.png' class='logo'>
+                    <span class="default-font">timechoice</span>
+
+                </div>
+                <div class="page-title">
+                    SIGNUP INFORMATION
+                </div>
+                <div class="announcement">
+                    <mat-icon style="color: rgb(31, 172, 31);">check_circle</mat-icon>
+                    <span class="default-font">Your account is ready to go. Please provide some of your personal
+                        information.</span>
+                </div>
+                <div class="information">
+                    <form action="" name="registerForm" [formGroup]="registerForm">
+                        <div class="column">
+                            <div class="custom-textfield">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" formControlName="userName" matInput
+                                    placeholder="ex: minhdang12345">
+                                <mat-error *ngIf="userName!.hasError('required')">Username is required</mat-error>
+                                <mat-error *ngIf="userName!.hasError('invalidInputRange')">Username must be from 5 to
+                                    255 characters</mat-error>
+                            </div>
+                            <div class="custom-textfield">
+                                <label for="fullName">Full name</label>
+                                <input type="text" id="fullName" formControlName="fullName" matInput
+                                    placeholder="ex: Nguyen Minh Dang">
+                                <mat-error *ngIf="fullName!.hasError('required')">Full Name is required</mat-error>
+                                <mat-error *ngIf="fullName!.hasError('invalidInputRange')">Full Name must be from 5 to
+                                    255 characters</mat-error>
+                            </div>
+                            <div class="custom-textfield">
+                                <label for="address">Address</label>
+                                <input type="" id="address" formControlName="address"
+                                    placeholder="ex: 01 Vo Van Ngan street, Thu Duc city">
+                                <mat-error *ngIf="address!.hasError('required')">Address is required</mat-error>
+                                <mat-error *ngIf="address!.hasError('invalidInputRange')">Address must be from 8 to
+                                    255 characters</mat-error>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="custom-checkbox">
+                                <div class="gender"
+                                    style="display: flex; flex-direction: column; height: 100%; gap: 0.25rem">
+                                    <label for="gender">Gender</label>
+                                    <mat-radio-group aria-label="Select an option" formControlName="gender">
+                                        <mat-radio-button value="male" style="margin-right: 5%">Male</mat-radio-button>
+                                        <mat-radio-button value="female"
+                                            style="margin-right: 5%">Female</mat-radio-button>
+                                        <mat-radio-button value="others">Others</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+                            <div class="password-textfield">
+                                <label for="password">Password</label>
+                                <div class="password">
+                                    <input type="text" id="password" [type]=" hidePassword ? 'password' : 'text'"
+                                        formControlName="password">
+                                    <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                                        [attr.aria-label]="'Hide Password'" [attr.aria-pressed]="hidePassword">
+                                        <mat-icon>
+                                            {{hidePassword ? 'visibility_off' : 'visibility'}}
+                                        </mat-icon>
+                                    </button>
+                                </div>
+                                <mat-error *ngIf="password!.hasError('required')">Password is required</mat-error>
+                                <mat-error *ngIf="password!.hasError('invalidInputRange')">Password must be from 8
+                                    to 255 characters</mat-error>
+                            </div>
+                            <div class="password-textfield">
+                                <label for="repassword">Re-enter Password</label>
+                                <div class="password">
+                                    <input type="text" id="confirmPasword"
+                                        [type]=" hideConfirmPassword ? 'password' : 'text'"
+                                        formControlName="confirmPassword">
+                                    <button mat-icon-button matSuffix
+                                        (click)="hideConfirmPassword = !hideConfirmPassword"
+                                        [attr.aria-label]="'Hide Password'" [attr.aria-pressed]="hideConfirmPassword">
+                                        <mat-icon>
+                                            {{hideConfirmPassword ? 'visibility_off' : 'visibility'}}
+                                        </mat-icon>
+                                    </button>
+                                </div>
+                                <mat-error *ngIf="confirmPasword!.hasError('required')">Password is required</mat-error>
+                                <mat-error *ngIf="confirmPasword!.hasError('passwordNotMatch')">Password does not
+                                    match</mat-error>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- <div class="confirm-information">
+                    <button mat-raised-button type="submit" [disabled]="registerForm.invalid"
+                        [ngClass]="{ 'disabled-button': registerForm.invalid }" (click)="onConfirm(registerForm)">
+                        Confirm and Proceed to Payment
+                    </button>
+                </div> -->
+
+                <div class="confirm-information">
+                    <button mat-raised-button type="submit" (click)="onConfirm(registerForm)">
+                        Confirm Information
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

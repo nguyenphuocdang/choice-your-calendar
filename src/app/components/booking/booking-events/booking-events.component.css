@@ -9,7 +9,7 @@
     height: fit-content;
 }
 
-.body li 
+.body li
 {
     margin-top: 1%;
 }
@@ -21,7 +21,9 @@
     margin: auto;
 }
 
-.event-list .body .event-element mat-card-content
+.event-list .body .event-element
+
+mat-card-content
 {
     display: flex;
     border-radius: 10px;
@@ -52,9 +54,9 @@
 
 .event-element button
 {
-    height: 20%; 
+    height: 20%;
     width: 20%;
-    margin-left: 5% ; 
+    margin-left: 5% ;
     margin-top: 2%;
     margin-right: 2%;
 }

@@ -11,64 +11,87 @@ import { InvitePartnersComponent } from './shared/invite-partners/invite-partner
 import { PublicCalendarComponent } from './shared/public-calendar/public-calendar.component';
 import { PrivateCalendarComponent } from './shared/private-calendar/private-calendar.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { UserProfileComponent } from './organization/resources/user-profile/user-profile.component';
+import { OrgDashboardComponent } from './organization/org-dashboard/org-dashboard.component';
+import { AddEmployeeComponent } from './organization/resources/add-employee/add-employee.component';
+import { AddDeviceComponent } from './organization/devices/add-device/add-device.component';
+//Angular Calendar
+import { CalendarModule } from 'angular-calendar';
+import { DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { BookingResourcesComponent } from './organization/resources/booking-resources/booking-resources.component';
 const routes: Routes = [
-    // Sidenav-Wrapper Component acts like a shell & the active child Component gets rendered into the <router-outlet>
-    {
-      path: '',
-      component: WrapperComponent,
-      children: [
-        {
-          path: 'booking-events',
-          component: BookingEventsComponent,
-        },
-        {
-          path: 'create-calendar',
-          component: CreateScheduleComponent,
-        },
-        {
-          path: 'active-calendar',
-          component: ActiveCalendarComponent,
-        },
-        {
-          path: 'all-schedule',
-          component: CalendarComponent,
-        },
-        {
-          path: 'user-profile',
-          component: ProfileComponent,
-        },
-        {
-          path: 'invite-partners',
-          component: InvitePartnersComponent,
-        },
-        {
-          path: 'public-calendar/:pathMapping',
-          component: PublicCalendarComponent,
-        },
-        {
-          path: 'private',
-          component: PrivateCalendarComponent,
-        }
-        ,
-        {
-          path: 'profile',
-          component: CreateBookingComponent,
-        },
-        {
-          path: 'admin-dashboard',
-          component: AdminDashboardComponent,
-        }
-      ],
-      
-    },
-    {
-      path: '*',
-      redirectTo: '/calendar-dashboard',
-      pathMatch: 'full'
-    }
-  ];
+  // Sidenav-Wrapper Component acts like a shell & the active child Component gets rendered into the <router-outlet>
+  {
+    path: '',
+    component: WrapperComponent,
+    children: [
+      {
+        path: 'booking-events',
+        component: BookingEventsComponent,
+      },
+      {
+        path: 'create-calendar',
+        component: CreateScheduleComponent,
+      },
+      {
+        path: 'active-calendar',
+        component: ActiveCalendarComponent,
+      },
+      {
+        path: 'all-schedule',
+        component: CalendarComponent,
+      },
+      {
+        path: 'user-profile',
+        component: UserProfileComponent,
+      },
+      {
+        path: 'invite-partners',
+        component: InvitePartnersComponent,
+      },
+      {
+        path: 'public-calendar/:pathMapping',
+        component: PublicCalendarComponent,
+      },
+      {
+        path: 'private',
+        component: PrivateCalendarComponent,
+      },
+      {
+        path: 'user-profile',
+        component: UserProfileComponent,
+      },
+      {
+        path: 'admin-dashboard',
+        component: AdminDashboardComponent,
+      },
+      {
+        path: 'organization-overview',
+        component: OrgDashboardComponent,
+      },
+      {
+        path: 'employee',
+        component: AddEmployeeComponent,
+      },
+      {
+        path: 'device',
+        component: AddDeviceComponent,
+      },
+      {
+        path: 'booking-resource',
+        component: BookingResourcesComponent,
+      },
+    ],
+  },
+  {
+    path: '*',
+    redirectTo: '/calendar-dashboard',
+    pathMatch: 'full',
+  },
+];
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
-  })
-  export class DashboardRoutingModule { }
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class DashboardRoutingModule {}

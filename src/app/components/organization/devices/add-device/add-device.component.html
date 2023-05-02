@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="device-grid-container">
+        <div class="device-grid-item create-button" *ngIf="role != 'ROLE_BASIC_USER'">
+            <button>
+                <mat-icon>add</mat-icon>
+                <span>Add New Resource</span>
+            </button>
+        </div>
+        <div class="device-grid-item" *ngFor="let item of devices, let index = index">
+            <mat-card>
+                <mat-card-content appMaterialElevation>
+                    <div class="device-name">
+                        <span> {{item.name}}</span>
+                    </div>
+                    <div class="icon">
+                        <mat-icon *ngIf="item.deviceType == 'ROOM'"
+                            style="color: rgb(8, 98, 8);">meeting_room</mat-icon>
+                        <mat-icon *ngIf="item.deviceType == 'DEVICE'"
+                            style="color: rgb(230, 146, 116);">important_devices</mat-icon>
+                    </div>
+                    <div class="approver">
+                        <span>Approver</span>
+                        <input value="{{item.approverFullName}}">
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
