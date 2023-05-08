@@ -1,15 +1,49 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
+import {
+  MatBottomSheet,
+  MatBottomSheetConfig,
+  MatBottomSheetRef,
+} from '@angular/material/bottom-sheet';
+import {
+  MatDrawerContainer,
+  MatSidenav,
+  MatSidenavContainer,
+} from '@angular/material/sidenav';
 import { ToastrService } from 'ngx-toastr';
-import { EventDetail } from 'src/app/_models/event';
+import {
+  BookingSlotRequest,
+  DateBookingSlot,
+  EventDetail,
+  EventSearchRequest,
+} from 'src/app/_models/event';
 import { SearchResourceRequestBody } from 'src/app/_models/request';
 import { ResourceBasicInfo, ResourceDetail } from 'src/app/_models/resource';
-import { ApiResponse, DataListResponse } from 'src/app/_models/response';
+import {
+  ApiResponse,
+  CustomError,
+  DataListResponse,
+} from 'src/app/_models/response';
+import {
+  BookingSlot,
+  ScheduleData,
+  ScheduleDatas,
+  TimeData,
+} from 'src/app/_models/schedule';
 import { UserBusinessDetail } from 'src/app/_models/user';
+import { EventService } from 'src/app/_services/event.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { DeviceService } from 'src/app/_services/resource.service';
 import { UserService } from 'src/app/_services/user.service';
+import Utils from 'src/app/_utils/utils';
 
 @Component({
   selector: 'app-booking-resources',
@@ -17,6 +51,7 @@ import { UserService } from 'src/app/_services/user.service';
   styleUrls: ['./booking-resources.component.scss'],
 })
 export class BookingResourcesComponent implements OnInit {
+  @ViewChild(MatSidenav) sidenav!: MatSidenav;
   resourceType: ResourceBasicInfo[] = [
     {
       label: 'Meeting Room',
@@ -261,35 +296,285 @@ export class BookingResourcesComponent implements OnInit {
   selectedResourceFormControl = new FormControl();
   selectedResourceTypeFormControl = new FormControl();
   tooltipSelectedResources: string = '';
-  // upcomingEvents: EventDetail[] = [];
-  upcomingEvents: EventDetail[] = [
-    {
-      id: 2,
-      hostFlag: true,
-      hostName: 'Nguyen Minh Dang 2',
-      organizationName: null,
-      eventName: 'This is event title',
-      startTime: 1682295394786,
-      endTime: 1682298994786,
-      eventStatus: 'PENDING',
-      sendEmailFlag: true,
-      appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-      reason: null,
-    },
-  ];
+  upcomingEvents: EventDetail[] = [];
   pendingEvents: EventDetail[] = [];
   cancelEvents: EventDetail[] = [];
+  // previousEvents: any[] = [
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 1682295394786,
+  //     endTime: 1682295394786,
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  //   {
+  //     id: 2,
+  //     hostFlag: true,
+  //     hostName: 'Nguyen Minh Dang 2',
+  //     organizationName: '',
+  //     eventName: 'This is event title',
+  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
+  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
+  //     eventStatus: 'PENDING',
+  //     sendEmailFlag: true,
+  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
+  //     reason: '',
+  //   },
+  // ];
   previousEvents: EventDetail[] = [];
+  isShowingBookSidenav: boolean = false;
+  isShowingConfirmBookSidenav: boolean = false;
+  weekdays: DateBookingSlot[] = [];
+  indexSelectedWeekday: number = 0;
+  eventDurationFormControl = new FormControl('30 minutes');
+  eventDuration: string = '';
+  bookingSlots: BookingSlot[] = [];
+  indexSelectedBookingSlot: number = 0;
   constructor(
     private resourceService: DeviceService,
+    private eventService: EventService,
     private toastrService: ToastrService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private bottomSheetBookingConfirm: MatBottomSheet,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
-    // this._getResourceType();
-    // this._getAllResources();
-    // this._getAllUserInOrganization();
+    this._getResourceType();
+    this._getAllResources();
+    this._getAllUserInOrganization();
+    this._getEventList();
+    // this.previousEvents.forEach((element: any, index: number) => {
+    //   this.previousEvents[index] = new EventDetail(element);
+    //   debugger;
+    // });
   }
 
   _getResourceType() {
@@ -406,5 +691,182 @@ export class BookingResourcesComponent implements OnInit {
         });
       this.tooltipSelectedResources = tempTooltipContent.join(', ');
     }
+  }
+
+  _getEventList() {
+    try {
+      let defaultPage: number = 0;
+      let defaultSize: number = 100;
+      let currentDate: Date = new Date();
+      let nextYearDate: Date = new Date(
+        currentDate.getFullYear() + 1,
+        currentDate.getMonth(),
+        currentDate.getDate()
+      );
+      let lastYearDate: Date = new Date(
+        currentDate.getFullYear() - 1,
+        currentDate.getMonth(),
+        currentDate.getDate()
+      );
+      let defaultStartDate: string = lastYearDate.toISOString();
+      let defaultEndDate: string = nextYearDate.toISOString();
+
+      let requestBody: EventSearchRequest = {
+        endTime: defaultEndDate,
+        eventDescription: '',
+        eventName: '',
+        hostName: '',
+        partnerName: '',
+        startTime: defaultStartDate,
+      };
+      this.eventService
+        .getEventList(requestBody, defaultPage, defaultSize)
+        .subscribe(
+          (response: ApiResponse<DataListResponse<EventDetail[]>>) => {
+            if (response.statusCode === 200) {
+              response.data.content.forEach((element: any) => {
+                const event: EventDetail = new EventDetail(element);
+                this.previousEvents.push(event);
+              });
+            }
+          },
+          (error: CustomError) => {
+            debugger;
+            // this.toastrService.error('Error in getting events', 'ERROR');
+          }
+        );
+    } catch (error) {
+      debugger;
+      // this.toastrService.error('Error in getting events', 'ERROR');
+    }
+  }
+
+  triggerBookingSidenav() {
+    if (this.weekdays.length > 0) {
+      if (this.weekdays[this.indexSelectedWeekday])
+        this.weekdays[this.indexSelectedWeekday].selectFlag = false;
+      this.indexSelectedWeekday = 0;
+      this.weekdays[0].selectFlag = true;
+    } else {
+      const currentDate: Date = new Date();
+      for (let i = 0; i < 7; i++) {
+        let dateFormat = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate() + i
+        );
+        const weekday: DateBookingSlot = {
+          code: dateFormat.toLocaleString('en-US', { weekday: 'short' }),
+          day:
+            dateFormat.getDate() < 10
+              ? `0${dateFormat.getDate()}`
+              : `${dateFormat.getDate()}`,
+          date_ddmmyy: Utils.convertFromDatetoDDMMYY(dateFormat),
+          date: dateFormat,
+          selectFlag: false,
+        };
+        this.weekdays.push(weekday);
+        this.weekdays[this.indexSelectedWeekday].selectFlag = true;
+      }
+    }
+    this._getBookingSlots(0);
+    if (this.isShowingBookSidenav == false) this.isShowingBookSidenav = true;
+  }
+  closeBookingSidenav() {
+    if (this.isShowingBookSidenav) this.isShowingBookSidenav = false;
+  }
+  dateSelect(index: number) {
+    if (this.weekdays[this.indexSelectedWeekday])
+      this.weekdays[this.indexSelectedWeekday].selectFlag = false;
+    this.indexSelectedWeekday = index;
+    this.weekdays[this.indexSelectedWeekday].selectFlag = true;
+    if (this.bookingSlots.length > 0) {
+      this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = false;
+    }
+    this.isShowingConfirmBookSidenav = true;
+  }
+
+  onSelectionChangeEventDuration() {
+    debugger;
+  }
+
+  _getBookingSlots(index: number) {
+    // try {
+    //   //Handle Duration
+    //   let eventDuration: number = 0;
+    //   let match =
+    //     this.eventDurationFormControl.value!.match(/^\d+(?= minutes)/);
+    //   if (match) eventDuration = parseInt(match[0]);
+    //   //Handle Time
+    //   let selectedDate: Date = new Date(this.weekdays[index].date);
+    //   let fromDate: string = '';
+    //   if (index == 0) {
+    //     let currentDate: Date = new Date();
+    //     currentDate.setMinutes(Math.ceil(currentDate.getMinutes() / 60) * 60);
+    //     currentDate.setSeconds(1);
+    //     currentDate.setMilliseconds(0);
+    //     fromDate = currentDate.toISOString();
+    //   } else {
+    //     selectedDate.setHours(0);
+    //     selectedDate.setMinutes(0);
+    //     fromDate = selectedDate.toISOString();
+    //   }
+    //   selectedDate.setHours(23);
+    //   selectedDate.setMinutes(59);
+    //   let toDate: string = selectedDate.toISOString();
+    //   //Handle Resource
+    //   const listDeviceId: number[] = [];
+    //   const listPartnerId: number[] = [];
+    //   this.selectedResourceFormControl.value.forEach((element: any) => {
+    //     if (element.deviceType != null) listDeviceId.push(element.id);
+    //     else listPartnerId.push(element.id);
+    //   });
+    //   //Handle Request
+    //   let requestBody: BookingSlotRequest = {
+    //     eventDuration: eventDuration,
+    //     freeScheduleFlag: false,
+    //     fromDate: fromDate,
+    //     toDate: toDate,
+    //     listDeviceId: listDeviceId,
+    //     listPartnerId: listPartnerId,
+    //   };
+    //   debugger;
+    //   this.eventService
+    //     .getBookingSlots(requestBody)
+    //     .subscribe((response: ApiResponse<ScheduleDatas>) => {
+    //       debugger;
+    //       if (response.statusCode === 200) {
+    //         const tempBookingSlots: BookingSlot[] = [];
+    //         response.data.scheduleDatas[0].timeDatas.forEach(
+    //           (element: TimeData) => {
+    //             const bookingSlot: BookingSlot = {
+    //               selectFlag: false,
+    //               timeDatas: element,
+    //             };
+    //             tempBookingSlots.push(bookingSlot);
+    //           }
+    //         );
+    //         this.bookingSlots = tempBookingSlots;
+    //       } else {
+    //         debugger;
+    //       }
+    //     });
+    // } catch (error) {
+    //   debugger;
+    //   if (this.selectedResourceFormControl.value == null) {
+    //     this.toastrService.warning(
+    //       'Please select resource for booking request.',
+    //       'WARNING'
+    //     );
+    //   }
+    // }
+  }
+
+  onSelectBookingSlotClicked(index: number) {
+    this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = false;
+    this.indexSelectedBookingSlot = index;
+    this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = true;
+    //Open the bottom sheet to handle the confirmation
+    // this.bottomSheetBookingConfirm.open(BottomSheetComponent);
   }
 }

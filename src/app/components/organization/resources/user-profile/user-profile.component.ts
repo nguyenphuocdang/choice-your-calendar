@@ -44,10 +44,12 @@ export class UserProfileComponent implements OnInit {
         ) {
           this.user = response.data;
           this.user.effectiveDate = Utils.convertUTCtoDateString(
-            response.data.effectiveDate
+            response.data.effectiveDate,
+            true
           );
           this.user.expiredDate = Utils.convertUTCtoDateString(
-            response.data.expiredDate
+            response.data.expiredDate,
+            true
           );
           const roleResponse: any = await this.userService.getRolePromise();
           if (

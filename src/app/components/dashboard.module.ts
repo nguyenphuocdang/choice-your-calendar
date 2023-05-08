@@ -46,6 +46,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 // import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import {
   NgxMatDatetimePickerModule,
@@ -139,6 +140,7 @@ const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
     ClipboardModule,
     MatRadioModule,
     MatGridListModule,
+    MatBottomSheetModule,
     MatTooltipModule,
     MatTabsModule,
     // Full Calendar

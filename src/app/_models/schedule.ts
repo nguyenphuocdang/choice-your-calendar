@@ -49,13 +49,21 @@ export class BasicEvent {
   endTime!: string;
 }
 
+export class ScheduleDatas {
+  scheduleDatas!: ScheduleData[];
+}
 export class ScheduleData {
   day!: string;
   timeDatas!: TimeData[];
 }
 export class TimeData {
-  title!: string;
+  title?: string;
   startTime!: string;
   endTime!: string;
-  event!: boolean;
+  event?: boolean;
+}
+
+export class BookingSlot {
+  selectFlag!: boolean;
+  timeDatas!: TimeData;
 }

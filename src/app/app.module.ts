@@ -35,6 +35,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 //Bootstrap
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 //import { NgbNavModule, NgbCollapseModule, NgbTooltipModule,} from '@ng-bootstrap/ng-bootstrap';
@@ -128,6 +129,7 @@ const lang = 'en-US';
     MatTooltipModule,
     MatExpansionModule,
     MatRadioModule,
+    MatBottomSheetModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

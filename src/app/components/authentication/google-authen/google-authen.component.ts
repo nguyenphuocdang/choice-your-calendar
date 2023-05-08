@@ -38,6 +38,7 @@ export class GoogleAuthenComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    debugger;
     if (this.authorizationCode != '') {
       this.router.navigate(['/provide-info'], {
         state: {

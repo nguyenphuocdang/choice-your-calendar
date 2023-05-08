@@ -127,12 +127,12 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   toggleSidenav() {
-    this.isOverlay = !this.isOverlay;
+    // this.isOverlay = !this.isOverlay;
     this.isShowing = !this.isShowing;
   }
 
   toggleSidenavDefaultCalendar() {
-    this.isOverlay = !this.isOverlay;
+    // this.isOverlay = !this.isOverlay;
     this.isShowingAddDefault = !this.isShowingAddDefault;
   }
 
@@ -193,7 +193,7 @@ export class AddEmployeeComponent implements OnInit {
     }
     try {
       this.calendarService
-        .addDefaultCalendar(this.defaultCalendarAddRequest)
+        .createDefaultSchedule(this.defaultCalendarAddRequest)
         .subscribe(async (response: any) => {
           if (response.statusCode === 200) {
             this.toastrService.success(

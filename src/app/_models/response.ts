@@ -35,3 +35,10 @@ export interface DataListResponse<T> {
   number: number;
   empty: boolean;
 }
+
+export class CustomError {
+  errors!: any[];
+  constructor(error: any) {
+    this.errors = error;
+  }
+}

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" (dblclick)="closeBookingSidenav()">
     <div class="booking-resource">
         <mat-card>
             <mat-card-content>
@@ -126,7 +126,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="schedule-button">
-                                <button mat-raised-button class="book">
+                                <button mat-raised-button class="book" (click)="triggerBookingSidenav()">
                                     <mat-icon>today</mat-icon>
                                     Schedule
                                 </button>
@@ -158,17 +158,123 @@
                                         </div>
                                     </mat-tab>
                                     <mat-tab label="All Booking Events">
-                                        <div *ngIf="previousEvents.length === 0" class='unavailable-event'>
+                                        <div *ngIf="previousEvents.length === 0; else hasEvents"
+                                            class='unavailable-event'>
                                             <span>No Booking Event Found</span>
                                             <img src="assets/images/no-event.png" class="image">
                                         </div>
-                                    </mat-tab>
+                                        <ng-template #hasEvents>
+                                            <div class="event-grid-container">
+                                                <div class="event-card" *ngFor="let event of previousEvents">
+                                                    <mat-card>
+                                                        <mat-card-content appMaterialElevation>
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1682823938/event-image/event-image_pmj0ye.jpg?fbclid=IwAR21IoqQ2Nrl6_Nqd2wFOGChCilHpTAg24mWhM-Bt2lFlY5IrahvPajz73w"
+                                                                alt="" *ngIf="event.appointmentUrl != ''">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1683194746/website-image/interview_ll0mzx.jpg"
+                                                                alt="" *ngIf="event.appointmentUrl == ''">
+                                                            <span class="date">
+                                                                <mat-icon style="color: #23a669;;">date_range</mat-icon>
+                                                                {{event.date}}
+                                                            </span>
+                                                            <span class="time">
+                                                                <mat-icon style="color:#23a669;">alarm</mat-icon>
+                                                                {{event.time}}
+                                                            </span>
+                                                            <span class="title">
+                                                                {{event.eventName}}
+                                                            </span>
+                                                            <span class="status" *ngIf="event.appointmentUrl != ''">
+                                                                <mat-icon
+                                                                    style="color: #00705a;;">check_circle</mat-icon>
+                                                                Online
+                                                            </span>
+                                                            <span class="status" *ngIf="event.appointmentUrl == ''">
+                                                                <mat-icon
+                                                                    style="color: rgb(204, 4, 4);">check_circle</mat-icon>
+                                                                Offline
+                                                            </span>
+                                                        </mat-card-content>
+                                                    </mat-card>
+                                                </div>
+                                            </div>
+                                        </ng-template>
 
+                                    </mat-tab>
                                 </mat-tab-group>
                             </div>
                         </mat-card-content>
                     </mat-card>
                 </div>
+                <div class="booking-sidenav">
+                    <mat-sidenav-container #sidenavContainer>
+                        <mat-sidenav #sidenav position="end" [opened]="isShowingBookSidenav">
+                            <div class="selected-day" *ngIf="weekdays.length > 0">
+                                {{weekdays[indexSelectedWeekday].code}}, {{weekdays[indexSelectedWeekday].date_ddmmyy}}
+                            </div>
+                            <div class="weekday">
+                                <div class='day' *ngFor="let day of weekdays, let index = index">
+                                    <button mat-raised-button (click)="dateSelect(index)"
+                                        [ngClass]="{'date-click-event': day.selectFlag}">
+                                        <span class="button-day">
+                                            {{day.day}}
+                                        </span>
+                                        <span class="button-weekday">
+                                            {{day.code}}
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="event-duration">
+                                <span>
+                                    Event Duration
+                                </span>
+                                <mat-form-field appearance="fill">
+                                    <mat-select [formControl]='eventDurationFormControl'
+                                        (selectionChange)="onSelectionChangeEventDuration()">
+                                        <mat-option value="30 minutes">
+                                            30 minutes
+                                        </mat-option>
+                                        <mat-option value="60 minutes">
+                                            60 minutes
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="booking-slot">
+                                <span style="font-weight: 500; font-size: medium; padding:3% !important">
+                                    Booking Slots Available
+                                </span>
+                                <div class="slots-grid-container">
+                                    <div class="slots-card" *ngFor="let slot of bookingSlots, let index = index">
+                                        <mat-card>
+                                            <mat-card-content [ngClass]="{'selected-booking-slot': slot.selectFlag}"
+                                                (click)="onSelectBookingSlotClicked(index)">
+                                                <span>
+                                                    {{slot.timeDatas.startTime}} - {{slot.timeDatas.endTime}}
+                                                </span>
+                                            </mat-card-content>
+                                        </mat-card>
+                                    </div>
+                                </div>
+                                <div class="unavailable" *ngIf="bookingSlots.length == 0">
+                                    NO SLOTS AVAILABLE
+                                </div>
+                            </div>
+                        </mat-sidenav>
+                    </mat-sidenav-container>
+                </div>
+
+                <div class="confirm-booking-sidenav">
+                    <mat-sidenav-container>
+                        <mat-sidenav #sidenav [opened]="isShowingConfirmBookSidenav">
+                            <!-- content goes here -->
+                        </mat-sidenav>
+                        <mat-sidenav-content>
+                            <!-- content goes here -->
+                        </mat-sidenav-content>
+                    </mat-sidenav-container>
+                </div>
+
             </mat-card-content>
         </mat-card>
     </div>

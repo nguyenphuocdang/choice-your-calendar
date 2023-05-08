@@ -31,6 +31,21 @@ export class CalendarService {
     private http: HttpClient,
     private storageService: LocalStorageService
   ) {}
+
+  // Create default schedule for member (by manager)
+  createDefaultSchedule(requestBody: Schedule) {
+    return this.http
+      .post(Utils.ORGANIZATION_API + '/schedule/user/add', requestBody)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((err) => {
+          return err;
+        })
+      );
+  }
+
   create(requestData: Schedule): Observable<any> {
     return this.http.post(Utils.SCHEDULE_API + '/add', requestData).pipe(
       map((response: any) => {
@@ -138,19 +153,6 @@ export class CalendarService {
         return err;
       })
     );
-  }
-
-  addDefaultCalendar(requestBody: Schedule) {
-    return this.http
-      .post(Utils.ORGANIZATION_API + '/schedule/user/add', requestBody)
-      .pipe(
-        map((response: any) => {
-          return response;
-        }),
-        catchError((err) => {
-          return err;
-        })
-      );
   }
 
   async getActiveCalendarUsingPromise(

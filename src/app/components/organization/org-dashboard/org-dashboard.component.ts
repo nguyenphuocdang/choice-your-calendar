@@ -250,6 +250,7 @@ export class OrgDashboardComponent implements OnInit {
         this.listTimeWorkings = defaultCalendar.data.listTimeWorkings;
         debugger;
         this.listTimeWorkings.forEach((element: any, index: number) => {
+          debugger;
           element.startTime = Utils.convertTimeTo24HoursFormat(
             element.startTime
           );

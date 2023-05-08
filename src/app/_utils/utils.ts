@@ -52,21 +52,39 @@ export default class Utils {
   static status403: string = '403 PERMISSION';
   static status404: string = '404 PAGE NOT FOUND';
 
-  static convertUTCtoDateString(timestamp: any): string {
+  static convertUTCtoDateString(timestamp: any, dateOnly: boolean): string {
+    // 1682295394786 => Monday, April 24, 2023(Date only)
+    // 1682295394786 => Monday, April 24, 2023 at 7:16 AM
     const date = new Date(timestamp);
-    const dateString = date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    const dateString = dateOnly
+      ? date.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      : date.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        });
     return dateString;
   }
 
   static convertUTCtoDDMMYY(timestamp: any): string {
+    // 1682295394786 => 24/03/2023
     const date = new Date(timestamp);
+    const formatDay: string = Utils.convertFromDatetoDDMMYY(date);
+    return formatDay;
+  }
+
+  static convertFromDatetoDDMMYY(date: Date): string {
+    // Sat May 06 2023 00:00:00 => 06/05/2023
     const day = date.getDate();
-    const month = date.getMonth();
+    const month = date.getMonth() + 1;
     const year = date.getFullYear();
     const dayString = day < 10 ? `0${day}` : `${day}`;
     const monthString = month < 10 ? `0${month}` : `${month}`;
@@ -76,6 +94,7 @@ export default class Utils {
   }
 
   static convertTimeTo24HoursFormat(time: string): string {
+    //08:00 => 8 AM
     // Split the time string into hours and minutes
     const [hours, minutes] = time.split(':');
 
@@ -92,5 +111,15 @@ export default class Utils {
     const time12HourFormat = `${hours12} ${meridiem}`;
 
     return time12HourFormat;
+  }
+
+  static convertUTCtoTimeString(timestamp: any): string {
+    // 1682295394786 => 7:16 AM
+    const date = new Date(timestamp);
+    const timeString = date.toLocaleTimeString([], {
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+    return timeString;
   }
 }
