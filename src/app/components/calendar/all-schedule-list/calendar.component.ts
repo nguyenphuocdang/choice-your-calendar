@@ -119,7 +119,7 @@ export class CalendarComponent implements OnInit {
               id: schedulesElement.id,
               name: schedulesElement.name,
               brief: schedulesElement.brief,
-              listTimeWorkingDatas: schedulesElement.listTimeWorkings,
+              listTimeWorkings: schedulesElement.listTimeWorkings,
               active: '',
               effectiveDate: schedulesElement.effectiveDate ?? '',
               expiriedDate: schedulesElement.expiriedDate ?? '',

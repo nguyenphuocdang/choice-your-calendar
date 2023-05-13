@@ -93,6 +93,10 @@ const lang = 'en-US';
 //     }
 //   })
 // }
+
+import { Stomp, StompConfig } from '@stomp/stompjs';
+import { Socket } from 'socket.io-client';
+import * as SockJS from 'sockjs-client';
 @NgModule({
   declarations: [
     AppComponent,

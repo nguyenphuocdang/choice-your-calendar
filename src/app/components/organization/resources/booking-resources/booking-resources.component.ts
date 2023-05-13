@@ -25,7 +25,10 @@ import {
   EventDetail,
   EventSearchRequest,
 } from 'src/app/_models/event';
-import { SearchResourceRequestBody } from 'src/app/_models/request';
+import {
+  SearchResourceRequestBody,
+  socketRequest,
+} from 'src/app/_models/request';
 import { ResourceBasicInfo, ResourceDetail } from 'src/app/_models/resource';
 import {
   ApiResponse,
@@ -42,6 +45,7 @@ import { UserBusinessDetail } from 'src/app/_models/user';
 import { EventService } from 'src/app/_services/event.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { DeviceService } from 'src/app/_services/resource.service';
+import { SocketService } from 'src/app/_services/socket.service';
 import { UserService } from 'src/app/_services/user.service';
 import Utils from 'src/app/_utils/utils';
 
@@ -558,6 +562,7 @@ export class BookingResourcesComponent implements OnInit {
   bookingSlots: BookingSlot[] = [];
   indexSelectedBookingSlot: number = 0;
   constructor(
+    private socketService: SocketService,
     private resourceService: DeviceService,
     private eventService: EventService,
     private toastrService: ToastrService,
@@ -567,14 +572,35 @@ export class BookingResourcesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._getResourceType();
-    this._getAllResources();
-    this._getAllUserInOrganization();
-    this._getEventList();
-    // this.previousEvents.forEach((element: any, index: number) => {
-    //   this.previousEvents[index] = new EventDetail(element);
-    //   debugger;
-    // });
+    this._handleWebSocket();
+    // this._getResourceType();
+    // this._getAllResources();
+    // this._getAllUserInOrganization();
+    // this._getEventList();
+  }
+
+  _handleWebSocket() {
+    const requestBody: socketRequest = {
+      content: 'Sending message to server',
+      messageFrom: '7',
+      messageFromEmail: '',
+      messageTo: '',
+      messageType: 'NOTIFY',
+    };
+    try {
+      this.socketService
+        .sendPrivateMessage(requestBody)
+        .subscribe((response: any) => {
+          if (response.statusCode === 200) {
+            this.toastrService.success('Send message successfully', 'SUCCESS');
+            debugger;
+          } else {
+            debugger;
+          }
+        });
+    } catch (error) {
+      debugger;
+    }
   }
 
   _getResourceType() {
@@ -721,20 +747,14 @@ export class BookingResourcesComponent implements OnInit {
       };
       this.eventService
         .getEventList(requestBody, defaultPage, defaultSize)
-        .subscribe(
-          (response: ApiResponse<DataListResponse<EventDetail[]>>) => {
-            if (response.statusCode === 200) {
-              response.data.content.forEach((element: any) => {
-                const event: EventDetail = new EventDetail(element);
-                this.previousEvents.push(event);
-              });
-            }
-          },
-          (error: CustomError) => {
-            debugger;
-            // this.toastrService.error('Error in getting events', 'ERROR');
+        .subscribe((response: ApiResponse<DataListResponse<EventDetail[]>>) => {
+          if (response.statusCode === 200) {
+            response.data.content.forEach((element: any) => {
+              const event: EventDetail = new EventDetail(element);
+              this.previousEvents.push(event);
+            });
           }
-        );
+        });
     } catch (error) {
       debugger;
       // this.toastrService.error('Error in getting events', 'ERROR');

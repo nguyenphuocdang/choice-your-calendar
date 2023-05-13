@@ -2,8 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, lastValueFrom, map, throwError } from 'rxjs';
 import Utils from '../_utils/utils';
-import { ApiResponse, DataListResponse } from '../_models/response';
+import {
+  ApiResponse,
+  CustomError,
+  DataListResponse,
+} from '../_models/response';
 import { UserBusinessDetail } from '../_models/user';
+import { OrganizationDetails } from '../_models/organization';
+import {
+  AssignScheduleRequestBody,
+  ScheduleDatas,
+  ScheduleResponse,
+} from '../_models/schedule';
 
 @Injectable({
   providedIn: 'root',
@@ -83,5 +93,71 @@ export class OrganizationService {
           return throwError(error);
         })
       );
+  }
+
+  getOrganizationDetail(): Observable<ApiResponse<OrganizationDetails>> {
+    const requestUrl = `${Utils.ORGANIZATION_API}/detail`;
+    return this.http.get<ApiResponse<OrganizationDetails>>(requestUrl).pipe(
+      map((response: ApiResponse<OrganizationDetails>) => {
+        return response;
+      }),
+      catchError((error: any) => {
+        debugger;
+        return throwError(error);
+      })
+    );
+  }
+
+  getOrganizationDefaultCalendar(
+    offset?: number,
+    pageNumber?: number,
+    pageSize?: number,
+    paged?: boolean,
+    sorted?: boolean,
+    unsorted?: boolean,
+    unpaged?: boolean
+  ): Observable<ApiResponse<DataListResponse<ScheduleResponse[]>>> {
+    // const requestUrl = `${Utils.ORGANIZATION_API}/schedule/list?offset=${offset}&pageNumber=${pageNumber}&pageSize=${pageSize}&paged=${paged}&sort.sorted=${sorted}&sort.unsorted=${unsorted}&unpaged=${unsorted}`;
+    const requestUrl = `${Utils.ORGANIZATION_API}/schedule/list`;
+    return this.http
+      .get<ApiResponse<DataListResponse<ScheduleResponse[]>>>(requestUrl)
+      .pipe(
+        map((response: ApiResponse<DataListResponse<ScheduleResponse[]>>) => {
+          return response;
+        }),
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+  assignSchedule(
+    requestBody: AssignScheduleRequestBody
+  ): Observable<ApiResponse<boolean>> {
+    const requestUrl = `${Utils.ORGANIZATION_API}/schedule/assign-schedule-for-user-and-device`;
+    return this.http.post<ApiResponse<boolean>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<boolean>) => {
+        return response;
+      }),
+      catchError((error: any) => {
+        return throwError(CustomError);
+      })
+    );
+  }
+
+  viewActiveCalendar(
+    userId: number,
+    freeScheduleFlag: boolean,
+    fromDate: string,
+    toDate: string
+  ) {
+    const requestUrl = `${Utils.ORGANIZATION_API}/schedule/view-default-calendar-for-user/${userId}?freeScheduleFlag=${freeScheduleFlag}&fromDate=${fromDate}&toDate=${toDate}`;
+    return this.http.get<ApiResponse<ScheduleDatas>>(requestUrl).pipe(
+      map((response: ApiResponse<ScheduleDatas>) => {
+        return response;
+      }),
+      catchError((error: any) => {
+        return throwError(CustomError);
+      })
+    );
   }
 }

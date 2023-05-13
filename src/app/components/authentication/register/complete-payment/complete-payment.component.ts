@@ -19,6 +19,7 @@ export class CompletePaymentComponent implements OnInit {
     private paymentService: PaymentService,
     private popupService: PopupService
   ) {
+    debugger;
     if (this.activatedRoute.snapshot.queryParamMap.get('paymentId') != null) {
       this.paymentId =
         this.activatedRoute.snapshot.queryParamMap.get('paymentId') ?? '';

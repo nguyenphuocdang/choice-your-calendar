@@ -2,7 +2,7 @@ export class socketRequest {
   content!: string;
   messageFrom!: string;
   messageFromEmail!: string;
-  messageTo!: 0;
+  messageTo!: string;
   messageType!: string;
 }
 

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" (dblclick)="closeSidenavAssign()">
     <!-- <div class="overlay" [ngClass]="{ 'overlay-active' : isOverlay}"></div> -->
     <div class="container-2">
         <div class="title">
@@ -15,7 +15,16 @@
                     </span>
                 </button>
             </div>
-            <div class="add-default-calendar-button" (click)="toggleSidenavDefaultCalendar()">
+            <!-- <div class="add-default-calendar-button" (click)="toggleSidenavDefaultCalendar()">
+                <button mat-raised-button>
+                    <span style="display: flex;">
+                        <mat-icon style="color: white; margin: auto">add</mat-icon>
+                        Assign Calendar
+                    </span>
+                </button>
+            </div> -->
+
+            <div class="add-default-calendar-button" (click)="toggleSidenavAssign()">
                 <button mat-raised-button>
                     <span style="display: flex;">
                         <mat-icon style="color: white; margin: auto">add</mat-icon>
@@ -44,11 +53,11 @@
                         <!-- Checkbox Column -->
                         <ng-container matColumnDef="select" class="select">
                             <th mat-header-cell *matHeaderCellDef>
-                                <mat-checkbox>
+                                <mat-checkbox [(ngModel)]="allSelected" (change)="selectAllUsers()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let row">
-                                <mat-checkbox>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-checkbox [(ngModel)]="element.selected" (change)="selectUser()">
                                 </mat-checkbox>
                             </td>
                         </ng-container>
@@ -185,6 +194,58 @@
                         </button>
                     </div>
 
+                </div>
+            </mat-sidenav>
+        </mat-sidenav-container>
+    </div>
+    <div class="sidenav">
+        <mat-sidenav-container>
+            <mat-sidenav #sidenav position="end" [opened]="isShowingAssign">
+                <div class="assign-schedule-title">
+                    <span>
+                        ASSIGN SCHEDULE
+                    </span>
+                </div>
+                <div class="morning-work">
+                    <mat-card>
+                        <mat-card-content appMaterialElevation>
+                            <div class="morning-work-title">
+                                <mat-checkbox [(ngModel)]="assignMorningFlag"> <span>Morning Working
+                                        Schedule</span></mat-checkbox>
+                            </div>
+                            <div class="time-duration">
+                                <mat-icon>alarm</mat-icon>
+                                <span>{{morningWorkingTime}}</span>
+                            </div>
+                            <div class="time-duration">
+                                <mat-icon>event</mat-icon>
+                                <span>{{morningWorkingDays}}</span>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="afternoon-work">
+                    <mat-card>
+                        <mat-card-content appMaterialElevation>
+                            <div class="afternoon-work-title">
+                                <mat-checkbox [(ngModel)]="assignAfternoonFlag"> <span>Afternoon Working
+                                        Schedule</span></mat-checkbox>
+                            </div>
+                            <div class="time-duration">
+                                <mat-icon>alarm</mat-icon>
+                                <span>{{afternoonWorkingTime}}</span>
+                            </div>
+                            <div class="time-duration">
+                                <mat-icon>event</mat-icon>
+                                <span>{{afternoonWorkingDays}}</span>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="confirm-button">
+                    <button mat-raised-button (click)="assignSchedule()">
+                        Confirm Assign
+                    </button>
                 </div>
             </mat-sidenav>
         </mat-sidenav-container>

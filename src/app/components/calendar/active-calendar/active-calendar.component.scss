@@ -7,17 +7,36 @@
   display: flex;
   justify-content: center;
   .active-calendar {
-    width: 95%;
-    height: 95%;
+    width: 98%;
+    height: 98%;
     display: flex;
+    flex-direction: column;
     margin: auto;
     background-color: white;
     border-radius: 10px;
     border: 1px solid #e4dcd9;
+    .header {
+      height: 10%;
+      display: flex;
+      align-items: center;
+      .dayview {
+        font-size: x-large;
+        font-weight: 500;
+        color: #04a158;
+      }
+    }
+    .calendar-view {
+      display: flex;
+      height: 90%;
+    }
+
     mwl-calendar-month-view {
       margin: auto;
-      width: 96%;
-      height: 99%;
+      width: 97%;
+      height: 100%;
+      ::ng-deep .cal-month-view .cal-day-cell {
+        min-height: 93px !important;
+      }
     }
   }
   .sidenav {

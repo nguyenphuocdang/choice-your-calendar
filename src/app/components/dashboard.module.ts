@@ -80,6 +80,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MaterialElevationDirective } from '../custom-style/material-elevation2.directive';
 import { BookingResourcesComponent } from './organization/resources/booking-resources/booking-resources.component';
+import { ApproveDashboardComponent } from './organization/resources/approve-dashboard/approve-dashboard.component';
 const lang = 'en-US';
 
 const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
@@ -111,6 +112,7 @@ const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
     OrgDashboardComponent,
     MaterialElevationDirective,
     BookingResourcesComponent,
+    ApproveDashboardComponent,
   ],
   imports: [
     FormsModule,

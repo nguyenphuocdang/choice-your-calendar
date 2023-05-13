@@ -65,4 +65,5 @@ export class UserBusinessDetail {
   eventHosterFlag!: boolean;
   hostFlag!: boolean;
   createPublicEventFlag!: boolean;
+  selected?: boolean;
 }

@@ -1,11 +1,11 @@
 <div class="container">
     <div class="overlay" [ngClass]="{ 'overlay-active' : isOverlay}"></div>
-    <div class="create-button">
+    <!-- <div class="create-button">
         <button mat-raised-button (click)="toggleSidenav()">
             <span style="display: flex;"><mat-icon style="margin: auto;">add</mat-icon>
                 Organization</span>
         </button>
-    </div>
+    </div> -->
     <div class="container-2">
         <div class="title">
             <span>
@@ -19,7 +19,7 @@
         <div class="information">
             <div class="column">
                 <div class="num-employee element-box">
-                    <span class="element-1"> 7</span>
+                    <span class="element-1"> {{organizationData.numberUsers}}</span>
                     <span class="element-2"> Total Employees</span>
                 </div>
             </div>

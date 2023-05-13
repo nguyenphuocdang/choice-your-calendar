@@ -1,8 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { J } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
-import { ListTimeWorkingDatas, Schedule } from 'src/app/_models/schedule';
+import { ApiResponse, DataListResponse } from 'src/app/_models/response';
+import {
+  AssignScheduleRequestBody,
+  ListTimeWorkingDatas,
+  Schedule,
+  ScheduleResponse,
+} from 'src/app/_models/schedule';
 import { UserBusinessDetail } from 'src/app/_models/user';
 import { CalendarService } from 'src/app/_services/calendar.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
@@ -17,6 +24,7 @@ export class AddEmployeeComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef | undefined;
   isShowing: boolean = false;
   isShowingAddDefault: boolean = false;
+  isShowingAssign: boolean = false;
   isOverlay: boolean = false;
   public dataSource!: MatTableDataSource<UserBusinessDetail>;
   title: string = '';
@@ -48,6 +56,14 @@ export class AddEmployeeComponent implements OnInit {
     'SATURDAY',
     'SUNDAY',
   ];
+  morningWorkingTime: string = '';
+  afternoonWorkingTime: string = '';
+  morningWorkingDays: string = '';
+  afternoonWorkingDays: string = '';
+  assignMorningFlag: boolean = false;
+  assignAfternoonFlag: boolean = false;
+  morningScheduleId: number = -1;
+  afternoonScheduleId: number = -1;
   constructor(
     private sanitizer: DomSanitizer,
     private organizationService: OrganizationService,
@@ -56,60 +72,14 @@ export class AddEmployeeComponent implements OnInit {
   ) {}
   fileName: string = '';
   listEmployee: UserBusinessDetail[] = [];
+  allSelected: boolean = false;
+  listAssignEmployeeIDs: number[] = [];
   file: any;
   async ngOnInit(): Promise<void> {
-    // this.listEmployee = [
-    //   {
-    //     id: 7,
-    //     fullname: 'Nguyễn Phước Đăng',
-    //     email: 'anakin9472@gmail.com',
-    //     address: 'Thu Duc city',
-    //     imagePath:
-    //       'https://lh3.googleusercontent.com/a-/ACB-R5T06WP_UsAsujiRGdGxD3QjIIOk2Yo9s7ry5nE4=s96-c',
-    //     effectiveDate: 1680972388312,
-    //     managerFlag: true,
-    //     eventHosterFlag: true,
-    //   },
-    //   {
-    //     id: 8,
-    //     fullname: 'User Default',
-    //     email: 'userdefaultemail0fc727e2-7846-40d8-8ff7-c42ae1fc72b1@gmail.com',
-    //     address: '',
-    //     imagePath:
-    //       'https://res.cloudinary.com/dzri3e9wa/image/upload/v1667315212/email-teamplate/default-male-image_cgjs2b.png',
-    //     effectiveDate: null,
-    //     managerFlag: false,
-    //     eventHosterFlag: false,
-    //   },
-    //   {
-    //     id: 9,
-    //     fullname: 'Nguyễn Hoàng Đức',
-    //     email: 'nguyensonthach9472@gmail.com',
-    //     address: '255 Đường Võ Văn Tần Phường 5, Quận 3, TP. Hồ Chí Minh',
-    //     imagePath:
-    //       'https://res.cloudinary.com/dzri3e9wa/image/upload/v1667315212/email-teamplate/default-male-image_cgjs2b.png',
-    //     effectiveDate: 1681173572564,
-    //     managerFlag: false,
-    //     eventHosterFlag: false,
-    //   },
-    //   {
-    //     id: 10,
-    //     fullname: 'Nguyễn Tuấn Anh',
-    //     email: 'tinnt268@gmail.com',
-    //     address: '255 Đường Võ Văn Tần Phường 5, Quận 3, TP. Hồ Chí Minh',
-    //     imagePath:
-    //       'https://res.cloudinary.com/dzri3e9wa/image/upload/v1667315212/email-teamplate/default-male-image_cgjs2b.png',
-    //     effectiveDate: 1681198386553,
-    //     managerFlag: true,
-    //     eventHosterFlag: true,
-    //   },
-    // ];
-    // this.listEmployee.forEach((element, index) => {
-    //   this.listEmployee[index].effectiveDate = Utils.convertUTCtoDDMMYY(
-    //     element.effectiveDate
-    //   );
-    // });
-    // this.dataSource = new MatTableDataSource<any>(this.listEmployee);
+    await this.getAllUsers();
+  }
+
+  async getAllUsers() {
     try {
       let userData: any = await this.organizationService.getEmployee();
       if (userData.statusCode === 200) {
@@ -118,6 +88,7 @@ export class AddEmployeeComponent implements OnInit {
           this.listEmployee[index].effectiveDate = Utils.convertUTCtoDDMMYY(
             element.effectiveDate
           );
+          this.listEmployee[index].selected = false;
         });
         this.dataSource = new MatTableDataSource<any>(this.listEmployee);
       }
@@ -134,6 +105,15 @@ export class AddEmployeeComponent implements OnInit {
   toggleSidenavDefaultCalendar() {
     // this.isOverlay = !this.isOverlay;
     this.isShowingAddDefault = !this.isShowingAddDefault;
+  }
+
+  toggleSidenavAssign() {
+    this.getDefaultSchedules();
+    this.isShowingAssign = !this.isShowingAssign;
+  }
+
+  closeSidenavAssign() {
+    if (this.isShowingAssign) this.isShowingAssign = !this.isShowingAssign;
   }
 
   downloadExcel() {
@@ -210,6 +190,97 @@ export class AddEmployeeComponent implements OnInit {
           } else {
             debugger;
             this.toastrService.error(response.errors[0].errorMessage, 'ERROR');
+          }
+        });
+    } catch (error) {
+      debugger;
+    }
+  }
+
+  onAssignCalendar() {}
+
+  selectAllUsers() {
+    this.listEmployee.forEach((user: UserBusinessDetail) => {
+      user.selected = this.allSelected;
+    });
+  }
+
+  selectUser() {}
+
+  getDefaultSchedules() {
+    try {
+      this.organizationService
+        .getOrganizationDefaultCalendar()
+        .subscribe(
+          (response: ApiResponse<DataListResponse<ScheduleResponse[]>>) => {
+            if (response.statusCode === 200) {
+              this.morningScheduleId = response.data.content[0].id;
+              this.morningWorkingTime = `${response.data.content[0].listTimeWorkings[0].startTime} - ${response.data.content[0].listTimeWorkings[0].endTime}`;
+              this.morningWorkingDays = `From ${this.tolowerKeepFirstLetter(
+                response.data.content[0].listTimeWorkings[0].weekday
+              )} to ${this.tolowerKeepFirstLetter(
+                response.data.content[0].listTimeWorkings[
+                  response.data.content[0].listTimeWorkings.length - 1
+                ].weekday
+              )}`;
+
+              this.afternoonScheduleId = response.data.content[1].id;
+              this.afternoonWorkingTime = `${response.data.content[1].listTimeWorkings[0].startTime} - ${response.data.content[1].listTimeWorkings[0].endTime}`;
+              this.afternoonWorkingDays = `From ${this.tolowerKeepFirstLetter(
+                response.data.content[1].listTimeWorkings[0].weekday
+              )} to ${this.tolowerKeepFirstLetter(
+                response.data.content[1].listTimeWorkings[
+                  response.data.content[1].listTimeWorkings.length - 1
+                ].weekday
+              )}`;
+            }
+          }
+        );
+    } catch (error) {}
+  }
+
+  tolowerKeepFirstLetter(upperWord: string) {
+    const formattedWord =
+      upperWord.charAt(0) + upperWord.slice(1).toLowerCase();
+    return formattedWord;
+  }
+
+  assignSchedule() {
+    debugger;
+    this.listEmployee.forEach((employee) => {
+      if (employee.selected) this.listAssignEmployeeIDs.push(employee.id);
+    });
+    const requestBody: AssignScheduleRequestBody = {
+      listDeviceId: [],
+      scheduleId: -1,
+      listMemberId: this.listAssignEmployeeIDs,
+    };
+    if (this.assignMorningFlag && !this.assignAfternoonFlag) {
+      requestBody.scheduleId = this.morningScheduleId;
+      this._assignSchedule(requestBody);
+    } else if (!this.assignMorningFlag && this.assignAfternoonFlag) {
+      requestBody.scheduleId = this.afternoonScheduleId;
+      this._assignSchedule(requestBody);
+    } else {
+      requestBody.scheduleId = this.morningScheduleId;
+      this._assignSchedule(requestBody);
+      requestBody.scheduleId = this.afternoonScheduleId;
+      this._assignSchedule(requestBody);
+    }
+  }
+  _assignSchedule(requestBody: AssignScheduleRequestBody) {
+    try {
+      this.organizationService
+        .assignSchedule(requestBody)
+        .subscribe((response: ApiResponse<boolean>) => {
+          if (response.statusCode === 200) {
+            this.toastrService.success(
+              'Assign schedule successfully',
+              'SUCCESS'
+            );
+            debugger;
+          } else {
+            debugger;
           }
         });
     } catch (error) {

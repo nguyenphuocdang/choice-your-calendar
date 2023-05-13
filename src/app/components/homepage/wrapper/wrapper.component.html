@@ -11,12 +11,26 @@
         </mat-list-item>
 
         <mat-list-item [routerLink]="'admin-dashboard'" *ngIf="role == 'ROLE_ADMIN'">
-          <!-- <mat-list-item [routerLink]="'admin-dashboard'" class="custom-list-item" (click)="changeColor()"> -->
           <mat-icon mat-list-icon> beenhere</mat-icon>
           <span *ngIf="isExpanded" class="menu-item">Admin Dashboard</span>
         </mat-list-item>
 
-        <mat-expansion-panel *ngIf="role == 'ROLE_BUSINESS_USER' || role == 'ROLE_BASIC_USER'">
+        <mat-list-item [routerLink]="'organization-overview'" class="panel-item">
+          <mat-icon mat-list-icon>desktop_windows</mat-icon>
+          <span *ngIf="isExpanded" class="organization-item">Overview</span>
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="'employee'" *ngIf="role == 'ROLE_BUSINESS_USER'">
+          <mat-icon mat-list-icon>people_outline</mat-icon>
+          <span *ngIf="isExpanded" class="organization-item">Employee</span>
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="'device'">
+          <mat-icon mat-list-icon>devices</mat-icon>
+          <span *ngIf="isExpanded" class="organization-item">Device</span>
+        </mat-list-item>
+
+        <!-- <mat-expansion-panel *ngIf="role == 'ROLE_BUSINESS_USER' || role == 'ROLE_BASIC_USER'">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <mat-list-item class="panel-item">
@@ -25,29 +39,24 @@
               </mat-list-item>
             </mat-panel-title>
           </mat-expansion-panel-header>
-
-          <mat-list-item [routerLink]="'organization-overview'" class="panel-item">
-            <mat-icon mat-list-icon>desktop_windows</mat-icon>
-            <span *ngIf="isExpanded" class="organization-item">Overview</span>
-          </mat-list-item>
-
-          <mat-list-item [routerLink]="'employee'" *ngIf="role == 'ROLE_BUSINESS_USER'">
-            <mat-icon mat-list-icon>people_outline</mat-icon>
-            <span *ngIf="isExpanded" class="organization-item">Employee</span>
-          </mat-list-item>
-
-          <mat-list-item [routerLink]="'device'">
-            <mat-icon mat-list-icon>devices</mat-icon>
-            <span *ngIf="isExpanded" class="organization-item">Device</span>
-          </mat-list-item>
-        </mat-expansion-panel>
+        </mat-expansion-panel> -->
 
         <mat-list-item [routerLink]="'booking-resource'">
           <mat-icon mat-list-icon>schedule</mat-icon>
           <span *ngIf="isExpanded" class="organization-item">Book Resources</span>
         </mat-list-item>
 
-        <mat-expansion-panel>
+        <mat-list-item [routerLink]="'approve-dashboard'">
+          <mat-icon mat-list-icon>assignment_turned_in</mat-icon>
+          <span *ngIf="isExpanded" class="organization-item">Approve Dashboard</span>
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="'active-calendar'">
+          <mat-icon mat-list-icon>event_available</mat-icon>
+          <span *ngIf="isExpanded" class="menu-item">Main Calendar</span>
+        </mat-list-item>
+
+        <!-- <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
               <mat-list-item>
@@ -56,27 +65,7 @@
               </mat-list-item>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <mat-list-item [routerLink]="'active-calendar'">
-            <mat-icon mat-list-icon>event_available</mat-icon>
-            <span *ngIf="isExpanded" class="menu-item">Main Calendar</span>
-          </mat-list-item>
-        </mat-expansion-panel>
-
-        <!-- <mat-list-item [routerLink]="'invite-partners'">
-            <mat-icon mat-list-icon>public</mat-icon>
-            <span *ngIf="isExpanded" class="menu-item">Invite Partners</span>
-          </mat-list-item>
-
-          <mat-list-item [routerLink]="'booking-events'">
-            <mat-icon mat-list-icon>voice_chat</mat-icon>
-            <span *ngIf="isExpanded" class="menu-item">Upcoming Bookings</span>
-          </mat-list-item>
-
-          <mat-list-item [routerLink]="'private'">
-            <mat-icon mat-list-icon>inbox</mat-icon>
-            <span *ngIf="isExpanded" class="menu-item">Shared With Me</span>
-          </mat-list-item> -->
-
+        </mat-expansion-panel> -->
 
         <div class="profile" (click)="profileMouseEnter()" [mat-menu-trigger-for]="menu">
           <mat-list-item>

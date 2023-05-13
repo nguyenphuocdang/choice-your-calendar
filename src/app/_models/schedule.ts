@@ -22,7 +22,7 @@ export class ScheduleResponse {
   id!: number;
   name!: string;
   brief!: string;
-  listTimeWorkingDatas!: ListTimeWorkingDatas[];
+  listTimeWorkings!: ListTimeWorkingDatas[];
   active!: string;
   effectiveDate!: string;
   expiriedDate!: string;
@@ -50,6 +50,7 @@ export class BasicEvent {
 }
 
 export class ScheduleDatas {
+  scheduleId?: number;
   scheduleDatas!: ScheduleData[];
 }
 export class ScheduleData {
@@ -66,4 +67,10 @@ export class TimeData {
 export class BookingSlot {
   selectFlag!: boolean;
   timeDatas!: TimeData;
+}
+
+export class AssignScheduleRequestBody {
+  listDeviceId?: number[];
+  listMemberId?: number[];
+  scheduleId!: number;
 }

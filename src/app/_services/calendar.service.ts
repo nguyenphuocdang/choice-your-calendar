@@ -9,6 +9,7 @@ import { LocalStorageService } from './local-storage.service';
 import { throwError } from 'rxjs';
 import { ActiveCalendar } from '../_models/active-calendar';
 import {
+  AssignScheduleRequestBody,
   ModifyScheduleRequest,
   Schedule,
   ScheduleResponse,
@@ -16,6 +17,7 @@ import {
 // import { EventInput } from '@fullcalendar/angular';
 import { PaginatedResult } from '../_models/pagination';
 import Utils from '../_utils/utils';
+import { ApiResponse, CustomError } from '../_models/response';
 
 const requestHeader = new HttpHeaders({ 'No-Auth': 'True' });
 

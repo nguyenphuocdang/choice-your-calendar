@@ -1,8 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
+import { el } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
-import { ListTimeWorkingDatas } from 'src/app/_models/schedule';
+import { OrganizationDetails } from 'src/app/_models/organization';
+import { ApiResponse, DataListResponse } from 'src/app/_models/response';
+import {
+  ListTimeWorkingDatas,
+  ScheduleResponse,
+} from 'src/app/_models/schedule';
+import { UserBusinessDetail } from 'src/app/_models/user';
 import { CalendarService } from 'src/app/_services/calendar.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import Utils from 'src/app/_utils/utils';
@@ -17,7 +24,7 @@ export class OrgDashboardComponent implements OnInit {
   isShowing: boolean = false;
   isOverlay: boolean = false;
   isBusiness: boolean = false;
-  organizationData: any = {
+  organizationData: OrganizationDetails = {
     id: 0,
     code: '',
     name: '',
@@ -35,21 +42,6 @@ export class OrgDashboardComponent implements OnInit {
     .map((_, i) => i + 1); // Array with numbers 1 to 12
   morningWork: any[] = [];
   afternoonWork: any[] = [];
-  // rows: any[] = [
-  //   // Array of row data
-  //   [1], // Row 1 data
-  //   [2], // Row 2 data
-  //   [3],
-  //   [4],
-  //   [5],
-  //   [6],
-  //   [7],
-  //   [8],
-  //   [9],
-  //   [10],
-  //   [11],
-  //   [12],
-  // ];
   rows: any[] = [
     [
       { value: '7 AM' },
@@ -173,11 +165,8 @@ export class OrgDashboardComponent implements OnInit {
     ],
   ];
 
-  listTimeWorkings: ListTimeWorkingDatas[] = [];
+  listTimeWorkings: ScheduleResponse[] = [];
 
-  // rows: number[] = Array(12)
-  //   .fill(0)
-  //   .map((_, i) => i + 1);
   constructor(
     private fb: UntypedFormBuilder,
     private organizationService: OrganizationService,
@@ -195,17 +184,129 @@ export class OrgDashboardComponent implements OnInit {
     name: [''],
   });
   async ngOnInit() {
+    this.getOrganizationDetail();
+    this.getOrganizationDefaultSchedules();
+  }
+
+  getOrganizationDetail() {
     try {
-      let organizationDetail =
-        await this.organizationService.getOrganizationDetailPromise();
-      if (organizationDetail.statusCode === 200) {
-        this.organizationData = organizationDetail.data;
-        this.isBusiness = true;
-      }
+      this.organizationService
+        .getOrganizationDetail()
+        .subscribe((response: ApiResponse<OrganizationDetails>) => {
+          if (response.statusCode === 200) {
+            this.organizationData = response.data;
+            this.getNumberOfUsers();
+          } else {
+            debugger;
+          }
+        });
     } catch (error) {
       debugger;
     }
-    this.getBusinessDefaultCalendar();
+  }
+
+  getNumberOfUsers() {
+    try {
+      this.organizationService
+        .getUserInOrganization()
+        .subscribe(
+          (response: ApiResponse<DataListResponse<UserBusinessDetail[]>>) => {
+            if (response.statusCode === 200) {
+              this.organizationData.numberUsers = response.data.totalElements;
+            } else {
+              debugger;
+            }
+          }
+        );
+    } catch (error) {
+      debugger;
+      this.toastrService.error('Error in getting users', 'ERROR');
+    }
+  }
+
+  getOrganizationDefaultSchedules() {
+    try {
+      this.organizationService
+        .getOrganizationDefaultCalendar()
+        .subscribe(
+          (response: ApiResponse<DataListResponse<ScheduleResponse[]>>) => {
+            if (response.statusCode === 200) {
+              this.listTimeWorkings = response.data.content;
+              this.listTimeWorkings.forEach((element) => {
+                if (element.name == 'Morning Default Calendar') {
+                  element.listTimeWorkings.forEach((listTimeWorkingData) => {
+                    listTimeWorkingData.startTime =
+                      Utils.convertTimeTo24HoursFormat(
+                        listTimeWorkingData.startTime
+                      );
+                    listTimeWorkingData.endTime =
+                      Utils.convertTimeTo24HoursFormat(
+                        listTimeWorkingData.endTime
+                      );
+                    this.morningWork.push(listTimeWorkingData);
+                  });
+                } else if (element.name == 'Afternoon Default Calendar') {
+                  element.listTimeWorkings.forEach((listTimeWorkingData) => {
+                    listTimeWorkingData.startTime =
+                      Utils.convertTimeTo24HoursFormat(
+                        listTimeWorkingData.startTime
+                      );
+                    listTimeWorkingData.endTime =
+                      Utils.convertTimeTo24HoursFormat(
+                        listTimeWorkingData.endTime
+                      );
+                    this.afternoonWork.push(listTimeWorkingData);
+                  });
+                }
+              });
+              this.rows.forEach((element, rowIndex) => {
+                if (rowIndex < this.rows.length / 2) {
+                  this.morningWork.forEach((date, dateIndex) => {
+                    if (date.startTime == element[0].value) {
+                      element[dateIndex + 1].status = 'start_working_morning';
+                      for (
+                        let i = rowIndex + 1;
+                        i < this.rows.length / 2;
+                        i++
+                      ) {
+                        if (date.endTime == this.rows[i][0].value) {
+                          this.rows[i][dateIndex + 1].status =
+                            'end_working_morning';
+                          break;
+                        } else {
+                          this.rows[i][dateIndex + 1].status =
+                            'is_working_morning';
+                        }
+                      }
+                    }
+                  });
+                } else {
+                  this.afternoonWork.forEach((date, dateIndex) => {
+                    if (date.startTime == element[0].value) {
+                      element[dateIndex + 1].status = 'start_working_afternoon';
+                      for (
+                        let i = this.rows.length / 2;
+                        i < this.rows.length;
+                        i++
+                      ) {
+                        if (date.endTime == this.rows[i][0].value) {
+                          this.rows[i][dateIndex + 1].status =
+                            'end_working_afternoon';
+                          break;
+                        } else {
+                          this.rows[i][dateIndex + 1].status =
+                            'is_working_afternoon';
+                        }
+                      }
+                    }
+                  });
+                }
+              });
+              debugger;
+            }
+          }
+        );
+    } catch (error) {}
   }
 
   onCreateOrganization() {
@@ -237,66 +338,6 @@ export class OrgDashboardComponent implements OnInit {
             this.toastrService.error(response.errors[0].errorMessage, 'ERROR');
           }
         });
-    } catch (error) {
-      debugger;
-    }
-  }
-
-  async getBusinessDefaultCalendar() {
-    try {
-      const defaultCalendar: any =
-        await this.calendarService.getCalendarUserBusiness();
-      if (defaultCalendar.statusCode === 200) {
-        this.listTimeWorkings = defaultCalendar.data.listTimeWorkings;
-        debugger;
-        this.listTimeWorkings.forEach((element: any, index: number) => {
-          debugger;
-          element.startTime = Utils.convertTimeTo24HoursFormat(
-            element.startTime
-          );
-          element.endTime = Utils.convertTimeTo24HoursFormat(element.endTime);
-          if (element.title == 'Morning Work') {
-            this.morningWork.push(element);
-          }
-          if (element.title == 'Afternoon Work') {
-            this.afternoonWork.push(element);
-          }
-        });
-
-        this.rows.forEach((element, rowIndex) => {
-          if (rowIndex < this.rows.length / 2) {
-            this.morningWork.forEach((date, dateIndex) => {
-              if (date.startTime == element[0].value) {
-                element[dateIndex + 1].status = 'start_working_morning';
-                for (let i = rowIndex + 1; i < this.rows.length / 2; i++) {
-                  if (date.endTime == this.rows[i][0].value) {
-                    this.rows[i][dateIndex + 1].status = 'end_working_morning';
-                    break;
-                  } else {
-                    this.rows[i][dateIndex + 1].status = 'is_working_morning';
-                  }
-                }
-              }
-            });
-          } else {
-            this.afternoonWork.forEach((date, dateIndex) => {
-              if (date.startTime == element[0].value) {
-                element[dateIndex + 1].status = 'start_working_afternoon';
-                for (let i = this.rows.length / 2; i < this.rows.length; i++) {
-                  if (date.endTime == this.rows[i][0].value) {
-                    this.rows[i][dateIndex + 1].status =
-                      'end_working_afternoon';
-                    break;
-                  } else {
-                    this.rows[i][dateIndex + 1].status = 'is_working_afternoon';
-                  }
-                }
-              }
-            });
-          }
-        });
-      }
-      debugger;
     } catch (error) {
       debugger;
     }

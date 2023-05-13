@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EventInput } from '@fullcalendar/core';
 import { BehaviorSubject } from 'rxjs';
+import { UserProfile } from '../_models/user';
 
 const ROLE_KEY = 'role';
 const ACCESS_TOKEN_KEY = 'accessToken';
@@ -9,7 +10,7 @@ const REFRESH_TOKEN_KEY = 'refreshToken';
 const EMAIL = 'email';
 const ACTIVE_CALENDAR = 'activeCalendar';
 const AUTHORIZATION_CODE = 'authorizationCode';
-
+const USER = 'USER';
 @Injectable({
   providedIn: 'root',
 })
@@ -79,6 +80,16 @@ export class LocalStorageService {
 
   public getEmail(): string {
     return localStorage.getItem(EMAIL)!;
+  }
+
+  public setUserProfile(data: UserProfile) {
+    return localStorage.setItem(USER, JSON.stringify(data));
+  }
+
+  public getUserProfile(): UserProfile {
+    const user = localStorage.getItem(USER) ?? '';
+    const userParse = JSON.parse(user) as UserProfile;
+    return userParse;
   }
 
   public setActiveCalendar(activeCalendar: EventInput[]) {

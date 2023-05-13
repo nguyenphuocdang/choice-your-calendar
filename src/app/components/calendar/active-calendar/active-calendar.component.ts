@@ -34,6 +34,7 @@ import { PopupService } from 'src/app/_services/popup.service';
 import {
   FreeTimeScheduleSlots,
   ListTimeWorkingDatas,
+  ScheduleDatas,
   TimeData,
 } from 'src/app/_models/schedule';
 //Angular Calendar
@@ -43,6 +44,8 @@ import { CalendarView } from 'angular-calendar';
 import { SocketService } from 'src/app/_services/socket.service';
 import { socketRequest } from 'src/app/_models/request';
 import { ApiResponse } from 'src/app/_models/response';
+import { OrganizationService } from 'src/app/_services/organization.service';
+import { UserProfile } from 'src/app/_models/user';
 
 @Component({
   selector: 'app-active-calendar',
@@ -51,9 +54,10 @@ import { ApiResponse } from 'src/app/_models/response';
 })
 export class ActiveCalendarComponent implements OnInit {
   views: CalendarView = CalendarView.Month;
+  view: CalendarView = CalendarView.Month;
+  CalendarView = CalendarView;
   viewDate: Date = new Date();
-  events: CalendarEvent[] = [];
-  eventsMapping: CalendarEvent[] = [];
+  monthEvents: CalendarEvent[] = [];
   eventsRendered: TimeData[] = [];
   isShowing: boolean = false;
 
@@ -94,81 +98,85 @@ export class ActiveCalendarComponent implements OnInit {
     private socketService: SocketService,
     private toastrService: ToastrService,
     private popupService: PopupService,
+    private organizationService: OrganizationService,
+    private storageService: LocalStorageService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
   async ngOnInit(): Promise<void> {
-    // this._getUserActiveCalendar();
-    this._testSocketApi();
-  }
-
-  private _testSocketApi() {
-    const requestBody: socketRequest = {
-      content: 'test websocket message',
-      messageFrom: '',
-      messageFromEmail: '',
-      messageTo: 0,
-      messageType: 'NOTIFY',
-    };
-    try {
-      this.socketService
-        .sendPublicMessage(requestBody)
-        .subscribe((response: ApiResponse<any>) => {
-          debugger;
-        });
-    } catch (error) {
-      debugger;
-    }
+    this._getUserActiveCalendar();
   }
 
   private async _getUserActiveCalendar() {
     try {
       const freeScheduleFlag: boolean = false;
-      const fromDate: string = '2023-04-17';
-      const toDate: string = '2023-04-23';
-      debugger;
+      const today: Date = new Date();
+      const currentMonth: number = today.getMonth() + 1;
+      const currentYear: number = today.getFullYear();
+      const _firstDayOfCurrentMonth: string = this._convertYYYYMMDD(
+        1,
+        currentMonth,
+        currentYear
+      );
+      const _firstDayOfNextMonth: string = this._convertYYYYMMDD(
+        1,
+        currentMonth + 1,
+        currentYear
+      );
 
-      // const activeCalendarResponse: any =
-      //   await this.calendarService.viewDefaultCalendarUser(
-      //     freeScheduleFlag,
-      //     fromDate,
-      //     toDate
-      //   );
-      // if (activeCalendarResponse.statusCode === 200) {
-      //   const eventsData: any = activeCalendarResponse.data.scheduleDatas;
-      //   eventsData.forEach((element: any) => {
-      //     element.timeDatas.forEach((timeData: any) => {
-      //       const startTime: string = `${element.day}T${timeData.startTime}`;
-      //       const endTime: string = `${element.day}T${timeData.endTime}`;
-      //       const eventDataMapping: CalendarEvent = {
-      //         start: new Date(startTime),
-      //         end: new Date(endTime),
-      //         title: `${timeData.title}`,
-      //         color: timeData.event
-      //           ? {
-      //               primary: '#ECD425',
-      //               secondary: '#FAE3E3',
-      //             }
-      //           : {
-      //               primary: '#0926B5',
-      //               secondary: '#FAE3E3',
-      //             },
-      //       };
-      //       this.eventsMapping.push(eventDataMapping);
-      //     });
-      //   });
-      //   this.events = this.eventsMapping;
-      // } else {
-      //   debugger;
-      //   this.toastrService.error(
-      //     activeCalendarResponse.errors[0].errorMessage,
-      //     'ERROR'
-      //   );
-      // }
+      const user: UserProfile = this.storageService.getUserProfile();
+      const userId: number = user.id;
+      this.organizationService
+        .viewActiveCalendar(
+          userId,
+          freeScheduleFlag,
+          _firstDayOfCurrentMonth,
+          _firstDayOfNextMonth
+        )
+        .subscribe((response: ApiResponse<ScheduleDatas>) => {
+          if (response.statusCode === 200) {
+            const eventsMapping: CalendarEvent[] = [];
+            response.data.scheduleDatas.forEach((schedule, index) => {
+              if (schedule.timeDatas.length > 0) {
+                schedule.timeDatas.forEach((timeData, index) => {
+                  const startTime: string = `${schedule.day}T${timeData.startTime}`;
+                  const endTime: string = `${schedule.day}T${timeData.endTime}`;
+                  const eventDataMapping: CalendarEvent = {
+                    start: new Date(startTime),
+                    end: new Date(endTime),
+                    title: `${timeData.title}`,
+                    color: timeData.event
+                      ? {
+                          primary: '#ECD425',
+                          secondary: '#FAE3E3',
+                        }
+                      : {
+                          primary: '#0926B5',
+                          secondary: '#FAE3E3',
+                        },
+                  };
+                  eventsMapping.push(eventDataMapping);
+                });
+              }
+            });
+            this.monthEvents = eventsMapping;
+          } else {
+            debugger;
+            this.toastrService.error('Error getting Active Calendar', 'ERROR');
+          }
+        });
     } catch (error) {
       debugger;
       this.toastrService.error('Error getting Active Calendar', 'ERROR');
     }
+  }
+
+  _convertYYYYMMDD(day: number, month: number, year: number): string {
+    const dayString: string = day < 10 ? `0${day}` : `${day}`;
+    const monthString: string = month < 10 ? `0${month}` : `${month}`;
+    const yearString: string = `${year}`;
+    const formatDay: string = `${yearString}-${monthString}-${dayString}`;
+    return formatDay;
   }
 
   onDayClicked(day: CalendarMonthViewDay) {
@@ -212,6 +220,11 @@ export class ActiveCalendarComponent implements OnInit {
   toggleCloseNav() {
     if (this.isShowing) this.isShowing = !this.isShowing;
     this.eventsRendered = [];
+  }
+  closeOpenMonthViewDay() {}
+
+  setView(view: CalendarView) {
+    this.view = view;
   }
 
   private async _getActiveCalendar(

@@ -36,7 +36,8 @@ export class WrapperComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private storageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +65,7 @@ export class WrapperComponent implements OnInit {
           response.statusMessage === 'Successfully'
         ) {
           this.user = response.data;
+          this.storageService.setUserProfile(this.user);
           const roleResponse: any = await this.userService.getRolePromise();
           this.role = roleResponse.data[0].code;
         } else {
