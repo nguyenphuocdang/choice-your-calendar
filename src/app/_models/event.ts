@@ -8,6 +8,7 @@ export class EventSearchRequest {
   hostName!: string;
   partnerName!: string;
   startTime!: string;
+  searchUserEmail?: string;
 }
 export class EventDetail {
   id!: number;

@@ -256,58 +256,88 @@
                 border: 1.75px solid #23a669;
               }
             }
-            .event-duration {
-              margin-top: 8%;
-              padding-left: 5%;
-              padding-right: 5%;
-              display: flex;
-              flex-direction: column;
-              gap: 10%;
-              height: 15%;
-              span {
-                font-weight: 500;
-                font-size: medium;
-              }
-              // display: flex;
-              // flex-direction: column;
-              // justify-content: space-between;
-              // margin: 2% 8% 2% 0;
-              // margin: 2%;
-              // height: 8rem;
-              font-size: medium;
-              font-weight: 500;
-              ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-                background-color: rgb(255, 255, 255);
-                border-radius: 5px;
-                border: 2px solid rgb(221, 212, 212);
-                padding: 1% !important;
-                padding-left: 5% !important;
-                width: 60%;
-              }
-              ::ng-deep .mat-form-field-underline {
-                display: none;
-              }
-              mat-select {
-                user-select: none;
+            .booking-resource-info {
+              height: 25%;
+              padding: 5%;
+              padding-bottom: 0 !important;
+              form {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                height: 100%;
+                .event-name {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.5rem;
+                  user-select: none;
+                  height: 50%;
+                  label {
+                    font-weight: 500;
+                    font-size: medium;
+                  }
+                  input {
+                    border-radius: 5px;
+                    border: 2px solid rgb(221, 212, 212);
+                    margin: auto;
+                    height: 100%;
+                    width: 90%;
+                    padding-left: 3%;
+                    padding-right: 3%;
+                  }
+                }
+                .row2 {
+                  display: flex;
+                  flex-direction: row;
+                  height: 50%;
+                  div {
+                    display: flex;
+                    flex-direction: column;
+                    width: 50%;
+                    gap: 0.5rem;
+                    span {
+                      font-weight: 500;
+                      font-size: medium;
+                    }
+                    mat-form-field {
+                      margin-left: 10%;
+                      margin-right: 10%;
+                    }
+                    ::ng-deep .mat-form-field-underline {
+                      display: none;
+                    }
+                    ::ng-deep .mat-form-field-appearance-fill {
+                      .mat-form-field-flex {
+                        background-color: rgb(255, 255, 255);
+                        border-radius: 5px;
+                        border: 2px solid rgb(221, 212, 212);
+                        padding-top: 0;
+                      }
+                    }
+                    ::ng-deep
+                      .mat-form-field-appearance-fill
+                      .mat-select-arrow-wrapper {
+                      transform: translateY(0);
+                    }
+                  }
+                }
               }
             }
             .booking-slot {
+              padding-top: 5%;
               padding-left: 2%;
               padding-right: 2%;
               padding-bottom: 5%;
-              margin-top: 5%;
               .unavailable {
                 border: 2px solid rgb(221, 212, 212);
                 height: 10rem;
                 justify-content: center;
                 display: flex;
                 align-items: center;
-                margin-top: 5%;
                 border-radius: 5px;
                 font-size: large;
                 font-weight: 500;
-                margin-left: 3% !important;
-                margin-right: 3% !important;
+                width: 85%;
+                margin: auto;
               }
               .slots-grid-container {
                 margin-top: 5%;

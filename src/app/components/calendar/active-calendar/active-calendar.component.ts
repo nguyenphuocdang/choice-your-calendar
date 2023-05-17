@@ -59,8 +59,17 @@ export class ActiveCalendarComponent implements OnInit {
   viewDate: Date = new Date();
   monthEvents: CalendarEvent[] = [];
   eventsRendered: TimeData[] = [];
+  dayClickSelected: string = '';
   isShowing: boolean = false;
-
+  weekdays: string[] = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
   calendarOptions!: CalendarOptions;
   ACTIVE_EVENTS: EventInput[] = [];
   defaultDate: Date = new Date();
@@ -145,16 +154,29 @@ export class ActiveCalendarComponent implements OnInit {
                     start: new Date(startTime),
                     end: new Date(endTime),
                     title: `${timeData.title}`,
-                    color: timeData.event
-                      ? {
-                          primary: '#ECD425',
-                          secondary: '#FAE3E3',
-                        }
-                      : {
-                          primary: '#0926B5',
-                          secondary: '#FAE3E3',
-                        },
+                    cssClass: 'event-schedule',
                   };
+                  if (timeData.event)
+                    eventDataMapping.color = {
+                      primary: '#005ECA',
+                      secondary: '#DFEEFF',
+                      secondaryText: '#000000',
+                    };
+                  else {
+                    if (timeData.title === 'Morning Work') {
+                      eventDataMapping.color = {
+                        primary: '#EED600',
+                        secondary: '#F3E77E',
+                        secondaryText: '#000000',
+                      };
+                    } else {
+                      eventDataMapping.color = {
+                        primary: '#F36529',
+                        secondary: '#F5D3C4',
+                        secondaryText: '#000000',
+                      };
+                    }
+                  }
                   eventsMapping.push(eventDataMapping);
                 });
               }
@@ -180,6 +202,10 @@ export class ActiveCalendarComponent implements OnInit {
   }
 
   onDayClicked(day: CalendarMonthViewDay) {
+    let dateSelected: Date = new Date(day.date);
+    this.dayClickSelected = `${
+      this.weekdays[dateSelected.getDay()]
+    }, ${Utils.convertFromDatetoDDMMYY(dateSelected)}`;
     if (day.events.length == 0) {
       if (this.isShowing) {
         this.isShowing = !this.isShowing;
@@ -210,7 +236,7 @@ export class ActiveCalendarComponent implements OnInit {
             title: element.title,
             startTime: startTime,
             endTime: endTime,
-            event: element.color?.primary == '#ECD425' ? true : false,
+            event: element.color?.primary == '#005ECA' ? true : false,
           };
           this.eventsRendered.push(timeData);
         });

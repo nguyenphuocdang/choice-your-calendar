@@ -40,7 +40,7 @@ export class DeviceService {
     unpaged?: boolean
   ): Observable<ApiResponse<DataListResponse<ResourceDetail[]>>> {
     // const requestUrl = `${Utils.ORGANIZATION_API}/device/get-all-device-of-organization?offset=${offset}&pageNumber=${pageNumber}&pageSize=${pageSize}&paged=${paged}&sort.sorted=${sorted}&sort.unsorted=${unsorted}&unpaged=${unsorted}`;
-    const requestUrl = `${Utils.ORGANIZATION_API}/device/get-all-device-of-organization?offset=<long>&pageNumber=<integer>&pageSize=<integer>&paged=<boolean>&sort.sorted=<boolean>&sort.unsorted=<boolean>&unpaged=<boolean>`;
+    const requestUrl = `${Utils.ORGANIZATION_API}/device/get-all-device-of-organization`;
     return this.http
       .post<ApiResponse<DataListResponse<ResourceDetail[]>>>(
         requestUrl,

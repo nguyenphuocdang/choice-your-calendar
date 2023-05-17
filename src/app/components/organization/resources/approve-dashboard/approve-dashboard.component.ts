@@ -24,13 +24,14 @@ export class ApproveDashboardComponent implements OnInit {
     //   this.messages.push(messageResponse);
     //   console.log('Message received:' + this.messages);
     // });
+    // this.userId = 10;
+    // this.socketService.connect(this.userId.toString());
     this.userId = 10;
     this.socketService.subscribe(
       '/user/notify/private-messages',
-      (message: any): any => {
+      (message: any) => {
         const messageData = JSON.parse(message.body);
         console.log(messageData);
-        debugger;
       },
       this.userId
     );

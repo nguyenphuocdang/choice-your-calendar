@@ -102,18 +102,41 @@
         </div>
       </div>
     </div>
-    <div class="calendar-view">
-      <mwl-calendar-month-view [viewDate]="viewDate" [events]="monthEvents" (dayClicked)="onDayClicked($event.day)
-      " class="custom-cal-month-view">
+    <div class="calendar-view" [ngSwitch]="view">
+      <div class="description" *ngIf="view==CalendarView.Month">
+        <span>
+          <i class="circle-icon morning"></i>
+          Morning Work
+        </span>
+        <span>
+          <i class="circle-icon afternoon"></i>
+          Afternoon Work
+        </span>
+        <span>
+          <i class="circle-icon book-resource"></i>
+          Booking Resource Event
+        </span>
+      </div>
+      <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="monthEvents"
+        (dayClicked)="onDayClicked($event.day)">
       </mwl-calendar-month-view>
+      <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="monthEvents">
+
+      </mwl-calendar-week-view>
+      <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="monthEvents">
+
+      </mwl-calendar-day-view>
     </div>
   </div>
   <div class="sidenav">
     <mat-sidenav-container>
       <mat-sidenav #sidenav position="end" [opened]="isShowing">
-        <div class='title'><span>Activities</span></div>
+        <div class='title'>
+          <span>{{dayClickSelected}}</span>
+        </div>
         <div class="time">
-          <div class="time-data" *ngFor="let event of eventsRendered" [ngClass]="event.event ? 'event' : 'non-event' ">
+          <div class="time-data" *ngFor="let event of eventsRendered" [ngClass]="{ 'event': event.event,
+        'morning-work': event.title=='Morning Work', 'afternoon-work': event.title =='Afternoon Work' }">
             <span class="time-title">
               <mat-icon>event_available</mat-icon>
               {{event.title}}

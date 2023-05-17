@@ -120,14 +120,14 @@ export class CalendarComponent implements OnInit {
               name: schedulesElement.name,
               brief: schedulesElement.brief,
               listTimeWorkings: schedulesElement.listTimeWorkings,
-              active: '',
+              active: false,
               effectiveDate: schedulesElement.effectiveDate ?? '',
               expiriedDate: schedulesElement.expiriedDate ?? '',
             };
-            schedule.active =
-              schedulesElement.active == true
-                ? 'In Active'
-                : 'No Longer In Use';
+            // schedule.active =
+            //   schedulesElement.active == true
+            //     ? 'In Active'
+            //     : 'No Longer In Use';
             listSchedule.push(schedule);
           }
           this.dataArray = listSchedule;

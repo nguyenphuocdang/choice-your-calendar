@@ -81,10 +81,11 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MaterialElevationDirective } from '../custom-style/material-elevation2.directive';
 import { BookingResourcesComponent } from './organization/resources/booking-resources/booking-resources.component';
 import { ApproveDashboardComponent } from './organization/resources/approve-dashboard/approve-dashboard.component';
+import { PublicEventsComponent } from './organization/events/public-events/public-events.component';
+import { InternalEventsComponent } from './organization/events/internal-events/internal-events.component';
 const lang = 'en-US';
 
 const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
-
 @NgModule({
   declarations: [
     WrapperComponent,
@@ -113,6 +114,8 @@ const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
     MaterialElevationDirective,
     BookingResourcesComponent,
     ApproveDashboardComponent,
+    PublicEventsComponent,
+    InternalEventsComponent,
   ],
   imports: [
     FormsModule,

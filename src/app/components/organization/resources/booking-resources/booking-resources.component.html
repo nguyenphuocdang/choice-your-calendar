@@ -224,21 +224,47 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="event-duration">
-                                <span>
-                                    Event Duration
-                                </span>
-                                <mat-form-field appearance="fill">
-                                    <mat-select [formControl]='eventDurationFormControl'
-                                        (selectionChange)="onSelectionChangeEventDuration()">
-                                        <mat-option value="30 minutes">
-                                            30 minutes
-                                        </mat-option>
-                                        <mat-option value="60 minutes">
-                                            60 minutes
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+
+                            <div class="booking-resource-info">
+                                <form action="" name="makeEventForm" [formGroup]="makeEventForm">
+                                    <div class="row1 event-name">
+                                        <label for="event-name">Event Name</label>
+                                        <input type="text" formControlName="eventName">
+                                    </div>
+                                    <div class="row2">
+                                        <div>
+                                            <span>
+                                                Event Duration
+                                            </span>
+                                            <mat-form-field appearance="fill">
+                                                <mat-select formControlName='eventDuration'
+                                                    (selectionChange)="onSelectionChangeEventDuration()">
+                                                    <mat-option value="30 minutes">
+                                                        30 minutes
+                                                    </mat-option>
+                                                    <mat-option value="60 minutes">
+                                                        60 minutes
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div>
+                                            <span>Event Type</span>
+                                            <mat-form-field appearance="fill">
+                                                <mat-select formControlName='eventType'>
+                                                    <mat-option value="Offline">
+                                                        Offline
+                                                    </mat-option>
+                                                    <mat-option value="Online">
+                                                        Online
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </form>
+
+
                             </div>
                             <div class="booking-slot">
                                 <span style="font-weight: 500; font-size: medium; padding:3% !important">

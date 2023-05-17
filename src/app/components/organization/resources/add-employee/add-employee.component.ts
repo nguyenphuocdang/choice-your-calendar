@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { J } from '@fullcalendar/core/internal-common';
+import { J, el } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
+import { Observable, map } from 'rxjs';
 import { ApiResponse, DataListResponse } from 'src/app/_models/response';
 import {
   AssignScheduleRequestBody,
@@ -27,6 +29,9 @@ export class AddEmployeeComponent implements OnInit {
   isShowingAssign: boolean = false;
   isOverlay: boolean = false;
   public dataSource!: MatTableDataSource<UserBusinessDetail>;
+  defaultPageIndex: number = 0;
+  defaultPageSize: number = 9;
+  defaultNumberUsers: number = 0;
   title: string = '';
   brief: string = '';
   startTime: string = '';
@@ -35,11 +40,13 @@ export class AddEmployeeComponent implements OnInit {
     'select',
     'fullname',
     'email',
+    'shift',
     'address',
     'imagePath',
     'effectiveDate',
     'managerFlag',
     'eventHosterFlag',
+    'createPublicEventFlag',
   ];
   defaultCalendarAddRequest: Schedule = {
     name: '',
@@ -58,12 +65,16 @@ export class AddEmployeeComponent implements OnInit {
   ];
   morningWorkingTime: string = '';
   afternoonWorkingTime: string = '';
+  fullTimeWorkingTime: string = '';
   morningWorkingDays: string = '';
   afternoonWorkingDays: string = '';
+  fullTimeWorkingDays: string = '';
   assignMorningFlag: boolean = false;
   assignAfternoonFlag: boolean = false;
+  assignFullTimeFlag: boolean = false;
   morningScheduleId: number = -1;
   afternoonScheduleId: number = -1;
+  fullTimeScheduleId: number = -1;
   constructor(
     private sanitizer: DomSanitizer,
     private organizationService: OrganizationService,
@@ -75,26 +86,85 @@ export class AddEmployeeComponent implements OnInit {
   allSelected: boolean = false;
   listAssignEmployeeIDs: number[] = [];
   file: any;
-  async ngOnInit(): Promise<void> {
-    await this.getAllUsers();
+  ngOnInit(): void {
+    this.getUserInOrganization(this.defaultPageIndex, this.defaultPageSize + 1);
   }
 
-  async getAllUsers() {
+  getUserInOrganization(pageIndex: number, size: number) {
     try {
-      let userData: any = await this.organizationService.getEmployee();
-      if (userData.statusCode === 200) {
-        this.listEmployee = userData.data.content;
-        this.listEmployee.forEach((element, index) => {
-          this.listEmployee[index].effectiveDate = Utils.convertUTCtoDDMMYY(
-            element.effectiveDate
-          );
-          this.listEmployee[index].selected = false;
-        });
-        this.dataSource = new MatTableDataSource<any>(this.listEmployee);
-      }
+      this.organizationService
+        .getUserInOrganization(
+          0,
+          pageIndex,
+          0,
+          0,
+          size,
+          true,
+          false,
+          true,
+          false
+        )
+        .subscribe(
+          (response: ApiResponse<DataListResponse<UserBusinessDetail[]>>) => {
+            if (response.statusCode === 200) {
+              this.defaultNumberUsers = response.data.totalElements - 1;
+              let indexOfDefaultUser: number = 0;
+              response.data.content.forEach((element, index) => {
+                if (element.fullname === 'User Default') {
+                  indexOfDefaultUser = index;
+                } else {
+                  element.effectiveDate = Utils.convertUTCtoDDMMYY(
+                    element.effectiveDate
+                  );
+                  element.selected = false;
+                  if (element.scheduleName === 'Morning Default Calendar')
+                    element.shift = 'Morning';
+                  else if (
+                    element.scheduleName === 'Afternoon Default Calendar'
+                  )
+                    element.shift = 'Afternoon';
+                  else if (
+                    element.scheduleName === 'Full-Time Default Calendar'
+                  )
+                    element.shift = 'Full-time';
+                  else element.shift = 'Unassigned';
+                }
+
+                // this.getUserScheduleType(
+                //   response.data.content[index].id
+                // ).subscribe((result) => {
+                //   response.data.content[index].shift = result;
+                // });
+              });
+              response.data.content.splice(indexOfDefaultUser, 1);
+              this.listEmployee = response.data.content;
+              this.dataSource = new MatTableDataSource<any>(this.listEmployee);
+            }
+          }
+        );
     } catch (error) {
       debugger;
     }
+  }
+
+  pageChanged(event: PageEvent) {
+    this.getUserInOrganization(event.pageIndex, this.defaultPageSize + 1);
+  }
+
+  getUserScheduleType(id: number): Observable<string> {
+    return this.organizationService.getUserScheduleById(id).pipe(
+      map((response: ApiResponse<ScheduleResponse>) => {
+        if (response.statusCode === 200) {
+          if (response.data.name === 'Full-Time Default Calendar')
+            return 'Full-time';
+          else if (response.data.name === 'Morning Default Calendar')
+            return 'Morning';
+          else return 'Afternoon';
+        } else {
+          return 'Unassigned';
+        }
+      })
+    );
   }
 
   toggleSidenav() {
@@ -148,8 +218,7 @@ export class AddEmployeeComponent implements OnInit {
               'Your organization is created successfully',
               'SUCCESS'
             );
-
-            debugger;
+            this.dataSource.connect();
           } else {
             debugger;
             this.toastrService.error(response.errors[0].errorMessage, 'ERROR');
@@ -197,8 +266,6 @@ export class AddEmployeeComponent implements OnInit {
     }
   }
 
-  onAssignCalendar() {}
-
   selectAllUsers() {
     this.listEmployee.forEach((user: UserBusinessDetail) => {
       user.selected = this.allSelected;
@@ -214,25 +281,40 @@ export class AddEmployeeComponent implements OnInit {
         .subscribe(
           (response: ApiResponse<DataListResponse<ScheduleResponse[]>>) => {
             if (response.statusCode === 200) {
-              this.morningScheduleId = response.data.content[0].id;
-              this.morningWorkingTime = `${response.data.content[0].listTimeWorkings[0].startTime} - ${response.data.content[0].listTimeWorkings[0].endTime}`;
-              this.morningWorkingDays = `From ${this.tolowerKeepFirstLetter(
-                response.data.content[0].listTimeWorkings[0].weekday
-              )} to ${this.tolowerKeepFirstLetter(
-                response.data.content[0].listTimeWorkings[
-                  response.data.content[0].listTimeWorkings.length - 1
-                ].weekday
-              )}`;
-
-              this.afternoonScheduleId = response.data.content[1].id;
-              this.afternoonWorkingTime = `${response.data.content[1].listTimeWorkings[0].startTime} - ${response.data.content[1].listTimeWorkings[0].endTime}`;
-              this.afternoonWorkingDays = `From ${this.tolowerKeepFirstLetter(
-                response.data.content[1].listTimeWorkings[0].weekday
-              )} to ${this.tolowerKeepFirstLetter(
-                response.data.content[1].listTimeWorkings[
-                  response.data.content[1].listTimeWorkings.length - 1
-                ].weekday
-              )}`;
+              response.data.content.forEach((element, index) => {
+                if (element.name === 'Morning Default Calendar') {
+                  this.morningScheduleId = element.id;
+                  this.morningWorkingTime = `${element.listTimeWorkings[0].startTime} - ${element.listTimeWorkings[0].endTime}`;
+                  this.morningWorkingDays = `From ${this.tolowerKeepFirstLetter(
+                    element.listTimeWorkings[0].weekday
+                  )} to ${this.tolowerKeepFirstLetter(
+                    element.listTimeWorkings[
+                      element.listTimeWorkings.length - 1
+                    ].weekday
+                  )}`;
+                } else if (element.name === 'Afternoon Default Calendar') {
+                  this.afternoonScheduleId = element.id;
+                  this.afternoonWorkingTime = `${element.listTimeWorkings[0].startTime} - ${element.listTimeWorkings[0].endTime}`;
+                  this.afternoonWorkingDays = `From ${this.tolowerKeepFirstLetter(
+                    element.listTimeWorkings[0].weekday
+                  )} to ${this.tolowerKeepFirstLetter(
+                    element.listTimeWorkings[
+                      element.listTimeWorkings.length - 1
+                    ].weekday
+                  )}`;
+                } else if (element.name === 'Full-Time Default Calendar') {
+                  this.fullTimeScheduleId = element.id;
+                  this.fullTimeWorkingDays = `From ${this.tolowerKeepFirstLetter(
+                    element.listTimeWorkings[0].weekday
+                  )} to ${this.tolowerKeepFirstLetter(
+                    element.listTimeWorkings[
+                      element.listTimeWorkings.length - 1
+                    ].weekday
+                  )}`;
+                  this.fullTimeWorkingTime = `${element.listTimeWorkings[0].startTime} - ${element.listTimeWorkings[0].endTime} and
+                  ${element.listTimeWorkings[1].startTime} - ${element.listTimeWorkings[1].endTime}`;
+                }
+              });
             }
           }
         );
@@ -246,7 +328,7 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   assignSchedule() {
-    debugger;
+    this.listAssignEmployeeIDs = [];
     this.listEmployee.forEach((employee) => {
       if (employee.selected) this.listAssignEmployeeIDs.push(employee.id);
     });
@@ -255,20 +337,34 @@ export class AddEmployeeComponent implements OnInit {
       scheduleId: -1,
       listMemberId: this.listAssignEmployeeIDs,
     };
-    if (this.assignMorningFlag && !this.assignAfternoonFlag) {
+    let flag: string = '';
+    if (
+      this.assignMorningFlag &&
+      !this.assignAfternoonFlag &&
+      !this.assignFullTimeFlag
+    ) {
       requestBody.scheduleId = this.morningScheduleId;
-      this._assignSchedule(requestBody);
-    } else if (!this.assignMorningFlag && this.assignAfternoonFlag) {
+      flag = 'Morning';
+      this._assignSchedule(requestBody, flag);
+    } else if (
+      !this.assignMorningFlag &&
+      this.assignAfternoonFlag &&
+      !this.assignFullTimeFlag
+    ) {
       requestBody.scheduleId = this.afternoonScheduleId;
-      this._assignSchedule(requestBody);
+      flag = 'Afternoon';
+      this._assignSchedule(requestBody, flag);
     } else {
-      requestBody.scheduleId = this.morningScheduleId;
-      this._assignSchedule(requestBody);
-      requestBody.scheduleId = this.afternoonScheduleId;
-      this._assignSchedule(requestBody);
+      if (this.assignFullTimeFlag) {
+        requestBody.scheduleId = this.fullTimeScheduleId;
+        flag = 'Full-time';
+        this._assignSchedule(requestBody, flag);
+      } else {
+        this.toastrService.warning('Please select time shift', 'Warning');
+      }
     }
   }
-  _assignSchedule(requestBody: AssignScheduleRequestBody) {
+  _assignSchedule(requestBody: AssignScheduleRequestBody, flag: string) {
     try {
       this.organizationService
         .assignSchedule(requestBody)
@@ -278,7 +374,12 @@ export class AddEmployeeComponent implements OnInit {
               'Assign schedule successfully',
               'SUCCESS'
             );
-            debugger;
+            this.listAssignEmployeeIDs.forEach((element) => {
+              const index = this.listEmployee.findIndex(
+                (item) => item.id === element
+              );
+              this.listEmployee[index].shift = flag;
+            });
           } else {
             debugger;
           }

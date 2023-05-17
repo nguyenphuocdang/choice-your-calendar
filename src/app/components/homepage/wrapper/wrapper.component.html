@@ -20,14 +20,19 @@
           <span *ngIf="isExpanded" class="organization-item">Overview</span>
         </mat-list-item>
 
-        <mat-list-item [routerLink]="'employee'" *ngIf="role == 'ROLE_BUSINESS_USER'">
+        <mat-list-item [routerLink]="'employee'">
           <mat-icon mat-list-icon>people_outline</mat-icon>
           <span *ngIf="isExpanded" class="organization-item">Employee</span>
         </mat-list-item>
 
         <mat-list-item [routerLink]="'device'">
           <mat-icon mat-list-icon>devices</mat-icon>
-          <span *ngIf="isExpanded" class="organization-item">Device</span>
+          <span *ngIf="isExpanded" class="organization-item">Room and Devices</span>
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="'active-calendar'">
+          <mat-icon mat-list-icon>event_available</mat-icon>
+          <span *ngIf="isExpanded" class="menu-item">Main Calendar</span>
         </mat-list-item>
 
         <!-- <mat-expansion-panel *ngIf="role == 'ROLE_BUSINESS_USER' || role == 'ROLE_BASIC_USER'">
@@ -43,18 +48,25 @@
 
         <mat-list-item [routerLink]="'booking-resource'">
           <mat-icon mat-list-icon>schedule</mat-icon>
-          <span *ngIf="isExpanded" class="organization-item">Book Resources</span>
+          <span *ngIf="isExpanded" class="organization-item">Booking Resources</span>
         </mat-list-item>
 
-        <mat-list-item [routerLink]="'approve-dashboard'">
+        <mat-list-item [routerLink]="'company-events'">
+          <mat-icon mat-list-icon>layers</mat-icon>
+          <span *ngIf="isExpanded" class="organization-item">Company Events</span>
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="'public-events'">
+          <mat-icon mat-list-icon>public-events</mat-icon>
+          <span *ngIf="isExpanded" class="organization-item">Public Events</span>
+        </mat-list-item>
+
+        <!-- <mat-list-item [routerLink]="'approve-dashboard'">
           <mat-icon mat-list-icon>assignment_turned_in</mat-icon>
           <span *ngIf="isExpanded" class="organization-item">Approve Dashboard</span>
-        </mat-list-item>
+        </mat-list-item> -->
 
-        <mat-list-item [routerLink]="'active-calendar'">
-          <mat-icon mat-list-icon>event_available</mat-icon>
-          <span *ngIf="isExpanded" class="menu-item">Main Calendar</span>
-        </mat-list-item>
+
 
         <!-- <mat-expansion-panel>
           <mat-expansion-panel-header>

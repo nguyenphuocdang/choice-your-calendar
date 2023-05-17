@@ -21,6 +21,8 @@ import { DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { BookingResourcesComponent } from './organization/resources/booking-resources/booking-resources.component';
 import { ApproveDashboardComponent } from './organization/resources/approve-dashboard/approve-dashboard.component';
+import { PublicEventsComponent } from './organization/events/public-events/public-events.component';
+import { InternalEventsComponent } from './organization/events/internal-events/internal-events.component';
 const routes: Routes = [
   // Sidenav-Wrapper Component acts like a shell & the active child Component gets rendered into the <router-outlet>
   {
@@ -86,6 +88,14 @@ const routes: Routes = [
       {
         path: 'approve-dashboard',
         component: ApproveDashboardComponent,
+      },
+      {
+        path: 'public-events',
+        component: PublicEventsComponent,
+      },
+      {
+        path: 'company-events',
+        component: InternalEventsComponent,
       },
     ],
   },

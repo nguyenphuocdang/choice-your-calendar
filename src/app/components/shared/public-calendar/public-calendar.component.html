@@ -1,4 +1,4 @@
-<div class="calendar">
+<!-- <div class="calendar">
     <div class="public-calendar">
         <mat-card>
             <mat-card-content>
@@ -18,11 +18,11 @@
                   <span>Duration: {{duration}}</span>
               </div>
 
-                <!-- <div *ngIf="expression">
-                  <full-calendar 
+                <div *ngIf="expression">
+                  <full-calendar
                   [options]='calendarOptions'>
-                  </full-calendar> 
-                </div> -->
+                  </full-calendar>
+                </div>
 
                 <div class="header-title">
                   PARTNER'S FREE-TIME SLOTS
@@ -44,10 +44,10 @@
                             </div>
                           </mat-card-content>
                         </mat-card>
-                        
+
                       </div>
                     </li>
-                  </ul>              
+                  </ul>
                 </div>
 
             </mat-card-content>
@@ -65,56 +65,48 @@
                   <mat-icon style="margin-right: 3%;">calendar_today</mat-icon>
                   <span style="font-size: 15px;">Compare with your free time</span>
               </button>
-
               <button mat-raised-button class="all-time-slots" (click)="getAllTimeSlots()">
                 <mat-icon style="margin-right: 3%;">calendar_today</mat-icon>
                 <span style="font-size: 15px;">Only partner's time slots</span>
             </button>
-
                 <div class ='booking-form'>
                     <div>
                       <mat-form-field class='email' appearance="outline">
                         <mat-label>Partner's Email</mat-label>
-                        <input matInput name="user-email" [readonly]="true" [(ngModel)]="partnerEmail"/> 
+                        <input matInput name="user-email" [readonly]="true" [(ngModel)]="partnerEmail"/>
                       </mat-form-field>
                     </div>
-      
                     <div>
                       <mat-form-field class='title' appearance="outline">
                         <mat-label>Event Title</mat-label>
                         <input matInput placeholder = 'Event Meeting 01' required name="title" [(ngModel)]="bookingEvent.eventName"/>
                       </mat-form-field>
                     </div>
-      
                     <div>
                       <span>Description</span>
                       <mat-form-field class='description' appearance="outline">
-                        <input matInput name="description" [(ngModel)]="bookingEvent.eventDescription"/> 
+                        <input matInput name="description" [(ngModel)]="bookingEvent.eventDescription"/>
                       </mat-form-field>
                     </div>
-
                     <div>
                       <mat-form-field class='date' appearance="outline">
                         <mat-label>Date</mat-label>
-                        <input matInput name="date" [(ngModel)]="date"/> 
+                        <input matInput name="date" [(ngModel)]="date"/>
                       </mat-form-field>
                     </div>
-
                     <div>
                       <mat-form-field class='start' appearance="outline">
                         <mat-label>Start Time</mat-label>
-                        <input matInput name="start" [(ngModel)]="bookingEvent.startTime"/> 
+                        <input matInput name="start" [(ngModel)]="bookingEvent.startTime"/>
                       </mat-form-field>
                     </div>
-
                     <div>
                       <mat-form-field class='end' appearance="outline">
                         <mat-label>End Time</mat-label>
-                        <input matInput name="end" [(ngModel)]="bookingEvent.endTime"/> 
+                        <input matInput name="end" [(ngModel)]="bookingEvent.endTime"/>
                       </mat-form-field>
                     </div>
-
-                    <!-- <div>
+                    <div>
                       <mat-form-field color="accent" appearance="fill" style="width: 90%">
                           <mat-label>Booking Date</mat-label>
                           <input matInput [matDatepicker]="picker2"  [(ngModel)]="date"/>
@@ -123,34 +115,24 @@
                           <mat-datepicker #picker2></mat-datepicker>
                       </mat-form-field>
                     </div>
-
                     <div style="margin-top: 2%">
                         Start Time:
                         <mat-form-field appearance="outline">
                           <input type="time" matInput name="startTime" [(ngModel)]="bookingEvent.startTime">
                        </mat-form-field>
                     </div>
-
                     <div>
                       End Time:
                       <mat-form-field appearance="outline">
                         <input type="time" matInput name="endTime" [(ngModel)]="bookingEvent.endTime">
                      </mat-form-field>
-                  </div> -->
-
+                  </div>
                   <div style="margin-left: 25%">
                     <button mat-flat-button color="warn" (click)="_addEvent()">Submit Booking</button>
-                  </div> 
-                
                   </div>
-
-
-
+              </div>
             </mat-card-content>
         </mat-card>
     </div>
-
-
-
-</div>   
-<router-outlet></router-outlet>
+</div>
+<router-outlet></router-outlet> -->

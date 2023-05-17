@@ -46,7 +46,8 @@
                 </div>
                 <div class="employee-table">
                     <div>
-                        <mat-paginator #matPaginator [length]="10" [pageSizeOptions]="[10]" aria-label="Select page">
+                        <mat-paginator #matPaginator [length]="defaultNumberUsers" [pageSizeOptions]="[defaultPageSize]"
+                            (page)="pageChanged($event)" aria-label="Select page">
                         </mat-paginator>
                     </div>
                     <table mat-table [dataSource]="dataSource" matSort style="width: 100%; border-radius: 10px;">
@@ -71,7 +72,8 @@
                         <!-- Email Column -->
                         <ng-container matColumnDef="email">
                             <th mat-header-cell *matHeaderCellDef>Email</th>
-                            <td mat-cell *matCellDef="let element">{{element.email}}</td>
+                            <td mat-cell *matCellDef="let element" matTooltipTrigger="hover" matTooltipPosition="right"
+                                [matTooltip]="element.email">{{element.email}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="address">
@@ -81,8 +83,10 @@
 
                         <ng-container matColumnDef="imagePath">
                             <th mat-header-cell *matHeaderCellDef>Image</th>
-                            <td mat-cell *matCellDef="let element" style="width: 8%">
-                                <img src={{element.imagePath}} class="profile-image">
+                            <td mat-cell *matCellDef="let element">
+                                <div>
+                                    <img src={{element.imagePath}} class="profile-image">
+                                </div>
                             </td>
                         </ng-container>
 
@@ -94,20 +98,49 @@
                         <ng-container matColumnDef="managerFlag">
                             <th mat-header-cell *matHeaderCellDef>Manager</th>
                             <td mat-cell *matCellDef="let element">
-                                <mat-icon style="color: rgb(16, 143, 16);"
-                                    *ngIf="element.managerFlag == true">check_circle</mat-icon>
-                                <mat-icon style="color: rgb(210, 12, 12);"
-                                    *ngIf="!element.managerFlag == true">cancel</mat-icon>
+                                <div>
+                                    <mat-icon style="color: rgb(16, 143, 16);"
+                                        *ngIf="element.managerFlag">check_circle</mat-icon>
+                                    <mat-icon style="color: rgb(210, 12, 12);"
+                                        *ngIf="!element.managerFlag">cancel</mat-icon>
+                                </div>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="eventHosterFlag">
-                            <th mat-header-cell *matHeaderCellDef>Event Hoster</th>
+                            <th mat-header-cell *matHeaderCellDef>Internal Event Hoster</th>
                             <td mat-cell *matCellDef="let element">
-                                <mat-icon style="color: rgb(16, 143, 16);"
-                                    *ngIf="element.eventHosterFlag == true">check_circle</mat-icon>
-                                <mat-icon style="color: rgb(210, 12, 12);"
-                                    *ngIf="!element.eventHosterFlag == true">cancel</mat-icon>
+                                <div>
+                                    <mat-icon style="color: rgb(16, 143, 16);"
+                                        *ngIf="element.eventHosterFlag">check_circle</mat-icon>
+                                    <mat-icon style="color: rgb(210, 12, 12);"
+                                        *ngIf="!element.eventHosterFlag">cancel</mat-icon>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="createPublicEventFlag">
+                            <th mat-header-cell *matHeaderCellDef>Public Event Hoster</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div>
+                                    <mat-icon style="color: rgb(16, 143, 16);"
+                                        *ngIf="element.createPublicEventFlag">check_circle</mat-icon>
+                                    <mat-icon style="color: rgb(210, 12, 12);"
+                                        *ngIf="!element.createPublicEventFlag">cancel</mat-icon>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="shift">
+                            <th mat-header-cell *matHeaderCellDef>Shift</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div [ngClass]="{'morning': element.shift == 'Morning',
+                                    'afternoon': element.shift == 'Afternoon',
+                                    'fulltime': element.shift == 'Full-time',
+                                    'unassigned': element.shift == 'Unassigned'}">
+                                    <i class="circle-icon"></i>
+                                    <span>
+                                        {{element.shift}}
+                                    </span>
+                                </div>
                             </td>
                         </ng-container>
 
@@ -206,10 +239,10 @@
                         ASSIGN SCHEDULE
                     </span>
                 </div>
-                <div class="morning-work">
+                <div class="morning-work schedule">
                     <mat-card>
                         <mat-card-content appMaterialElevation>
-                            <div class="morning-work-title">
+                            <div class="title">
                                 <mat-checkbox [(ngModel)]="assignMorningFlag"> <span>Morning Working
                                         Schedule</span></mat-checkbox>
                             </div>
@@ -224,10 +257,10 @@
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <div class="afternoon-work">
+                <div class="afternoon-work schedule">
                     <mat-card>
                         <mat-card-content appMaterialElevation>
-                            <div class="afternoon-work-title">
+                            <div class="title">
                                 <mat-checkbox [(ngModel)]="assignAfternoonFlag"> <span>Afternoon Working
                                         Schedule</span></mat-checkbox>
                             </div>
@@ -238,6 +271,24 @@
                             <div class="time-duration">
                                 <mat-icon>event</mat-icon>
                                 <span>{{afternoonWorkingDays}}</span>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="fulltime-work schedule">
+                    <mat-card>
+                        <mat-card-content appMaterialElevation>
+                            <div class="title">
+                                <mat-checkbox [(ngModel)]="assignFullTimeFlag"> <span>Full-time Working
+                                        Schedule</span></mat-checkbox>
+                            </div>
+                            <div class="time-duration">
+                                <mat-icon>alarm</mat-icon>
+                                <span>{{fullTimeWorkingTime}}</span>
+                            </div>
+                            <div class="time-duration">
+                                <mat-icon>event</mat-icon>
+                                <span>{{fullTimeWorkingDays}}</span>
                             </div>
                         </mat-card-content>
                     </mat-card>

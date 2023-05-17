@@ -122,4 +122,9 @@ export default class Utils {
     });
     return timeString;
   }
+
+  static toastrConfig = {
+    timeOut: 1500, // Time duration in milliseconds for how long the toastr will be displayed
+    extendedTimeOut: 1000, // Time duration in milliseconds for how long the toastr will be displayed after mouse hover
+  };
 }

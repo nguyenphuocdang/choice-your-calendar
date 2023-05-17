@@ -74,15 +74,17 @@ export class OrganizationService {
 
   getUserInOrganization(
     offset?: number,
+    page?: number,
     pageNumber?: number,
     pageSize?: number,
-    paged?: boolean,
+    size?: number,
     sorted?: boolean,
     unsorted?: boolean,
+    paged?: boolean,
     unpaged?: boolean
   ): Observable<ApiResponse<DataListResponse<UserBusinessDetail[]>>> {
-    // const requestUrl = `${Utils.ORGANIZATION_API}/user/get-all-user-of-organization?offset=${offset}&pageNumber=${pageNumber}&pageSize=${pageSize}&paged=${paged}&sort.sorted=${sorted}&sort.unsorted=${unsorted}&unpaged=${unsorted}`;
-    const requestUrl = `${Utils.ORGANIZATION_API}/user/get-all-user-of-organization?offset=10&pageNumber=10&pageSize=10&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=false`;
+    const requestUrl = `${Utils.ORGANIZATION_API}/user/get-all-user-of-organization?offset=${offset}&page=${page}&pageNumber=${pageNumber}&pageSize=${pageSize}&size=${size}&paged=${paged}&unpaged=${unpaged}&sort.sorted=${sorted}&sort.unsorted=${unsorted}`;
+    // const requestUrl = `${Utils.ORGANIZATION_API}/user/get-all-user-of-organization?offset=10&pageNumber=10&pageSize=10&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=false`;
     return this.http
       .get<ApiResponse<DataListResponse<UserBusinessDetail[]>>>(requestUrl)
       .pipe(
@@ -149,10 +151,24 @@ export class OrganizationService {
     freeScheduleFlag: boolean,
     fromDate: string,
     toDate: string
-  ) {
+  ): Observable<ApiResponse<ScheduleDatas>> {
     const requestUrl = `${Utils.ORGANIZATION_API}/schedule/view-default-calendar-for-user/${userId}?freeScheduleFlag=${freeScheduleFlag}&fromDate=${fromDate}&toDate=${toDate}`;
     return this.http.get<ApiResponse<ScheduleDatas>>(requestUrl).pipe(
       map((response: ApiResponse<ScheduleDatas>) => {
+        return response;
+      }),
+      catchError((error: any) => {
+        return throwError(CustomError);
+      })
+    );
+  }
+
+  getUserScheduleById(
+    userId: number
+  ): Observable<ApiResponse<ScheduleResponse>> {
+    const requestUrl = `${Utils.ORGANIZATION_API}/schedule/get-default-schedule-for-user/${userId}`;
+    return this.http.get<ApiResponse<ScheduleResponse>>(requestUrl).pipe(
+      map((response: ApiResponse<ScheduleResponse>) => {
         return response;
       }),
       catchError((error: any) => {

@@ -23,9 +23,10 @@ export class ScheduleResponse {
   name!: string;
   brief!: string;
   listTimeWorkings!: ListTimeWorkingDatas[];
-  active!: string;
-  effectiveDate!: string;
-  expiriedDate!: string;
+  active!: boolean;
+  effectiveDate?: string;
+  expiriedDate?: string;
+  freeScheduleFlag?: boolean;
 }
 
 export class ModifyScheduleRequest {

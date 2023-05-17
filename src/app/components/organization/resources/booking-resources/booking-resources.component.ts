@@ -7,7 +7,12 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {
+  FormControl,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import {
   MatBottomSheet,
   MatBottomSheetConfig,
@@ -41,8 +46,9 @@ import {
   ScheduleDatas,
   TimeData,
 } from 'src/app/_models/schedule';
-import { UserBusinessDetail } from 'src/app/_models/user';
+import { UserBusinessDetail, UserProfile } from 'src/app/_models/user';
 import { EventService } from 'src/app/_services/event.service';
+import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { DeviceService } from 'src/app/_services/resource.service';
 import { SocketService } from 'src/app/_services/socket.service';
@@ -56,240 +62,68 @@ import Utils from 'src/app/_utils/utils';
 })
 export class BookingResourcesComponent implements OnInit {
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
-  resourceType: ResourceBasicInfo[] = [
-    {
-      label: 'Meeting Room',
-      value: 'ROOM',
-    },
-    {
-      label: 'Support Device',
-      value: 'DEVICE',
-    },
-    {
-      label: 'Person',
-      value: 'PERSON',
-    },
-  ];
-  resourceRoom: ResourceDetail[] = [
-    {
-      id: 5,
-      code: 'ROOM01',
-      name: 'Meeting Room 01',
-      location: '1',
-      description: 'Meeting Room 01',
-      imagePath: '',
-      deviceType: 'ROOM',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 6,
-      code: 'ROOM02',
-      name: 'Meeting Room 02',
-      location: '2',
-      description: 'Meeting Room 02',
-      imagePath: '',
-      deviceType: 'ROOM',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 7,
-      code: 'ROOM03',
-      name: 'Meeting Room 03',
-      location: '3',
-      description: 'Meeting Room 03',
-      imagePath: '',
-      deviceType: 'ROOM',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 8,
-      code: 'ROOM04',
-      name: 'Meeting Room 04',
-      location: '4',
-      description: 'Meeting Room 04',
-      imagePath: '',
-      deviceType: 'ROOM',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-  ];
-  resourceSupportDevice: ResourceDetail[] = [
-    {
-      id: 9,
-      code: 'TELEVISION01',
-      name: 'Television 01',
-      location: '1',
-      description: 'Television 01',
-      imagePath: '',
-      deviceType: 'DEVICE',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 10,
-      code: 'TELEVISION02',
-      name: 'Television 02',
-      location: '2',
-      description: 'Television 02',
-      imagePath: '',
-      deviceType: 'DEVICE',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 11,
-      code: 'TELEVISION03',
-      name: 'Television 03',
-      location: '3',
-      description: 'Television 03',
-      imagePath: '',
-      deviceType: 'DEVICE',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 12,
-      code: 'DESKTOP01',
-      name: 'Desktop 01',
-      location: '1',
-      description: 'Desktop 01',
-      imagePath: '',
-      deviceType: 'DEVICE',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 13,
-      code: 'DESKTOP02',
-      name: 'Desktop 02',
-      location: '2',
-      description: 'Desktop 02',
-      imagePath: '',
-      deviceType: 'DEVICE',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 14,
-      code: 'DESKTOP03',
-      name: 'Desktop 03',
-      location: '3',
-      description: 'Desktop 03',
-      imagePath: '',
-      deviceType: 'DEVICE',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Phước Đăng',
-    },
-    {
-      id: 4,
-      code: 'TELEVISION',
-      name: 'Meeting Room Television',
-      location: 'Meeting Room',
-      description: 'Meeting Room Television',
-      imagePath: '',
-      deviceType: 'DEVICE',
-      enable: true,
-      deviceDefaultFlag: false,
-      approverFullName: 'Nguyễn Tuấn Anh',
-    },
-  ];
-  resourcePeople: UserBusinessDetail[] = [
-    {
-      id: 7,
-      fullname: 'Nguyễn Phước Đăng',
-      email: 'anakin9472@gmail.com',
-      address: 'Thu Duc city',
-      imagePath:
-        'https://lh3.googleusercontent.com/a-/ACB-R5T06WP_UsAsujiRGdGxD3QjIIOk2Yo9s7ry5nE4=s96-c',
-      effectiveDate: 1680972388312,
-      managerFlag: true,
-      eventHosterFlag: true,
-      hostFlag: true,
-      createPublicEventFlag: true,
-    },
-    {
-      id: 9,
-      fullname: 'Nguyễn Hoàng Đức',
-      email: 'nguyensonthach9472@gmail.com',
-      address: '255 Đường Võ Văn Tần Phường 5, Quận 3, TP. Hồ Chí Minh',
-      imagePath:
-        'https://res.cloudinary.com/dzri3e9wa/image/upload/v1667315212/email-teamplate/default-male-image_cgjs2b.png',
-      effectiveDate: 1681173572564,
-      managerFlag: false,
-      eventHosterFlag: false,
-      hostFlag: false,
-      createPublicEventFlag: false,
-    },
-    {
-      id: 10,
-      fullname: 'Nguyễn Tuấn Anh',
-      email: 'tinnt268@gmail.com',
-      address: '255 Đường Võ Văn Tần Phường 5, Quận 3, TP. Hồ Chí Minh',
-      imagePath:
-        'https://res.cloudinary.com/dzri3e9wa/image/upload/v1667315212/email-teamplate/default-male-image_cgjs2b.png',
-      effectiveDate: 1681198386553,
-      managerFlag: true,
-      eventHosterFlag: true,
-      hostFlag: false,
-      createPublicEventFlag: false,
-    },
-    {
-      id: 11,
-      fullname: 'Châu Ngọc Quang',
-      email: 'nguyenphuocdang1234@gmail.com',
-      address: 'Quang Trung, P.Tây Sơn, Thành phố Pleiku, Gia Lai ',
-      imagePath:
-        'https://res.cloudinary.com/dzri3e9wa/image/upload/v1667315212/email-teamplate/default-male-image_cgjs2b.png',
-      effectiveDate: 1681397289346,
-      managerFlag: false,
-      eventHosterFlag: true,
-      hostFlag: false,
-      createPublicEventFlag: false,
-    },
-    {
-      id: 12,
-      fullname: 'Cao Xuân Hải',
-      email: 'ryancao1811@gmail.com',
-      address: ' TT. Nhà Bè, Nhà Bè, Thành phố Hồ Chí Minh',
-      imagePath:
-        'https://res.cloudinary.com/dzri3e9wa/image/upload/v1667315212/email-teamplate/default-male-image_cgjs2b.png',
-      effectiveDate: 1681397385021,
-      managerFlag: false,
-      eventHosterFlag: false,
-      hostFlag: false,
-      createPublicEventFlag: false,
-    },
-    {
-      id: 13,
-      fullname: 'Nguyễn Duy Khang',
-      email: 'khangnguyen151001@gmail.com',
-      address: ' TT. Nhà Bè, Nhà Bè, Thành phố Hồ Chí Minh',
-      imagePath:
-        'https://res.cloudinary.com/dzri3e9wa/image/upload/v1667315212/email-teamplate/default-male-image_cgjs2b.png',
-      effectiveDate: 1681397599857,
-      managerFlag: true,
-      eventHosterFlag: true,
-      hostFlag: false,
-      createPublicEventFlag: false,
-    },
-  ];
-  // resourceType: ResourceBasicInfo[] = [];
-  // resourceRoom: ResourceDetail[] = [];
-  // resourceSupportDevice: ResourceDetail[] = [];
-  // resourcePeople: UserBusinessDetail[] = [];
+  // resourceType: ResourceBasicInfo[] = [
+  //   {
+  //     label: 'Meeting Room',
+  //     value: 'ROOM',
+  //   },
+  //   {
+  //     label: 'Support Device',
+  //     value: 'DEVICE',
+  //   },
+  //   {
+  //     label: 'Person',
+  //     value: 'PERSON',
+  //   },
+  // ];
+  // resourceRoom: ResourceDetail[] = [
+  //   {
+  //     id: 5,
+  //     code: 'ROOM01',
+  //     name: 'Meeting Room 01',
+  //     location: '1',
+  //     description: 'Meeting Room 01',
+  //     imagePath: '',
+  //     deviceType: 'ROOM',
+  //     enable: true,
+  //     deviceDefaultFlag: false,
+  //     approverFullName: 'Nguyễn Phước Đăng',
+  //   }
+  // ];
+  // resourceSupportDevice: ResourceDetail[] = [
+  //   {
+  //     id: 9,
+  //     code: 'TELEVISION01',
+  //     name: 'Television 01',
+  //     location: '1',
+  //     description: 'Television 01',
+  //     imagePath: '',
+  //     deviceType: 'DEVICE',
+  //     enable: true,
+  //     deviceDefaultFlag: false,
+  //     approverFullName: 'Nguyễn Phước Đăng',
+  //   }
+  // ];
+  // resourcePeople: UserBusinessDetail[] = [
+  //   {
+  //     id: 7,
+  //     fullname: 'Nguyễn Phước Đăng',
+  //     email: 'anakin9472@gmail.com',
+  //     address: 'Thu Duc city',
+  //     imagePath:
+  //       'https://lh3.googleusercontent.com/a-/ACB-R5T06WP_UsAsujiRGdGxD3QjIIOk2Yo9s7ry5nE4=s96-c',
+  //     effectiveDate: 1680972388312,
+  //     managerFlag: true,
+  //     eventHosterFlag: true,
+  //     hostFlag: true,
+  //     createPublicEventFlag: true,
+  //   },
+
+  // ];
+  resourceType: ResourceBasicInfo[] = [];
+  resourceRoom: ResourceDetail[] = [];
+  resourceSupportDevice: ResourceDetail[] = [];
+  resourcePeople: UserBusinessDetail[] = [];
   selectedResourceTypeValue: string[] = [];
   selectedResourceRoom: ResourceDetail[] = [];
   selectedResourceDevice: ResourceDetail[] = [];
@@ -316,267 +150,49 @@ export class BookingResourcesComponent implements OnInit {
   //     sendEmailFlag: true,
   //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
   //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  //   {
-  //     id: 2,
-  //     hostFlag: true,
-  //     hostName: 'Nguyen Minh Dang 2',
-  //     organizationName: '',
-  //     eventName: 'This is event title',
-  //     startTime: 'Monday, April 24, 2023 7:16:34.786 AM',
-  //     endTime: 'Monday, April 24, 2023 8:16:34.786 AM',
-  //     eventStatus: 'PENDING',
-  //     sendEmailFlag: true,
-  //     appointmentUrl: 'https://meet.google.com/vjw-nzto-oyo',
-  //     reason: '',
-  //   },
-  // ];
+  //   }]
   previousEvents: EventDetail[] = [];
   isShowingBookSidenav: boolean = false;
   isShowingConfirmBookSidenav: boolean = false;
   weekdays: DateBookingSlot[] = [];
   indexSelectedWeekday: number = 0;
-  eventDurationFormControl = new FormControl('30 minutes');
+  // eventDurationFormControl = new FormControl('30 minutes');
   eventDuration: string = '';
   bookingSlots: BookingSlot[] = [];
   indexSelectedBookingSlot: number = 0;
+  user: UserProfile = this.storageService.getUserProfile();
+  currentIdUser: number = this.user.id;
+  makeEventForm: UntypedFormGroup = this.fb.group({
+    eventDuration: [''],
+    freeScheduleFlag: [false],
+    eventName: [''],
+    eventDescription: [''],
+    genMeetingLinkFlag: [false],
+    eventType: [''],
+    publicModeFlag: [false],
+    listDeviceId: [[]],
+    listPartnerId: [[]],
+    startTime: [''],
+    endTime: [''],
+  });
   constructor(
+    private fb: UntypedFormBuilder,
     private socketService: SocketService,
     private resourceService: DeviceService,
     private eventService: EventService,
     private toastrService: ToastrService,
     private organizationService: OrganizationService,
+    private storageService: LocalStorageService,
     private bottomSheetBookingConfirm: MatBottomSheet,
     private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
-    this._handleWebSocket();
-    // this._getResourceType();
-    // this._getAllResources();
-    // this._getAllUserInOrganization();
-    // this._getEventList();
+    // this._handleWebSocket();
+    this._getResourceType();
+    this._getAllResources();
+    this._getAllUserInOrganization();
+    this._getEventList();
   }
 
   _handleWebSocket() {
@@ -670,7 +286,10 @@ export class BookingResourcesComponent implements OnInit {
           (response: ApiResponse<DataListResponse<UserBusinessDetail[]>>) => {
             if (response.statusCode === 200) {
               response.data.content.forEach((element) => {
-                if (element.fullname != 'User Default') {
+                if (
+                  element.fullname != 'User Default' &&
+                  element.id != this.currentIdUser
+                ) {
                   this.resourcePeople.push(element);
                 }
               });
@@ -734,9 +353,9 @@ export class BookingResourcesComponent implements OnInit {
         currentDate.getMonth(),
         currentDate.getDate()
       );
-      let defaultStartDate: string = lastYearDate.toISOString();
-      let defaultEndDate: string = nextYearDate.toISOString();
-
+      //Example: "2023-05-14T17:00:00.000Z"
+      let defaultStartDate: string = lastYearDate.toISOString(); //Example: "2022-05-14T17:00:00.000Z"
+      let defaultEndDate: string = nextYearDate.toISOString(); //Example: "2024-05-14T17:00:00.000Z"
       let requestBody: EventSearchRequest = {
         endTime: defaultEndDate,
         eventDescription: '',
@@ -762,6 +381,21 @@ export class BookingResourcesComponent implements OnInit {
   }
 
   triggerBookingSidenav() {
+    this._handleCreateEventForm();
+    this._handleWeekdays();
+    this._getBookingSlots(0);
+    this.isShowingBookSidenav = true;
+  }
+
+  _handleCreateEventForm() {
+    const defaultEventName: string = 'Booking Resource Event';
+    const defaultEventDuration: string = '30 minutes';
+    const defaultEventType: string = 'Offline';
+    this.makeEventForm.get('eventName')?.setValue(defaultEventName);
+    this.makeEventForm.get('eventDuration')?.setValue(defaultEventDuration);
+    this.makeEventForm.get('eventType')?.setValue(defaultEventType);
+  }
+  _handleWeekdays() {
     if (this.weekdays.length > 0) {
       if (this.weekdays[this.indexSelectedWeekday])
         this.weekdays[this.indexSelectedWeekday].selectFlag = false;
@@ -789,8 +423,6 @@ export class BookingResourcesComponent implements OnInit {
         this.weekdays[this.indexSelectedWeekday].selectFlag = true;
       }
     }
-    this._getBookingSlots(0);
-    if (this.isShowingBookSidenav == false) this.isShowingBookSidenav = true;
   }
   closeBookingSidenav() {
     if (this.isShowingBookSidenav) this.isShowingBookSidenav = false;
@@ -803,7 +435,8 @@ export class BookingResourcesComponent implements OnInit {
     if (this.bookingSlots.length > 0) {
       this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = false;
     }
-    this.isShowingConfirmBookSidenav = true;
+    // this.isShowingConfirmBookSidenav = true;
+    this._getBookingSlots(this.indexSelectedWeekday);
   }
 
   onSelectionChangeEventDuration() {
@@ -811,81 +444,88 @@ export class BookingResourcesComponent implements OnInit {
   }
 
   _getBookingSlots(index: number) {
-    // try {
-    //   //Handle Duration
-    //   let eventDuration: number = 0;
-    //   let match =
-    //     this.eventDurationFormControl.value!.match(/^\d+(?= minutes)/);
-    //   if (match) eventDuration = parseInt(match[0]);
-    //   //Handle Time
-    //   let selectedDate: Date = new Date(this.weekdays[index].date);
-    //   let fromDate: string = '';
-    //   if (index == 0) {
-    //     let currentDate: Date = new Date();
-    //     currentDate.setMinutes(Math.ceil(currentDate.getMinutes() / 60) * 60);
-    //     currentDate.setSeconds(1);
-    //     currentDate.setMilliseconds(0);
-    //     fromDate = currentDate.toISOString();
-    //   } else {
-    //     selectedDate.setHours(0);
-    //     selectedDate.setMinutes(0);
-    //     fromDate = selectedDate.toISOString();
-    //   }
-    //   selectedDate.setHours(23);
-    //   selectedDate.setMinutes(59);
-    //   let toDate: string = selectedDate.toISOString();
-    //   //Handle Resource
-    //   const listDeviceId: number[] = [];
-    //   const listPartnerId: number[] = [];
-    //   this.selectedResourceFormControl.value.forEach((element: any) => {
-    //     if (element.deviceType != null) listDeviceId.push(element.id);
-    //     else listPartnerId.push(element.id);
-    //   });
-    //   //Handle Request
-    //   let requestBody: BookingSlotRequest = {
-    //     eventDuration: eventDuration,
-    //     freeScheduleFlag: false,
-    //     fromDate: fromDate,
-    //     toDate: toDate,
-    //     listDeviceId: listDeviceId,
-    //     listPartnerId: listPartnerId,
-    //   };
-    //   debugger;
-    //   this.eventService
-    //     .getBookingSlots(requestBody)
-    //     .subscribe((response: ApiResponse<ScheduleDatas>) => {
-    //       debugger;
-    //       if (response.statusCode === 200) {
-    //         const tempBookingSlots: BookingSlot[] = [];
-    //         response.data.scheduleDatas[0].timeDatas.forEach(
-    //           (element: TimeData) => {
-    //             const bookingSlot: BookingSlot = {
-    //               selectFlag: false,
-    //               timeDatas: element,
-    //             };
-    //             tempBookingSlots.push(bookingSlot);
-    //           }
-    //         );
-    //         this.bookingSlots = tempBookingSlots;
-    //       } else {
-    //         debugger;
-    //       }
-    //     });
-    // } catch (error) {
-    //   debugger;
-    //   if (this.selectedResourceFormControl.value == null) {
-    //     this.toastrService.warning(
-    //       'Please select resource for booking request.',
-    //       'WARNING'
-    //     );
-    //   }
-    // }
+    try {
+      //Handle Duration
+      let eventDuration: number = 0;
+      let match =
+        this.makeEventForm!.get('eventDuration')!.value.match(
+          /^\d+(?= minutes)/
+        );
+      if (match) eventDuration = parseInt(match[0]);
+      //Handle Time
+      let selectedDate: Date = new Date(this.weekdays[index].date);
+      let fromDate: string = '';
+      if (index == 0) {
+        let currentDate: Date = new Date();
+        currentDate.setMinutes(
+          Math.ceil(currentDate.getMinutes() / eventDuration) * eventDuration
+        );
+        currentDate.setSeconds(1);
+        currentDate.setMilliseconds(0);
+        fromDate = currentDate.toISOString();
+      } else {
+        selectedDate.setHours(0);
+        selectedDate.setMinutes(0);
+        fromDate = selectedDate.toISOString();
+      }
+      selectedDate.setHours(23);
+      selectedDate.setMinutes(59);
+      let toDate: string = selectedDate.toISOString();
+      //Handle Resource
+      const listDeviceId: number[] = [];
+      const listPartnerId: number[] = [];
+      // this.makeEventForm!.get('listDeviceId')!.setValue([]);
+      // this.makeEventForm!.get('listPartnerId')!.setValue([]);
+      listPartnerId.push(this.currentIdUser);
+      this.selectedResourceFormControl.value.forEach((element: any) => {
+        if (element.deviceType != null) listDeviceId.push(element.id);
+        else listPartnerId.push(element.id);
+      });
+      //Handle Request
+      let requestBody: BookingSlotRequest = {
+        eventDuration: eventDuration,
+        freeScheduleFlag: false,
+        fromDate: fromDate,
+        toDate: toDate,
+        listDeviceId: listDeviceId,
+        listPartnerId: listPartnerId,
+      };
+      this.eventService
+        .getBookingSlots(requestBody)
+        .subscribe((response: ApiResponse<ScheduleDatas>) => {
+          if (response.statusCode === 200) {
+            const tempBookingSlots: BookingSlot[] = [];
+            response.data.scheduleDatas[0].timeDatas.forEach(
+              (element: TimeData) => {
+                const bookingSlot: BookingSlot = {
+                  selectFlag: false,
+                  timeDatas: element,
+                };
+                tempBookingSlots.push(bookingSlot);
+              }
+            );
+            this.bookingSlots = tempBookingSlots;
+          } else {
+            debugger;
+          }
+        });
+    } catch (error) {
+      debugger;
+      if (this.selectedResourceFormControl.value == null) {
+        this.toastrService.warning(
+          'Please select resource for booking request.',
+          'WARNING',
+          Utils.toastrConfig
+        );
+      }
+    }
   }
 
   onSelectBookingSlotClicked(index: number) {
     this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = false;
     this.indexSelectedBookingSlot = index;
     this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = true;
+    debugger;
     //Open the bottom sheet to handle the confirmation
     // this.bottomSheetBookingConfirm.open(BottomSheetComponent);
   }

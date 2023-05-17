@@ -66,4 +66,6 @@ export class UserBusinessDetail {
   hostFlag!: boolean;
   createPublicEventFlag!: boolean;
   selected?: boolean;
+  shift?: string;
+  scheduleName!: string;
 }
