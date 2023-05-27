@@ -4,7 +4,7 @@
             <mat-card-content>
                 <div class="header">
                     <span>
-                        Booking Resources Dashboard
+                        Booking Dashboard
                     </span>
                 </div>
                 <div class="booking-info">
@@ -13,123 +13,159 @@
                             <!-- <div class="check">
                                 <mat-checkbox></mat-checkbox>
                             </div> -->
-                            <div class="resource-type select">
-                                <span>Resource Type</span>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>
-                                        Select type
-                                    </mat-label>
-                                    <mat-select multiple (selectionChange)="onResourceTypeSelectChangeAction($event)"
-                                        [formControl]="selectedResourceTypeFormControl">
-                                        <mat-select-trigger>
-                                            <span>
-                                                {{selectedResourceTypeFormControl.value?.[0]}}
-                                            </span>
-                                            <span *ngIf="(selectedResourceTypeFormControl.value?.length || 0) > 1"
-                                                class="additional-selection">
-                                                (+{{(selectedResourceTypeFormControl.value?.length || 0) - 1}}
-                                                {{selectedResourceTypeFormControl.value?.length === 2 ? 'other' :
-                                                'others'}})
-                                            </span>
-                                        </mat-select-trigger>
-                                        <ng-container>
-                                            <mat-option *ngFor="let type of resourceType" [value]="type.label">
-                                                {{type.label}}
+                            <div class="event-resource">
+                                <div class="resource-type select">
+                                    <span>Resource Type</span>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>
+                                            Select type
+                                        </mat-label>
+                                        <mat-select multiple
+                                            (selectionChange)="onResourceTypeSelectChangeAction($event)"
+                                            [formControl]="selectedResourceTypeFormControl">
+                                            <mat-select-trigger>
                                                 <span>
-                                                    <mat-icon *ngIf="type.value =='ROOM'" style="color: #23a669">
-                                                        place</mat-icon>
-                                                    <mat-icon *ngIf="type.value =='DEVICE'"
-                                                        style="color: #23a669">computer</mat-icon>
-                                                    <mat-icon *ngIf="type.value=='PERSON'"
-                                                        style="color: #23a669">people</mat-icon>
+                                                    {{selectedResourceTypeFormControl.value?.[0]}}
                                                 </span>
-                                            </mat-option>
-                                        </ng-container>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
+                                                <span *ngIf="(selectedResourceTypeFormControl.value?.length || 0) > 1"
+                                                    class="additional-selection">
+                                                    (+{{(selectedResourceTypeFormControl.value?.length || 0) - 1}}
+                                                    {{selectedResourceTypeFormControl.value?.length === 2 ? 'other' :
+                                                    'others'}})
+                                                </span>
+                                            </mat-select-trigger>
+                                            <ng-container>
+                                                <mat-option *ngFor="let type of resourceType" [value]="type.label">
+                                                    {{type.label}}
+                                                    <span>
+                                                        <mat-icon *ngIf="type.value =='ROOM'" style="color: #23a669">
+                                                            place</mat-icon>
+                                                        <mat-icon *ngIf="type.value =='DEVICE'"
+                                                            style="color: #23a669">computer</mat-icon>
+                                                        <mat-icon *ngIf="type.value=='PERSON'"
+                                                            style="color: #23a669">people</mat-icon>
+                                                    </span>
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
 
-                            <div class="resource-list select">
-                                <span>Resource Option</span>
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Select an option</mat-label>
-                                    <mat-select multiple (selectionChange)="onResourceSelectionChangeAction($event)"
-                                        [formControl]="selectedResourceFormControl">
-                                        <mat-select-trigger>
-                                            <span>
-                                                {{(selectedResourceFormControl.value?.[0].deviceType != null)
-                                                ?selectedResourceFormControl.value?.[0].name :
-                                                selectedResourceFormControl.value?.[0].fullname}}
-                                            </span>
-                                            <span *ngIf="selectedResourceFormControl.value?.length > 1">
-                                                , {{(selectedResourceFormControl.value?.[1].deviceType != null)
-                                                ?selectedResourceFormControl.value?.[1].name :
-                                                selectedResourceFormControl.value?.[1].fullname}}
-                                            </span>
-                                            <span *ngIf="(selectedResourceFormControl.value?.length || 0) > 2"
-                                                class="additional-selection" matTooltipTrigger="hover"
-                                                matTooltipPosition="right" [matTooltip]="tooltipSelectedResources"
-                                                [matTooltipClass]="{'mat-tooltip-style': true}">
-                                                (+{{(selectedResourceFormControl.value?.length || 0) - 2}}
-                                                {{selectedResourceFormControl.value?.length === 3 ? 'other' :
-                                                'others'}})
-                                            </span>
-                                        </mat-select-trigger>
-                                        <ng-container>
-                                            <div class="resource-content"
-                                                [ngClass]="{'border-bottom-line': isSelectRoom}">
-                                                <ng-container *ngIf="isSelectRoom">
-                                                    <div class="resource-list-type-header">
-                                                        <mat-icon> place</mat-icon>
-                                                        <span>Room</span>
-                                                    </div>
-                                                    <div class="grid-container">
-                                                        <mat-option *ngFor="let element of selectedResourceRoom"
-                                                            [value]="element">
-                                                            <span class="grid-element">{{element.name}}</span>
-                                                        </mat-option>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="resource-content"
-                                                [ngClass]="{'border-bottom-line': isSelectDevice}">
-                                                <ng-container *ngIf="isSelectDevice">
-                                                    <div class="resource-list-type-header">
-                                                        <mat-icon>computer</mat-icon>
-                                                        <span>Support Device</span>
-                                                    </div>
-                                                    <div class="grid-container">
-                                                        <mat-option *ngFor="let element of selectedResourceDevice"
-                                                            [value]="element">
-                                                            <span class="grid-element">{{element.name}}</span>
-                                                        </mat-option>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                            <div class="resource-content"
-                                                [ngClass]="{'border-bottom-line': isSelectPeople}">
-                                                <ng-container *ngIf="isSelectPeople">
-                                                    <div class="resource-list-type-header">
-                                                        <mat-icon>people</mat-icon>
-                                                        <span>People</span>
-                                                    </div>
-                                                    <div class="grid-container">
-                                                        <mat-option *ngFor="let element of selectedResourcePeople"
-                                                            [value]="element">
-                                                            <span class="grid-element">{{element.fullname}}</span>
-                                                        </mat-option>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                        </ng-container>
-                                    </mat-select>
-                                </mat-form-field>
+                                <div class="resource-list select">
+                                    <span>Resource Option</span>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Select an option</mat-label>
+                                        <mat-select multiple (selectionChange)="onResourceSelectionChangeAction($event)"
+                                            [formControl]="selectedResourceFormControl">
+                                            <mat-select-trigger>
+                                                <span>
+                                                    {{(selectedResourceFormControl.value?.[0].deviceType != null)
+                                                    ?selectedResourceFormControl.value?.[0].name :
+                                                    selectedResourceFormControl.value?.[0].fullname}}
+                                                </span>
+                                                <span *ngIf="selectedResourceFormControl.value?.length > 1">
+                                                    , {{(selectedResourceFormControl.value?.[1].deviceType != null)
+                                                    ?selectedResourceFormControl.value?.[1].name :
+                                                    selectedResourceFormControl.value?.[1].fullname}}
+                                                </span>
+                                                <span *ngIf="(selectedResourceFormControl.value?.length || 0) > 2"
+                                                    class="additional-selection" matTooltipTrigger="hover"
+                                                    matTooltipPosition="right" [matTooltip]="tooltipSelectedResources"
+                                                    [matTooltipClass]="{'mat-tooltip-style': true}">
+                                                    (+{{(selectedResourceFormControl.value?.length || 0) - 2}}
+                                                    {{selectedResourceFormControl.value?.length === 3 ? 'other' :
+                                                    'others'}})
+                                                </span>
+                                            </mat-select-trigger>
+                                            <ng-container>
+                                                <div class="resource-content"
+                                                    [ngClass]="{'border-bottom-line': isSelectRoom}">
+                                                    <ng-container *ngIf="isSelectRoom">
+                                                        <div class="resource-list-type-header">
+                                                            <mat-icon> place</mat-icon>
+                                                            <span>Room</span>
+                                                        </div>
+                                                        <div class="grid-container">
+                                                            <mat-option *ngFor="let element of selectedResourceRoom"
+                                                                [value]="element">
+                                                                <span class="grid-element">{{element.name}}</span>
+                                                                <mat-icon
+                                                                    style="color: rgb(9, 142, 71)">event_note</mat-icon>
+                                                            </mat-option>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="resource-content"
+                                                    [ngClass]="{'border-bottom-line': isSelectDevice}">
+                                                    <ng-container *ngIf="isSelectDevice">
+                                                        <div class="resource-list-type-header">
+                                                            <mat-icon>computer</mat-icon>
+                                                            <span>Support Device</span>
+                                                        </div>
+                                                        <div class="grid-container">
+                                                            <mat-option *ngFor="let element of selectedResourceDevice"
+                                                                [value]="element">
+                                                                <span class="grid-element">{{element.name}}</span>
+                                                                <mat-icon
+                                                                    style="color: rgb(9, 142, 71)">event_note</mat-icon>
+                                                            </mat-option>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="resource-content"
+                                                    [ngClass]="{'border-bottom-line': isSelectPeople}">
+                                                    <ng-container *ngIf="isSelectPeople">
+                                                        <div class="resource-list-type-header">
+                                                            <mat-icon>people</mat-icon>
+                                                            <span>People</span>
+                                                        </div>
+                                                        <div class="grid-container">
+                                                            <mat-option *ngFor="let element of selectedResourcePeople"
+                                                                [value]="element">
+                                                                <span class="grid-element">{{element.fullname}}</span>
+                                                                <mat-icon
+                                                                    style="color: rgb(9, 142, 71)">event_note</mat-icon>
+                                                            </mat-option>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="schedule-button">
+                                    <button mat-raised-button class="book" (click)="triggerBookingSidenav()">
+                                        <mat-icon>today</mat-icon>
+                                        Schedule
+                                    </button>
+                                </div>
                             </div>
-                            <div class="schedule-button">
-                                <button mat-raised-button class="book" (click)="triggerBookingSidenav()">
-                                    <mat-icon>today</mat-icon>
-                                    Schedule
-                                </button>
+                            <div class="event-option">
+                                <form [formGroup]="makeEventForm">
+                                    <mat-radio-group class="" formControlName="schedulingEventType"
+                                        name="schedulingEventType">
+                                        <mat-radio-button value="personal-booking">
+                                            <span matTooltipTrigger="hover" matTooltipPosition="right"
+                                                matTooltip="User can setup a personal event and book any resources to support for the event."
+                                                [matTooltipClass]="{'event-type-mat-tooltip-style': true}">Scheduling As
+                                                Personal
+                                                Booking Resources Event</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button value="company-event">
+                                            <span matTooltipTrigger="hover" matTooltipPosition="right"
+                                                matTooltip="User can setup a company event and book any resources to support for the event. Any company member can join the event."
+                                                [matTooltipClass]="{'event-type-mat-tooltip-style': true}">Scheduling As
+                                                Company Event</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button value="public-sharing-slot">
+                                            <span matTooltipTrigger="hover" matTooltipPosition="right"
+                                                matTooltip="User can setup some special slots to share to public user and receive booking. Booking resources are also supported."
+                                                [matTooltipClass]="{'event-type-mat-tooltip-style': true}">Scheduling As
+                                                Public Slot For External Booking</span>
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </form>
                             </div>
                         </mat-card-content>
                     </mat-card>
@@ -140,38 +176,25 @@
                             <div class="event-data">
                                 <mat-tab-group [dynamicHeight]="true">
                                     <mat-tab label="Upcoming Booking Events">
-                                        <div *ngIf="upcomingEvents.length === 0" class='unavailable-event'>
+                                        <div *ngIf="upcomingEvents.length === 0,else hasUpcomingEvents"
+                                            class='unavailable-event'>
                                             <span>No Upcoming Booking Event Found</span>
                                             <img src="assets/images/no-event.png" class="image">
                                         </div>
-                                    </mat-tab>
-                                    <mat-tab label="Pending Booking Events">
-                                        <div *ngIf="pendingEvents.length === 0" class='unavailable-event'>
-                                            <span>No Pending Booking Event Found</span>
-                                            <img src="assets/images/no-event.png" class="image">
-                                        </div>
-                                    </mat-tab>
-                                    <mat-tab label="Cancel Booking Events">
-                                        <div *ngIf="cancelEvents.length === 0" class='unavailable-event'>
-                                            <span>No Cancel Booking Event Found</span>
-                                            <img src="assets/images/no-event.png" class="image">
-                                        </div>
-                                    </mat-tab>
-                                    <mat-tab label="All Booking Events">
-                                        <div *ngIf="previousEvents.length === 0; else hasEvents"
-                                            class='unavailable-event'>
-                                            <span>No Booking Event Found</span>
-                                            <img src="assets/images/no-event.png" class="image">
-                                        </div>
-                                        <ng-template #hasEvents>
+                                        <ng-template #hasUpcomingEvents>
                                             <div class="event-grid-container">
-                                                <div class="event-card" *ngFor="let event of previousEvents">
+                                                <div class="event-card" *ngFor="let event of upcomingEvents">
                                                     <mat-card>
-                                                        <mat-card-content appMaterialElevation>
+                                                        <mat-card-content appMaterialElevation
+                                                            (click)="onViewingEventDetail(event.id)">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1684854218/event-image/public_event_vluu7p.jpg"
+                                                                alt="" *ngIf="event.publicModeFlag">
                                                             <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1682823938/event-image/event-image_pmj0ye.jpg?fbclid=IwAR21IoqQ2Nrl6_Nqd2wFOGChCilHpTAg24mWhM-Bt2lFlY5IrahvPajz73w"
-                                                                alt="" *ngIf="event.appointmentUrl != ''">
+                                                                alt=""
+                                                                *ngIf="!event.publicModeFlag && event.appointmentUrl != ''">
                                                             <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1683194746/website-image/interview_ll0mzx.jpg"
-                                                                alt="" *ngIf="event.appointmentUrl == ''">
+                                                                alt=""
+                                                                *ngIf="!event.publicModeFlag && event.appointmentUrl == ''">
                                                             <span class="date">
                                                                 <mat-icon style="color: #23a669;;">date_range</mat-icon>
                                                                 {{event.date}}
@@ -198,6 +221,150 @@
                                                 </div>
                                             </div>
                                         </ng-template>
+                                    </mat-tab>
+                                    <mat-tab label="Company Events">
+                                        <div *ngIf="publicEvents.length === 0; else hasCompanyEvents"
+                                            class='unavailable-event'>
+                                            <span>No Booking Event Found</span>
+                                            <img src="assets/images/no-event.png" class="image">
+                                        </div>
+                                        <ng-template #hasCompanyEvents>
+                                            <div class="event-grid-container">
+                                                <div class="event-card" *ngFor="let event of publicEvents">
+                                                    <mat-card>
+                                                        <mat-card-content appMaterialElevation
+                                                            (click)="onViewingEventDetail(event.id)">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1684854218/event-image/public_event_vluu7p.jpg"
+                                                                alt="" *ngIf="event.publicModeFlag">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1682823938/event-image/event-image_pmj0ye.jpg?fbclid=IwAR21IoqQ2Nrl6_Nqd2wFOGChCilHpTAg24mWhM-Bt2lFlY5IrahvPajz73w"
+                                                                alt=""
+                                                                *ngIf="!event.publicModeFlag && event.appointmentUrl != ''">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1683194746/website-image/interview_ll0mzx.jpg"
+                                                                alt=""
+                                                                *ngIf="!event.publicModeFlag && event.appointmentUrl == ''">
+                                                            <span class="date">
+                                                                <mat-icon style="color: #23a669;;">date_range</mat-icon>
+                                                                {{event.date}}
+                                                            </span>
+                                                            <span class="time">
+                                                                <mat-icon style="color:#23a669;">alarm</mat-icon>
+                                                                {{event.time}}
+                                                            </span>
+                                                            <span class="title">
+                                                                {{event.eventName}}
+                                                            </span>
+                                                            <span class="status" *ngIf="event.appointmentUrl != ''">
+                                                                <mat-icon
+                                                                    style="color: #00705a;;">check_circle</mat-icon>
+                                                                Online
+                                                            </span>
+                                                            <span class="status" *ngIf="event.appointmentUrl == ''">
+                                                                <mat-icon
+                                                                    style="color: rgb(204, 4, 4);">check_circle</mat-icon>
+                                                                Offline
+                                                            </span>
+                                                        </mat-card-content>
+                                                    </mat-card>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </mat-tab>
+                                    <mat-tab label="Previous Booking Events">
+                                        <div *ngIf="previousEvents.length === 0; else hasPreviousEvents"
+                                            class='unavailable-event'>
+                                            <span>No Booking Event Found</span>
+                                            <img src="assets/images/no-event.png" class="image">
+                                        </div>
+                                        <ng-template #hasPreviousEvents>
+                                            <div class="event-grid-container">
+                                                <div class="event-card" *ngFor="let event of previousEvents">
+                                                    <mat-card>
+                                                        <mat-card-content appMaterialElevation
+                                                            (click)="onViewingEventDetail(event.id)">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1684854218/event-image/public_event_vluu7p.jpg"
+                                                                alt="" *ngIf="event.publicModeFlag">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1682823938/event-image/event-image_pmj0ye.jpg?fbclid=IwAR21IoqQ2Nrl6_Nqd2wFOGChCilHpTAg24mWhM-Bt2lFlY5IrahvPajz73w"
+                                                                alt=""
+                                                                *ngIf="!event.publicModeFlag && event.appointmentUrl != ''">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1683194746/website-image/interview_ll0mzx.jpg"
+                                                                alt=""
+                                                                *ngIf="!event.publicModeFlag && event.appointmentUrl == ''">
+                                                            <span class="date">
+                                                                <mat-icon style="color: #23a669;;">date_range</mat-icon>
+                                                                {{event.date}}
+                                                            </span>
+                                                            <span class="time">
+                                                                <mat-icon style="color:#23a669;">alarm</mat-icon>
+                                                                {{event.time}}
+                                                            </span>
+                                                            <span class="title">
+                                                                {{event.eventName}}
+                                                            </span>
+                                                            <span class="status" *ngIf="event.appointmentUrl != ''">
+                                                                <mat-icon
+                                                                    style="color: #00705a;;">check_circle</mat-icon>
+                                                                Online
+                                                            </span>
+                                                            <span class="status" *ngIf="event.appointmentUrl == ''">
+                                                                <mat-icon
+                                                                    style="color: rgb(204, 4, 4);">check_circle</mat-icon>
+                                                                Offline
+                                                            </span>
+                                                        </mat-card-content>
+                                                    </mat-card>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </mat-tab>
+                                    <mat-tab label="Cancel Booking Events">
+                                        <div *ngIf="cancelEvents.length === 0; else hasCancelEvents"
+                                            class='unavailable-event'>
+                                            <span>No Cancel Booking Event Found</span>
+                                            <img src="assets/images/no-event.png" class="image">
+                                        </div>
+                                        <ng-template #hasCancelEvents>
+                                            <div class="event-grid-container">
+                                                <div class="event-card" *ngFor="let event of cancelEvents">
+                                                    <mat-card>
+                                                        <mat-card-content appMaterialElevation
+                                                            (click)="onViewingEventDetail(event.id)">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1684854218/event-image/public_event_vluu7p.jpg"
+                                                                alt="" *ngIf="event.publicModeFlag">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1682823938/event-image/event-image_pmj0ye.jpg?fbclid=IwAR21IoqQ2Nrl6_Nqd2wFOGChCilHpTAg24mWhM-Bt2lFlY5IrahvPajz73w"
+                                                                alt=""
+                                                                *ngIf="!event.publicModeFlag && event.appointmentUrl != ''">
+                                                            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1683194746/website-image/interview_ll0mzx.jpg"
+                                                                alt=""
+                                                                *ngIf="!event.publicModeFlag && event.appointmentUrl == ''">
+                                                            <span class="date">
+                                                                <mat-icon style="color: #23a669;;">date_range</mat-icon>
+                                                                {{event.date}}
+                                                            </span>
+                                                            <span class="time">
+                                                                <mat-icon style="color:#23a669;">alarm</mat-icon>
+                                                                {{event.time}}
+                                                            </span>
+                                                            <span class="title">
+                                                                {{event.eventName}}
+                                                            </span>
+                                                            <span class="status" *ngIf="event.appointmentUrl != ''">
+                                                                <mat-icon
+                                                                    style="color: #00705a;;">check_circle</mat-icon>
+                                                                Online
+                                                            </span>
+                                                            <span class="status" *ngIf="event.appointmentUrl == ''">
+                                                                <mat-icon
+                                                                    style="color: rgb(204, 4, 4);">check_circle</mat-icon>
+                                                                Offline
+                                                            </span>
+                                                        </mat-card-content>
+                                                    </mat-card>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </mat-tab>
+
+                                    <mat-tab label="">
 
                                     </mat-tab>
                                 </mat-tab-group>
@@ -208,8 +375,12 @@
                 <div class="booking-sidenav">
                     <mat-sidenav-container #sidenavContainer>
                         <mat-sidenav #sidenav position="end" [opened]="isShowingBookSidenav">
+                            <mat-icon class="close-icon" (click)="closeBookingSidenav()">close</mat-icon>
                             <div class="selected-day" *ngIf="weekdays.length > 0">
-                                {{weekdays[indexSelectedWeekday].code}}, {{weekdays[indexSelectedWeekday].date_ddmmyy}}
+                                <!-- {{weekdays[indexSelectedWeekday].code}}, {{weekdays[indexSelectedWeekday].date_ddmmyy}} -->
+                                <span class="previous-week"> <mat-icon>keyboard_arrow_left</mat-icon> Previous</span>
+                                <span class="current-week">{{durationCurrentWeekday}}</span>
+                                <span class="next-week"> <mat-icon>keyboard_arrow_right</mat-icon> Next</span>
                             </div>
                             <div class="weekday">
                                 <div class='day' *ngFor="let day of weekdays, let index = index">
@@ -227,31 +398,51 @@
 
                             <div class="booking-resource-info">
                                 <form action="" name="makeEventForm" [formGroup]="makeEventForm">
-                                    <div class="row1 event-name">
-                                        <label for="event-name">Event Name</label>
-                                        <input type="text" formControlName="eventName">
-                                    </div>
                                     <div class="row2">
-                                        <div>
-                                            <span>
+                                        <div class="input">
+                                            <label for="event-name">Event Name</label>
+                                            <input type="text" placeholder='Event Name' formControlName="eventName">
+                                        </div>
+                                        <div class="select">
+                                            <label>
                                                 Event Duration
-                                            </span>
+                                            </label>
                                             <mat-form-field appearance="fill">
                                                 <mat-select formControlName='eventDuration'
                                                     (selectionChange)="onSelectionChangeEventDuration()">
+                                                    <mat-option value="15 minutes">
+                                                        15 minutes
+                                                    </mat-option>
                                                     <mat-option value="30 minutes">
                                                         30 minutes
+                                                    </mat-option>
+                                                    <mat-option value="45 minutes">
+                                                        45 minutes
                                                     </mat-option>
                                                     <mat-option value="60 minutes">
                                                         60 minutes
                                                     </mat-option>
+                                                    <mat-option value="90 minutes">
+                                                        90 minutes
+                                                    </mat-option>
+                                                    <mat-option value="120 minutes">
+                                                        120 minutes
+                                                    </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
-                                        <div>
-                                            <span>Event Type</span>
+                                    </div>
+                                    <div class="row1">
+                                        <label for="event-description">Event Description</label>
+                                        <input type="text" placeholder='Input Event Description'
+                                            formControlName="eventDescription">
+                                    </div>
+                                    <div class="row2">
+                                        <div class="select">
+                                            <label for="event-type">Event Type</label>
                                             <mat-form-field appearance="fill">
-                                                <mat-select formControlName='eventType'>
+                                                <mat-select formControlName='eventType'
+                                                    (selectionChange)="onSelectionChangeEventType()">
                                                     <mat-option value="Offline">
                                                         Offline
                                                     </mat-option>
@@ -261,14 +452,18 @@
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
+                                        <div class="input">
+                                            <label for="event-location">Event Location</label>
+                                            <input type="text" formControlName="eventLocation">
+                                        </div>
                                     </div>
                                 </form>
 
 
                             </div>
                             <div class="booking-slot">
-                                <span style="font-weight: 500; font-size: medium; padding:3% !important">
-                                    Booking Slots Available
+                                <span style="font-weight: 500; font-size: medium;">
+                                    Slots Available
                                 </span>
                                 <div class="slots-grid-container">
                                     <div class="slots-card" *ngFor="let slot of bookingSlots, let index = index">
@@ -289,15 +484,58 @@
                         </mat-sidenav>
                     </mat-sidenav-container>
                 </div>
-
                 <div class="confirm-booking-sidenav">
                     <mat-sidenav-container>
                         <mat-sidenav #sidenav [opened]="isShowingConfirmBookSidenav">
-                            <!-- content goes here -->
+                            <mat-icon class="close-icon" (click)="onCloseConfirmSidenav()">close</mat-icon>
+                            <div class="booking-information">
+                                <span class="title">Confirm Booking Detail</span>
+                                <div class="detail">
+                                    <div class="event-name" *ngIf="makeEventForm.get('eventName')?.value">
+                                        <span>{{ makeEventForm.get('eventName')?.value }}</span>
+                                    </div>
+                                    <div class="event-description" *ngIf="makeEventForm.get('eventDescription')?.value">
+                                        <mat-icon>event_note</mat-icon> <span>{{
+                                            makeEventForm.get('eventDescription')?.value
+                                            }}</span>
+                                    </div>
+                                    <div class="date" *ngIf="weekdays.length > 0">
+                                        <mat-icon>event</mat-icon>
+                                        <span>{{weekdays[indexSelectedWeekday].code}}, {{
+                                            weekdays[indexSelectedWeekday].date_ddmmyy}}</span>
+                                    </div>
+                                    <div class="start-time" *ngIf="bookingSlots.length > 0">
+                                        <mat-icon>alarm</mat-icon>
+                                        <span>From {{
+                                            bookingSlots[indexSelectedBookingSlot].timeDatas.startTime}} to {{
+                                            bookingSlots[indexSelectedBookingSlot].timeDatas.endTime}}</span>
+                                    </div>
+                                    <!-- <div class="end-time" *ngIf="bookingSlots.length > 0">
+                                        <mat-icon>alarm</mat-icon>
+                                        <span>End at: {{
+                                            bookingSlots[indexSelectedBookingSlot].timeDatas.endTime}}</span>
+                                    </div> -->
+                                    <div class="event-type" *ngIf="makeEventForm.get('eventType')?.value">
+                                        <mat-icon>check_box</mat-icon>
+                                        <span>{{ makeEventForm.get('eventType')?.value}} Event</span>
+                                    </div>
+                                    <div class="location" *ngIf="displaySelectedResourceRoom.length>0">
+                                        <mat-icon> location_on</mat-icon>
+                                        <span>{{makeEventForm.get('eventLocation')?.value}}</span>
+                                    </div>
+                                    <div class="location" *ngIf="displaySelectedResourcePeople.length>0">
+                                        <mat-icon>people</mat-icon>
+                                        <span>{{displayEventParticipants}}</span>
+                                    </div>
+                                </div>
+                                <div class="confirm-button" (click)="onConfirmBookingSlot()">
+                                    <button mat-raised-button>
+                                        <mat-icon>save</mat-icon>
+                                        Confirm
+                                    </button>
+                                </div>
+                            </div>
                         </mat-sidenav>
-                        <mat-sidenav-content>
-                            <!-- content goes here -->
-                        </mat-sidenav-content>
                     </mat-sidenav-container>
                 </div>
 

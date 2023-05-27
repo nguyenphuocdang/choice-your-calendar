@@ -37,24 +37,36 @@
       width: 100%;
       padding-left: 1.5%;
       gap: 2%;
-      .add-employee-button {
+      div {
         display: flex;
         align-items: center;
         button {
-          background-color: #d96f0c;
           color: white;
           font-size: medium;
           border-radius: 7px;
+          span {
+            display: flex;
+            mat-icon {
+              color: white;
+              margin: auto;
+            }
+          }
+        }
+      }
+      .add-employee-button {
+        button {
+          background-color: #d96f0c;
         }
       }
       .add-default-calendar-button {
-        display: flex;
-        align-items: center;
         button {
           background-color: #0b8266;
-          color: white;
-          font-size: medium;
-          border-radius: 7px;
+        }
+      }
+      .assign-permission {
+        position: relative;
+        button {
+          background-color: #0068a3;
         }
       }
     }
@@ -464,4 +476,82 @@
 
 .sidenav-active {
   transform: translateX(0);
+}
+
+::ng-deep .mat-menu-permissions {
+  position: absolute;
+  top: -2.25rem;
+  left: 12.5rem;
+  max-width: 30rem;
+  width: 30rem;
+  min-height: 10rem;
+  height: 10rem;
+  display: flex;
+  .mat-menu-content {
+    padding: 10px;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    mat-radio-group {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      justify-content: space-between;
+      div {
+        height: fit-content;
+        width: 100%;
+        mat-radio-button {
+          height: fit-content;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          .mat-radio-container {
+            margin-top: -35px !important;
+          }
+          .mat-radio-label-content {
+            height: fit-content;
+            width: 95%;
+            white-space: normal;
+            display: flex;
+            flex-direction: column;
+            .option {
+              font-weight: 500;
+              color: rgb(16, 140, 115);
+              text-transform: uppercase;
+              font-size: medium;
+            }
+          }
+        }
+        mat-radio-button.disabled {
+          ::ng-deep .mat-radio-outer-circle {
+            background-color: #ded0d0;
+          }
+        }
+      }
+    }
+    // mat-checkbox {
+    //   height: 50%;
+    //   width: 100%;
+    //   .mat-checkbox-layout {
+    //     height: 100%;
+    //     width: 100%;
+    //     .mat-checkbox-label {
+    //       display: flex;
+    //       flex-direction: column;
+    //       width: 100%;
+    //       height: 100%;
+    //       .option {
+    //         font-weight: 500;
+    //         color: rgb(16, 140, 115);
+    //       }
+    //       .note {
+    //         flex: 1;
+    //         white-space: normal;
+    //         word-wrap: break-word;
+    //       }
+    //     }
+    //   }
+    // }
+  }
 }

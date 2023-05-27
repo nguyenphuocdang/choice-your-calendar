@@ -252,6 +252,12 @@ export class ActiveCalendarComponent implements OnInit {
   setView(view: CalendarView) {
     this.view = view;
   }
+  getEventBCount(day: CalendarMonthViewDay): number {
+    // Logic to calculate the count of Event B for the given day
+    // You can access the day.events array and filter by the Event B criteria to count Event B occurrences
+    // return day.events.filter(event => /* check if it's an Event B */).length;
+    return 5;
+  }
 
   private async _getActiveCalendar(
     fromDate: string,

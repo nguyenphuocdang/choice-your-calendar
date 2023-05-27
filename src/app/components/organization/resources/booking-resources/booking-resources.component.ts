@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   OnInit,
+  Optional,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -18,6 +19,7 @@ import {
   MatBottomSheetConfig,
   MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
 import {
   MatDrawerContainer,
   MatSidenav,
@@ -29,11 +31,10 @@ import {
   DateBookingSlot,
   EventDetail,
   EventSearchRequest,
+  MakeEventRequest,
 } from 'src/app/_models/event';
-import {
-  SearchResourceRequestBody,
-  socketRequest,
-} from 'src/app/_models/request';
+import { socketRequest } from 'src/app/_models/request';
+import { SearchDevice } from 'src/app/_models/resource';
 import { ResourceBasicInfo, ResourceDetail } from 'src/app/_models/resource';
 import {
   ApiResponse,
@@ -54,6 +55,7 @@ import { DeviceService } from 'src/app/_services/resource.service';
 import { SocketService } from 'src/app/_services/socket.service';
 import { UserService } from 'src/app/_services/user.service';
 import Utils from 'src/app/_utils/utils';
+import { EventDetailComponent } from './event-detail/event-detail.component';
 
 @Component({
   selector: 'app-booking-resources',
@@ -152,10 +154,13 @@ export class BookingResourcesComponent implements OnInit {
   //     reason: '',
   //   }]
   previousEvents: EventDetail[] = [];
+  publicEvents: EventDetail[] = [];
   isShowingBookSidenav: boolean = false;
   isShowingConfirmBookSidenav: boolean = false;
+  isShowingEventInfoSidenav: boolean = false;
   weekdays: DateBookingSlot[] = [];
   indexSelectedWeekday: number = 0;
+  durationCurrentWeekday: string = '';
   // eventDurationFormControl = new FormControl('30 minutes');
   eventDuration: string = '';
   bookingSlots: BookingSlot[] = [];
@@ -165,16 +170,27 @@ export class BookingResourcesComponent implements OnInit {
   makeEventForm: UntypedFormGroup = this.fb.group({
     eventDuration: [''],
     freeScheduleFlag: [false],
-    eventName: [''],
-    eventDescription: [''],
+    eventName: ['Default Event Name'],
+    eventDescription: ['Default Event Description'],
+    eventLocation: [''],
     genMeetingLinkFlag: [false],
     eventType: [''],
     publicModeFlag: [false],
+    publicShareModeFlag: [false],
     listDeviceId: [[]],
     listPartnerId: [[]],
     startTime: [''],
     endTime: [''],
+    schedulingEventType: ['personal-booking'],
   });
+
+  displaySelectedResourceRoom: ResourceDetail[] = [];
+  displaySelectedResourceDevice: ResourceDetail[] = [];
+  displaySelectedResourcePeople: UserBusinessDetail[] = [];
+  displayEventLocation: string = '';
+  displayEventDevice: string = '';
+  displayEventParticipants: string = '';
+
   constructor(
     private fb: UntypedFormBuilder,
     private socketService: SocketService,
@@ -183,8 +199,7 @@ export class BookingResourcesComponent implements OnInit {
     private toastrService: ToastrService,
     private organizationService: OrganizationService,
     private storageService: LocalStorageService,
-    private bottomSheetBookingConfirm: MatBottomSheet,
-    private elementRef: ElementRef
+    @Optional() private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -193,30 +208,7 @@ export class BookingResourcesComponent implements OnInit {
     this._getAllResources();
     this._getAllUserInOrganization();
     this._getEventList();
-  }
-
-  _handleWebSocket() {
-    const requestBody: socketRequest = {
-      content: 'Sending message to server',
-      messageFrom: '7',
-      messageFromEmail: '',
-      messageTo: '',
-      messageType: 'NOTIFY',
-    };
-    try {
-      this.socketService
-        .sendPrivateMessage(requestBody)
-        .subscribe((response: any) => {
-          if (response.statusCode === 200) {
-            this.toastrService.success('Send message successfully', 'SUCCESS');
-            debugger;
-          } else {
-            debugger;
-          }
-        });
-    } catch (error) {
-      debugger;
-    }
+    // this._handleWebsocketForReceivingResourceApproval();
   }
 
   _getResourceType() {
@@ -241,7 +233,7 @@ export class BookingResourcesComponent implements OnInit {
 
   _getAllResources() {
     try {
-      const requestBody: SearchResourceRequestBody = {
+      const requestBody: SearchDevice = {
         approverFullName: '',
         code: '',
         description: '',
@@ -354,23 +346,53 @@ export class BookingResourcesComponent implements OnInit {
         currentDate.getDate()
       );
       //Example: "2023-05-14T17:00:00.000Z"
-      let defaultStartDate: string = lastYearDate.toISOString(); //Example: "2022-05-14T17:00:00.000Z"
-      let defaultEndDate: string = nextYearDate.toISOString(); //Example: "2024-05-14T17:00:00.000Z"
+      let isoLastYearDate: string = lastYearDate.toISOString(); //Example: "2022-05-14T17:00:00.000Z"
+      let isoNextYearDate: string = nextYearDate.toISOString(); //Example: "2024-05-14T17:00:00.000Z"
+      let isoCurrentlyDate: string = currentDate.toISOString();
       let requestBody: EventSearchRequest = {
-        endTime: defaultEndDate,
+        endTime: isoCurrentlyDate,
         eventDescription: '',
         eventName: '',
         hostName: '',
         partnerName: '',
-        startTime: defaultStartDate,
+        startTime: isoLastYearDate,
       };
+      const sortCondition: string = 'id,DESC';
+      //Get all events from last year to next year
       this.eventService
-        .getEventList(requestBody, defaultPage, defaultSize)
+        .getEventList(requestBody, defaultPage, defaultSize, sortCondition)
         .subscribe((response: ApiResponse<DataListResponse<EventDetail[]>>) => {
           if (response.statusCode === 200) {
             response.data.content.forEach((element: any) => {
               const event: EventDetail = new EventDetail(element);
               this.previousEvents.push(event);
+              if (event.publicModeFlag) this.publicEvents.push(event);
+            });
+          }
+        });
+      //Get all events from current day to next year
+
+      let upcomingEventsRequestBody: EventSearchRequest = {
+        endTime: isoNextYearDate,
+        eventDescription: '',
+        eventName: '',
+        hostName: '',
+        partnerName: '',
+        startTime: isoCurrentlyDate,
+      };
+      this.eventService
+        .getEventList(
+          upcomingEventsRequestBody,
+          defaultPage,
+          defaultSize,
+          sortCondition
+        )
+        .subscribe((response: ApiResponse<DataListResponse<EventDetail[]>>) => {
+          if (response.statusCode === 200) {
+            response.data.content.forEach((element: any) => {
+              const event: EventDetail = new EventDetail(element);
+              this.upcomingEvents.push(event);
+              if (event.publicModeFlag) this.publicEvents.push(event);
             });
           }
         });
@@ -383,15 +405,53 @@ export class BookingResourcesComponent implements OnInit {
   triggerBookingSidenav() {
     this._handleCreateEventForm();
     this._handleWeekdays();
+    this.makeEventForm!.get('listPartnerId')!.setValue([this.currentIdUser]);
+    this._handleResourceSelection();
     this._getBookingSlots(0);
     this.isShowingBookSidenav = true;
   }
 
+  _handleResourceSelection() {
+    //Handle Resource
+    const listDeviceId: number[] = [];
+    const listPartnerId: number[] = [];
+    this.displaySelectedResourceDevice = [];
+    this.displaySelectedResourcePeople = [];
+    this.displaySelectedResourceRoom = [];
+    if (this.selectedResourceFormControl.value) {
+      listPartnerId.push(this.currentIdUser);
+      this.selectedResourceFormControl.value.forEach((element: any) => {
+        if (element.deviceType != null) {
+          listDeviceId.push(element.id);
+          if (element.deviceType === 'ROOM') {
+            this.displaySelectedResourceRoom.push(element);
+          } else if (element.deviceType === 'DEVICE')
+            this.displaySelectedResourceDevice.push(element);
+        } else {
+          listPartnerId.push(element.id);
+          this.displaySelectedResourcePeople.push(element);
+        }
+      });
+      this.makeEventForm!.get('listDeviceId')!.setValue(listDeviceId);
+      this.makeEventForm!.get('listPartnerId')!.setValue(listPartnerId);
+    }
+    if (this.displaySelectedResourcePeople.length > 0)
+      this.displayEventParticipants = this.displaySelectedResourcePeople
+        .map((element) => element.fullname)
+        .join(', ');
+    if (this.displaySelectedResourceRoom.length > 0)
+      this.displayEventLocation = this.displaySelectedResourceRoom
+        .map((element) => element.name)
+        .join(', ');
+    if (this.displayEventLocation.length > 0)
+      this.makeEventForm!.get('eventLocation')!.setValue(
+        this.displayEventLocation
+      );
+  }
+
   _handleCreateEventForm() {
-    const defaultEventName: string = 'Booking Resource Event';
     const defaultEventDuration: string = '30 minutes';
     const defaultEventType: string = 'Offline';
-    this.makeEventForm.get('eventName')?.setValue(defaultEventName);
     this.makeEventForm.get('eventDuration')?.setValue(defaultEventDuration);
     this.makeEventForm.get('eventType')?.setValue(defaultEventType);
   }
@@ -422,6 +482,13 @@ export class BookingResourcesComponent implements OnInit {
         this.weekdays.push(weekday);
         this.weekdays[this.indexSelectedWeekday].selectFlag = true;
       }
+      this.durationCurrentWeekday = `${
+        this.weekdays[0].code
+      }, ${this.weekdays[0].date.getDate()}/${
+        this.weekdays[0].date.getMonth() + 1
+      } - ${this.weekdays[6].code}, ${this.weekdays[6].date.getDate()}/${
+        this.weekdays[6].date.getMonth() + 1
+      }`;
     }
   }
   closeBookingSidenav() {
@@ -440,9 +507,18 @@ export class BookingResourcesComponent implements OnInit {
   }
 
   onSelectionChangeEventDuration() {
-    debugger;
+    this._getBookingSlots(this.indexSelectedWeekday);
   }
 
+  onSelectionChangeEventType() {
+    if (this.makeEventForm.get('eventType')!.value === 'Online') {
+      this.makeEventForm.get('eventLocation')?.setValue('Google Meet Link');
+    } else {
+      this.makeEventForm
+        .get('eventLocation')
+        ?.setValue(this.displayEventLocation);
+    }
+  }
   _getBookingSlots(index: number) {
     try {
       //Handle Duration
@@ -457,6 +533,7 @@ export class BookingResourcesComponent implements OnInit {
       let fromDate: string = '';
       if (index == 0) {
         let currentDate: Date = new Date();
+        currentDate.setHours(currentDate.getHours() + 7);
         currentDate.setMinutes(
           Math.ceil(currentDate.getMinutes() / eventDuration) * eventDuration
         );
@@ -464,31 +541,21 @@ export class BookingResourcesComponent implements OnInit {
         currentDate.setMilliseconds(0);
         fromDate = currentDate.toISOString();
       } else {
-        selectedDate.setHours(0);
-        selectedDate.setMinutes(0);
-        fromDate = selectedDate.toISOString();
+        selectedDate.setHours(0, 0, 0, 0);
+        const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
+        fromDate = newDate.toISOString();
       }
-      selectedDate.setHours(23);
-      selectedDate.setMinutes(59);
-      let toDate: string = selectedDate.toISOString();
-      //Handle Resource
-      const listDeviceId: number[] = [];
-      const listPartnerId: number[] = [];
-      // this.makeEventForm!.get('listDeviceId')!.setValue([]);
-      // this.makeEventForm!.get('listPartnerId')!.setValue([]);
-      listPartnerId.push(this.currentIdUser);
-      this.selectedResourceFormControl.value.forEach((element: any) => {
-        if (element.deviceType != null) listDeviceId.push(element.id);
-        else listPartnerId.push(element.id);
-      });
+      selectedDate.setHours(23, 59, 0, 0);
+      const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
+      let toDate: string = newDate.toISOString();
       //Handle Request
       let requestBody: BookingSlotRequest = {
         eventDuration: eventDuration,
         freeScheduleFlag: false,
         fromDate: fromDate,
         toDate: toDate,
-        listDeviceId: listDeviceId,
-        listPartnerId: listPartnerId,
+        listDeviceId: this.makeEventForm.get('listDeviceId')!.value,
+        listPartnerId: this.makeEventForm.get('listPartnerId')!.value,
       };
       this.eventService
         .getBookingSlots(requestBody)
@@ -525,8 +592,122 @@ export class BookingResourcesComponent implements OnInit {
     this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = false;
     this.indexSelectedBookingSlot = index;
     this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = true;
+    //Handle request formBody
+    const startTime: Date = this._combineTimeAndDate(
+      this.bookingSlots[this.indexSelectedBookingSlot].timeDatas.startTime,
+      this.weekdays[this.indexSelectedWeekday].date
+    );
+    const endTime: Date = this._combineTimeAndDate(
+      this.bookingSlots[this.indexSelectedBookingSlot].timeDatas.endTime,
+      this.weekdays[this.indexSelectedWeekday].date
+    );
+    const _earlier7hourStartTime: Date = new Date(
+      startTime.getTime() + 7 * 60 * 60 * 1000
+    );
+    const _earlier7hourEndTime: Date = new Date(
+      endTime.getTime() + 7 * 60 * 60 * 1000
+    );
+    let requestStartTime: string = _earlier7hourStartTime.toISOString();
+    let requestEndTime: string = _earlier7hourEndTime.toISOString();
+    this.makeEventForm.get('startTime')?.setValue(requestStartTime);
+    this.makeEventForm.get('endTime')?.setValue(requestEndTime);
+    this.isShowingConfirmBookSidenav = true;
     debugger;
-    //Open the bottom sheet to handle the confirmation
-    // this.bottomSheetBookingConfirm.open(BottomSheetComponent);
+  }
+
+  _combineTimeAndDate(time: string, date: Date): Date {
+    const [hours, minutes] = time.split(':');
+    const combinedDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      Number(hours),
+      Number(minutes)
+    );
+    return combinedDate;
+  }
+  onCloseConfirmSidenav() {
+    this.isShowingConfirmBookSidenav = false;
+  }
+  onConfirmBookingSlot() {
+    const makeEventRequestBody: MakeEventRequest = {
+      startTime: this.makeEventForm.get('startTime')!.value,
+      endTime: this.makeEventForm.get('endTime')!.value,
+      eventName: this.makeEventForm.get('eventName')!.value,
+      eventDescription: this.makeEventForm.get('eventDescription')!.value,
+      listDeviceId: this.makeEventForm.get('listDeviceId')!.value,
+      listPartnerId: this.makeEventForm.get('listPartnerId')!.value,
+      genMeetingLinkFlag:
+        this.makeEventForm.get('eventType')!.value === 'Offline' ? false : true,
+      publicModeFlag: this.makeEventForm.get('publicModeFlag')!.value,
+      location:
+        this.makeEventForm.get('eventType')!.value === 'Offline'
+          ? this.makeEventForm.get('eventLocation')!.value
+          : '',
+    };
+    debugger;
+    makeEventRequestBody.listPartnerId.shift();
+    try {
+      this.eventService
+        .makeNewEvent(makeEventRequestBody)
+        .subscribe((response: any) => {
+          if (response.statusCode === 200) {
+            this.makeEventForm.get('publicModeFlag')!.setValue(false);
+            this.toastrService.success(
+              'Your event is created successfully, the resources booking status will be updated constantly. Please view detail of your event.'
+            );
+            const data: any = {
+              id: response.data.id,
+              startTime: response.data.startTime,
+              endTime: response.data.endTime,
+              hostFlag: '',
+              partnerName: '',
+              organizationName: '',
+              eventStatus: response.data.eventStatusEnum,
+              sendEmailFlag: false,
+              appointmentUrl: '',
+              reason: '',
+              eventName: response.data.eventName,
+              publicModeFlag: response.data.publicModeFlag,
+            };
+            const newEvent: EventDetail = new EventDetail(data);
+            // this.previousEvents.unshift(newEvent);
+            this.upcomingEvents.unshift(newEvent);
+            if (newEvent.publicModeFlag) this.publicEvents.unshift(newEvent);
+            this.onCloseConfirmSidenav();
+          } else {
+            debugger;
+            this.toastrService.error('Error In Creating Event');
+          }
+        });
+    } catch (error) {
+      debugger;
+      this.toastrService.error('Error In Creating Event');
+    }
+  }
+
+  onViewingEventDetail(eventId: number) {
+    const dialogRef = this.dialog.open(EventDetailComponent, {
+      width: '800px',
+      height: 'fit-content',
+      minHeight: '500px',
+      data: {
+        eventId: eventId,
+        publicModeFlag: false,
+      },
+    });
+  }
+
+  _handleWebsocketForReceivingResourceApproval() {
+    const userId: number = this.storageService.getUserProfile().id;
+    this.socketService.subscribe(
+      '/user/notify/private-messages',
+      (message: any) => {
+        debugger;
+        const messageData = JSON.parse(message.body);
+        console.log(messageData);
+      },
+      userId
+    );
   }
 }

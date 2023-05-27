@@ -47,6 +47,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatSelectFilterModule } from 'mat-select-filter';
 // import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import {
   NgxMatDatetimePickerModule,
@@ -83,6 +84,8 @@ import { BookingResourcesComponent } from './organization/resources/booking-reso
 import { ApproveDashboardComponent } from './organization/resources/approve-dashboard/approve-dashboard.component';
 import { PublicEventsComponent } from './organization/events/public-events/public-events.component';
 import { InternalEventsComponent } from './organization/events/internal-events/internal-events.component';
+import { EventDetailComponent } from './organization/resources/booking-resources/event-detail/event-detail.component';
+import { PublicEventDetailsComponent } from './organization/events/internal-events/public-event-details/public-event-details/public-event-details.component';
 const lang = 'en-US';
 
 const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
@@ -116,6 +119,8 @@ const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
     ApproveDashboardComponent,
     PublicEventsComponent,
     InternalEventsComponent,
+    EventDetailComponent,
+    PublicEventDetailsComponent,
   ],
   imports: [
     FormsModule,

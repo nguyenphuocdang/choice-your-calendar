@@ -1,0 +1,104 @@
+<div class="event-detail">
+    <mat-icon class="close-icon" (click)="closeComponent()">close</mat-icon>
+    <span class="date">
+        {{eventInformation.date}}
+    </span>
+    <span class="title">
+        {{eventInformation.eventName}}
+    </span>
+    <span class="description" *ngIf="eventInformation.eventDescription">
+        {{eventInformation.eventDescription}}
+    </span>
+    <span class=" line"></span>
+    <span class="time with-icon">
+        <mat-icon>alarm</mat-icon>
+        <span>From {{eventInformation.startTime}} to {{eventInformation.endTime}}</span>
+    </span>
+    <span class="event-type with-icon">
+        <mat-icon>event_available</mat-icon>
+        <span *ngIf="eventInformation.appointmentUrl!.length > 0">
+            Online Meeting for {{(eventInformation.publicModeFlag) ? 'Company employees' : 'Personal Team'}}
+            <a [href]='eventInformation.appointmentUrl'>Open Link</a>
+        </span>
+        <span *ngIf="eventInformation.appointmentUrl!.length === 0">
+            Offline Meeting for {{(eventInformation.publicModeFlag) ? 'Company employees' : 'Personal Team'}}
+        </span>
+    </span>
+    <span class="location with-icon" *ngIf="roomList.length > 0">
+        <mat-icon> location_on</mat-icon>
+        <span *ngFor="let item of roomList" class="room">
+            {{item.name}}
+            <span class="event-status pending" *ngIf="!publicModeFlag && item.status==='WAITING'">
+                PENDING FOR APPROVAL
+            </span>
+            <span class="event-status success" *ngIf="!publicModeFlag && item.status==='ACCEPT'">
+                AVAILABLE TO USE
+            </span>
+        </span>
+    </span>
+    <span class="with-icon">
+        <mat-icon>person</mat-icon>
+        <span>Host: {{eventHoster.fullname}}</span>
+    </span>
+    <span class="number-participant with-icon">
+        <mat-icon>people</mat-icon>
+        <span>Currently {{eventInformation.numberOfParticipants-1}} {{(eventInformation.numberOfParticipants
+            <=2)? 'participant' : 'participants' }} is going.</span>
+                <!-- <span>{{eventInformation.numberOfParticipants-1}} participants including: {{this.displayParticipants}}
+        </span> -->
+                <span style="text-decoration: underline; font-weight: 500; color:rgb(3, 119, 61);"
+                    [matMenuTriggerFor]="menu" *ngIf="userList.length > 0">
+                    View List
+                </span>
+                <mat-menu #menu="matMenu" class="mat-menu-user-list">
+                    <span style="display: flex; flex-direction: column;" *ngFor="let item of userList">
+
+                        <span style="display: flex;">
+                            <mat-icon style="color: #24931e; width: 2rem;"> mail_outline</mat-icon>
+                            <span style="overflow: hidden; word-wrap: break-word;">{{item.email}}</span>
+                        </span>
+                    </span>
+
+
+                    <!--
+                    <span style="display: flex; flex-direction: column; width: 100%; gap: 1rem">
+                        <span *ngFor="let item of userList"
+                            style="display: flex; gap: 1rem; height: 1.5rem; width: 100%; align-items: center;">
+                            <span style="display: flex; gap: 0.25rem; width: 100%; align-items: center;">
+                                <mat-icon style="color: #24931e; width: 2rem;">person</mat-icon>
+                                <span style="overflow: hidden; word-wrap: break-word;">{{item.fullname}}</span>
+                            </span>
+                        </span>
+                    </span>
+                    <span style="display: flex; flex-direction: column; width: 100%; gap: 1rem">
+                        <span *ngFor="let item of userList"
+                            style="display: flex; gap: 1rem; height: 1.5rem; width: 100%; align-items: center;">
+                            <span style="display: flex; gap: 0.25rem; width: 100%; align-items: center;">
+                                <mat-icon style="color: #24931e; width: 2rem;"> mail_outline</mat-icon>
+                                <span style="overflow: hidden; word-wrap: break-word;">{{item.email}}</span>
+                            </span>
+                        </span>
+                    </span> -->
+                </mat-menu>
+        </span>
+
+        <div class="button-class">
+            <button mat-raised-button class="reschedule-button" *ngIf="!publicModeFlag">
+                Reschedule Event
+            </button>
+            <button mat-raised-button class="cancel-button" *ngIf="!publicModeFlag">
+                Cancel Event
+            </button>
+            <button mat-raised-button class="join-button" *ngIf="publicModeFlag && !participantFlag"
+                (click)="joinOrganizationEvent()">
+                JOIN EVENT
+            </button>
+            <button mat-raised-button class="participating-button" *ngIf="participantFlag" [disabled]="participantFlag">
+                <mat-icon>stars</mat-icon>
+                IS PARTICIPATING
+            </button>
+        </div>
+        <!-- <span class="list-participants with-icon">
+        <span *ngFor="let item of userList">{{item.fullname}}</span>
+    </span> -->
+</div>

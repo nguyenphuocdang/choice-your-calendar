@@ -1,5 +1,6 @@
 import Utils from '../_utils/utils';
 import { BookingResourcesComponent } from '../components/organization/resources/booking-resources/booking-resources.component';
+import { DeviceOfEvent } from './resource';
 
 export class EventSearchRequest {
   endTime!: string;
@@ -23,11 +24,12 @@ export class EventDetail {
   endTime?: any;
   eventStatus!: string;
   sendEmailFlag!: boolean;
+  publicModeFlag!: boolean;
   appointmentUrl?: string;
   reason?: string;
   constructor(data?: any) {
     this.id = data?.id;
-    this.hostFlag = data?.hostFlag;
+    this.hostFlag = data?.hostFlag ?? '';
     this.hostName = data?.hostFlag ?? '';
     this.partnerName = data?.partnerName ?? '';
     this.organizationName = data?.organizationName ?? '';
@@ -38,8 +40,46 @@ export class EventDetail {
     )} - ${Utils.convertUTCtoTimeString(data?.endTime)}`;
     this.eventStatus = data?.eventStatus;
     this.sendEmailFlag = data?.sendEmailFlag;
+    this.publicModeFlag = data?.publicModeFlag ?? false;
     this.appointmentUrl = data?.appointmentUrl ?? '';
     this.reason = data?.reason ?? '';
+  }
+}
+
+export class SingleEventDetail {
+  id!: number;
+  eventName!: string;
+  eventDescription!: string;
+  eventStatus!: string;
+  startTime!: string;
+  endTime!: string;
+  appointmentUrl?: string;
+  sendEmailFlag!: boolean;
+  orgName?: string;
+  numberOfParticipants!: number;
+  publicModeFlag!: boolean;
+  publicPathMapping?: string;
+  eventHosterId!: number;
+  date?: string;
+  location?: string;
+  hostEmail?: string;
+  hostFullName?: string;
+  participantFlag?: boolean;
+  constructor(data?: any) {
+    this.id = data?.id;
+    this.date = Utils.convertUTCtoDateString(data?.startTime, true);
+    this.startTime = `${Utils.convertUTCtoTimeString(data?.startTime)}`;
+    this.endTime = `${Utils.convertUTCtoTimeString(data?.endTime)}`;
+    this.eventName = data?.eventName;
+    this.eventDescription = data?.eventDescription ?? '';
+    this.appointmentUrl = data?.appointmentUrl ?? '';
+    this.location = data?.location ?? '';
+    this.eventStatus = data?.eventStatus ?? '';
+    this.numberOfParticipants = data?.numberOfParticipants;
+    this.hostEmail = data?.hostEmail ?? '';
+    this.hostFullName = data?.hostFullName ?? '';
+    this.publicModeFlag = data?.publicModeFlag ?? false;
+    this.participantFlag = data?.participantFlag ?? false;
   }
 }
 
@@ -78,4 +118,47 @@ export class DateBookingSlot {
   date_ddmmyy!: string;
   date!: Date;
   selectFlag!: boolean;
+}
+
+export class MakeEventRequest {
+  startTime!: string;
+  endTime!: string;
+  eventName!: string;
+  eventDescription!: string;
+  listDeviceId!: number[];
+  listPartnerId!: number[];
+  genMeetingLinkFlag!: boolean;
+  publicModeFlag!: boolean;
+  location!: string;
+}
+
+export class JoinEventRequest {
+  eventId!: number;
+  listEmailJoining!: string[];
+  pathMappingKey!: string;
+  shareCode!: string;
+  singleEventFlag!: boolean;
+}
+
+export class ShareExternalSlotClient {
+  id!: number;
+  pathToShare!: string;
+  pathMappingKey!: string;
+  startTime!: any;
+  endTime!: any;
+  freeTimeType!: string;
+  eventType!: string;
+  sharePublicEventFlag!: boolean;
+  shareFreeTimeScheduleFlag!: boolean;
+  publicNewEventFlag!: boolean;
+}
+
+export class BookPublicRequest {
+  eventDescription!: string;
+  eventExternalSlotId!: number;
+  eventName!: string;
+  listPartnerEmail!: string[];
+  location!: string;
+  pathMappingKey!: string;
+  shareCode!: string;
 }

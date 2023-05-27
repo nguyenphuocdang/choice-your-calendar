@@ -1,13 +1,14 @@
 .container {
-  width: 80vw;
+  width: 81.25vw;
   height: fit-content;
   background-color: #eaeff2;
   display: flex;
   justify-content: center;
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
+  min-height: 100vh;
   .booking-resource {
-    width: 98%;
+    width: 97%;
     height: fit-content;
     margin: auto;
     mat-card {
@@ -21,12 +22,11 @@
         .header {
           width: 100%;
           height: 10%;
-
           display: flex;
           span {
             font-size: x-large;
             font-weight: 500;
-            margin: 2%;
+            margin: 1.5%;
           }
         }
         .booking-info {
@@ -39,83 +39,112 @@
             mat-card-content {
               display: flex;
               position: relative;
-              flex-direction: row;
+              flex-direction: column;
               width: 97%;
               gap: 3%;
               height: fit-content;
               margin: auto;
               background-color: rgba(234, 242, 234, 0.53);
-              .select {
+              .event-resource {
                 display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                // margin: 2% 8% 2% 0;
-                margin: 2%;
-                height: 8rem;
-                font-family: system-ui, -apple-system, BlinkMacSystemFont,
-                  "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-                  "Helvetica Neue", sans-serif;
-                font-size: large;
-                font-weight: 500;
-                ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-                  background-color: rgb(255, 255, 255);
-                  border: 2px solid #23a669;
-                  border-radius: 5px;
+                flex-direction: row;
+                height: 75%;
+                .select {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 1rem;
+                  // margin: 2% 8% 2% 0;
+                  margin: 0.75rem 1rem 0rem 1rem;
+                  height: 8rem;
+                  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+                    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+                    "Helvetica Neue", sans-serif;
+                  font-size: large;
+                  font-weight: 500;
+                  ::ng-deep
+                    .mat-form-field-appearance-fill
+                    .mat-form-field-flex {
+                    background-color: rgb(255, 255, 255);
+                    border: 2px solid #23a669;
+                    border-radius: 5px;
+                  }
+                  ::ng-deep .mat-form-field-underline {
+                    display: none;
+                  }
+                  ::ng-deep .mat-form-field-wrapper {
+                    padding-bottom: 0 !important;
+                  }
+                  mat-select {
+                    user-select: none;
+                  }
+                  mat-form-field {
+                    width: 100%;
+                  }
                 }
-                ::ng-deep .mat-form-field-underline {
-                  display: none;
+                .resource-type {
+                  width: 17rem;
+                  .example-additional-selection {
+                    opacity: 0.75;
+                    font-size: 0.75em;
+                  }
+                  mat-icon {
+                    color: #23a669;
+                  }
                 }
-                mat-select {
-                  user-select: none;
+                .resource-list {
+                  width: 30rem;
+                  .example-additional-selection {
+                    opacity: 0.75;
+                    font-size: 0.75em;
+                  }
                 }
-                mat-form-field {
-                  width: 100%;
+
+                .check {
+                  display: flex;
+                  align-items: center;
+                  padding: 2%;
+                  ::ng-deep .mat-checkbox-frame {
+                    border-color: #23a669;
+                  }
                 }
-              }
-              .resource-type {
-                width: 17rem;
-                .example-additional-selection {
-                  opacity: 0.75;
-                  font-size: 0.75em;
-                }
-                mat-icon {
-                  color: #23a669;
-                }
-              }
-              .resource-list {
-                width: 30rem;
-                .example-additional-selection {
-                  opacity: 0.75;
-                  font-size: 0.75em;
+                .schedule-button {
+                  display: flex;
+                  position: absolute;
+                  height: fit-content;
+                  margin-top: 1%;
+                  right: 1%;
+                  gap: 5%;
+                  button {
+                    color: white;
+
+                    border-radius: 5px;
+                    width: 8rem;
+                  }
+                  .add-resource {
+                    background-color: rgb(39, 178, 39);
+                  }
+                  .book {
+                    background-color: rgb(196, 71, 18);
+                  }
                 }
               }
 
-              .check {
+              .event-option {
                 display: flex;
-                align-items: center;
-                padding: 2%;
-                ::ng-deep .mat-checkbox-frame {
-                  border-color: #23a669;
-                }
-              }
-              .schedule-button {
-                display: flex;
-                position: absolute;
-                height: fit-content;
-                margin-top: 1%;
-                right: 1%;
-                gap: 5%;
-                button {
-                  color: white;
-
-                  border-radius: 5px;
-                  width: 8rem;
-                }
-                .add-resource {
-                  background-color: rgb(39, 178, 39);
-                }
-                .book {
-                  background-color: rgb(196, 71, 18);
+                flex: 1;
+                form {
+                  display: flex;
+                  flex-direction: column;
+                  padding-left: 1rem;
+                  padding-bottom: 1rem;
+                  mat-radio-group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.25rem;
+                    font-size: medium;
+                    font-weight: 500;
+                    color: #6b6b6b;
+                  }
                 }
               }
             }
@@ -214,12 +243,33 @@
             right: 0;
             top: 0;
             bottom: 0;
-            width: 30%;
+            width: 35%;
+            .close-icon {
+              font-size: 30px;
+              color: #24931e;
+              margin-left: 10px;
+              margin-top: 10px;
+              cursor: pointer;
+            }
             .selected-day {
+              display: flex;
+              justify-content: space-between;
               padding: 5%;
-              text-align: center;
-              font-weight: 500;
-              font-size: large;
+              padding-top: 0% !important;
+              span {
+                display: flex;
+                align-items: center;
+              }
+              .current-week {
+                font-weight: 500;
+                font-size: large;
+              }
+              .previous-week {
+                text-decoration: underline;
+              }
+              .next-week {
+                text-decoration: underline;
+              }
             }
             .weekday {
               display: flex;
@@ -257,20 +307,21 @@
               }
             }
             .booking-resource-info {
-              height: 25%;
-              padding: 5%;
-              padding-bottom: 0 !important;
+              height: 35%;
+              padding: 2%;
               form {
                 display: flex;
                 flex-direction: column;
                 gap: 0.5rem;
                 height: 100%;
-                .event-name {
+                .row1 {
                   display: flex;
                   flex-direction: column;
                   gap: 0.5rem;
                   user-select: none;
-                  height: 50%;
+                  flex: 1;
+                  padding-left: 2%;
+                  padding-right: 2%;
                   label {
                     font-weight: 500;
                     font-size: medium;
@@ -278,29 +329,27 @@
                   input {
                     border-radius: 5px;
                     border: 2px solid rgb(221, 212, 212);
+                    padding-left: 2%;
+                    padding-right: 2%;
                     margin: auto;
                     height: 100%;
-                    width: 90%;
-                    padding-left: 3%;
-                    padding-right: 3%;
+                    width: 100%;
                   }
                 }
                 .row2 {
                   display: flex;
                   flex-direction: row;
-                  height: 50%;
+                  flex: 1;
                   div {
                     display: flex;
                     flex-direction: column;
                     width: 50%;
                     gap: 0.5rem;
-                    span {
+                    padding-left: 0.5rem;
+                    padding-right: 0.5rem;
+                    label {
                       font-weight: 500;
                       font-size: medium;
-                    }
-                    mat-form-field {
-                      margin-left: 10%;
-                      margin-right: 10%;
                     }
                     ::ng-deep .mat-form-field-underline {
                       display: none;
@@ -318,15 +367,27 @@
                       .mat-select-arrow-wrapper {
                       transform: translateY(0);
                     }
+                    ::ng-deep .mat-form-field-wrapper {
+                      padding-bottom: 0 !important;
+                    }
+                    input {
+                      border-radius: 5px;
+                      border: 2px solid rgb(221, 212, 212);
+                      margin: auto;
+                      height: 100%;
+                      width: 100%;
+                      padding-left: 3%;
+                      padding-right: 3%;
+                    }
+                    .input {
+                      height: 95%;
+                    }
                   }
                 }
               }
             }
             .booking-slot {
-              padding-top: 5%;
-              padding-left: 2%;
-              padding-right: 2%;
-              padding-bottom: 5%;
+              padding: 3%;
               .unavailable {
                 border: 2px solid rgb(221, 212, 212);
                 height: 10rem;
@@ -340,7 +401,7 @@
                 margin: auto;
               }
               .slots-grid-container {
-                margin-top: 5%;
+                margin-top: 3%;
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
                 gap: 20px;
@@ -380,14 +441,63 @@
             position: fixed;
             right: 0;
             bottom: 0;
-            width: 30%;
+            width: 35%;
             height: 60%;
             transform: translateY(100%);
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            .close-icon {
+              font-size: 30px;
+              color: #24931e;
+              margin-left: 10px;
+              margin-top: 10px;
+              cursor: pointer;
+            }
           }
           ::ng-deep .mat-drawer {
             top: auto !important;
+          }
+          .booking-information {
+            height: 85%;
+            padding: 5%;
+            display: flex;
+            flex-direction: column;
+            padding-top: 0 !important;
+            .title {
+              font-weight: 500;
+              height: 10%;
+              font-size: large;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            .detail {
+              display: flex;
+              flex-direction: column;
+              height: 80%;
+              div {
+                flex: 1;
+                display: flex;
+                gap: 1%;
+                align-items: center;
+                mat-icon {
+                  color: #069545;
+                }
+                font-size: medium;
+              }
+              .event-name {
+                text-transform: uppercase;
+                font-weight: 500;
+              }
+            }
+            .confirm-button {
+              display: flex;
+              justify-content: center;
+              button {
+                background-color: #069545;
+                color: white;
+              }
+            }
           }
         }
       }
@@ -406,8 +516,16 @@
   }
   font-weight: 500;
 }
-.resource-conent {
-  display: flex;
+.resource-content {
+  // display: flex;
+  ::ng-deep mat-option .mat-option-text {
+    display: flex !important;
+    justify-content: space-between;
+    mat-icon {
+      margin-top: 15px;
+      margin-right: 0 !important;
+    }
+  }
 }
 .grid-container {
   display: grid;
@@ -423,6 +541,13 @@
 
 ::ng-deep .mat-tooltip-style {
   background-color: rgb(21, 111, 56);
+  user-select: none;
+  font-size: medium;
+}
+::ng-deep .event-type-mat-tooltip-style {
+  background-color: rgb(41, 81, 56);
+  width: fit-content;
+  min-width: 20rem;
   user-select: none;
   font-size: medium;
 }

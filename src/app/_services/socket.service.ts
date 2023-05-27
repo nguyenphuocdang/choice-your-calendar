@@ -6,6 +6,13 @@ import { ApiResponse } from '../_models/response';
 import Utils from '../_utils/utils';
 import { Client, Stomp } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
+import {
+  NotifyUserJoinEvent,
+  RequestDeviceToApprover,
+  ResponseBorrowDeviceToClient,
+  SocketMessage,
+} from '../_models/socket';
 
 @Injectable({
   providedIn: 'root',
@@ -13,60 +20,11 @@ import * as SockJS from 'sockjs-client';
 export class SocketService {
   stompClient: any;
   private messageSubject = new BehaviorSubject<any>(null);
-  constructor(private http: HttpClient) {}
-
-  sendPrivateMessage(requestBody: socketRequest): Observable<ApiResponse<any>> {
-    return this.http
-      .post<ApiResponse<any>>(
-        `${Utils.SOCKET_API}/send-private-message`,
-        requestBody
-      )
-      .pipe(
-        map((response: ApiResponse<any>) => {
-          return response;
-        }),
-        catchError((error: any) => {
-          // handle error
-          debugger;
-          return throwError(error);
-        })
-      );
-  }
-
-  connect(userId: string) {
-    // const brokerURL = `https://api.timechoice.solutions:8000/ws?${userId}`;
-    // const ws = new SockJS(brokerURL);
-    // const stompClient = Stomp.over(ws);
-    // stompClient.connect(
-    //   {},
-    //   () => {
-    //     debugger;
-    //     this.stompClient.subscribe(
-    //       '/user/notify/private-messages',
-    //       (message: any) => {
-    //         debugger;
-    //         const messageData = JSON.parse(message);
-    //         console.log(`Received message: ${messageData}`);
-    //         // this.messageSubject.next(JSON.parse(message.body));
-    //       }
-    //     );
-    //   },
-    //   (error: any) => {
-    //     debugger;
-    //     console.log('Error connecting: ' + error);
-    //   }
-    // );
-
-    const brokerURL = `https://api.timechoice.solutions:8000/ws?${userId}`;
-    const ws = new SockJS(brokerURL);
-    this.stompClient = Stomp.over(ws);
-    this.stompClient.connect({}, () => {
-      debugger;
-      console.log('WebSocket connected');
-      this.subscribeToDestination('/user/notify/private-messages');
-    });
-  }
-
+  socketToastrConfig: Partial<IndividualConfig> = {
+    timeOut: 5000,
+    extendedTimeOut: 5000,
+  };
+  constructor(private http: HttpClient, private toastrService: ToastrService) {}
   subscribe(simpleBroker: string, callback: any, roomId: number): void {
     const brokerURL = `https://api.timechoice.solutions:8000/ws?${roomId}`;
     const ws = new SockJS(brokerURL);
@@ -83,14 +41,34 @@ export class SocketService {
   }
 
   private subscribeNotification(simpleBroker: string, callback: any): void {
-    debugger;
     this.stompClient.subscribe(simpleBroker, (message: any): any => {
       const textDecoder = new TextDecoder();
       const stringObject = textDecoder.decode(message._binaryBody);
-      const jsonObject = JSON.parse(stringObject);
-      const resultMessage: string = jsonObject.content;
-      console.log(resultMessage);
+      const jsonObject: SocketMessage<any> = JSON.parse(stringObject);
+      const resultMessage: any = jsonObject.content;
       debugger;
+      if (this.isNotifyUserJoinEvent(jsonObject.content)) {
+        const message: string = `User ${jsonObject.content.allNewPartnerEmail} joins your event.`;
+        this.toastrService.info(
+          message,
+          `Event ${jsonObject.content.eventName} New Participant`,
+          this.socketToastrConfig
+        );
+      } else if (this.isNotifyUserBorrowDevice(jsonObject.content)) {
+        const message: string = `New Request Booking For ${jsonObject.content.deviceName}`;
+        this.toastrService.info(
+          message,
+          `Event ${jsonObject.content.eventName} Resources Booking Request`,
+          this.socketToastrConfig
+        );
+      } else if (this.isNotifyUserCompleteBorrow(jsonObject.content)) {
+        const message: string = `All Resources For Event ${jsonObject.content.eventName} are approved.`;
+        this.toastrService.info(
+          message,
+          `Resources Booking Approval`,
+          this.socketToastrConfig
+        );
+      }
       callback();
     });
   }
@@ -105,12 +83,35 @@ export class SocketService {
     return this.messageSubject.asObservable();
   }
 
-  private subscribeToDestination(destination: string): void {
-    this.stompClient.subscribe(destination, (message: any) => {
-      debugger;
-      const messageData = JSON.parse(message.body);
-      console.log(`Received message: ${messageData}`);
-      // Do something with the received message
-    });
+  isNotifyUserJoinEvent(obj: any): obj is NotifyUserJoinEvent {
+    const requiredKeys: (keyof NotifyUserJoinEvent)[] = [
+      'allNewPartnerEmail',
+      'eventName',
+    ];
+    return requiredKeys.every((key) => key in obj);
+  }
+
+  isNotifyUserBorrowDevice(obj: any): obj is RequestDeviceToApprover {
+    const requiredKeys: (keyof RequestDeviceToApprover)[] = [
+      'borrowId',
+      'eventName',
+      'deviceCode',
+      'deviceName',
+      'startTime',
+      'endTime',
+      'requesterFullName',
+      'requesterEmail',
+    ];
+    return requiredKeys.every((key) => key in obj);
+  }
+
+  isNotifyUserCompleteBorrow(obj: any): obj is ResponseBorrowDeviceToClient {
+    const requiredKeys: (keyof ResponseBorrowDeviceToClient)[] = [
+      'eventName',
+      'rejectedDeviceName',
+      'rejectedDeviceCode',
+      'deviceType',
+    ];
+    return requiredKeys.every((key) => key in obj);
   }
 }

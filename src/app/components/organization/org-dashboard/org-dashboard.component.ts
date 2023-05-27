@@ -212,7 +212,9 @@ export class OrgDashboardComponent implements OnInit {
         .subscribe(
           (response: ApiResponse<DataListResponse<UserBusinessDetail[]>>) => {
             if (response.statusCode === 200) {
-              this.organizationData.numberUsers = response.data.totalElements;
+              //Not count the default User
+              this.organizationData.numberUsers =
+                response.data.totalElements - 1;
             } else {
               debugger;
             }

@@ -13,6 +13,7 @@ export default class Utils {
   static NOTIFY_API: string = Utils.baseUrl + '/notify';
   static ACCOUNT_API: string = Utils.baseUrl + '/account';
   static PUBLIC_API: string = Utils.baseUrl + '/public/schedule';
+  static PUBLIC_EVENT_API: string = Utils.baseUrl + '/public/event';
   static ADMIN_API: string = Utils.baseUrl + '/admin';
   static PAYMENT_API: string = Utils.baseUrl + '/payment';
   static ORGANIZATION_API: string = Utils.baseUrl + '/organization';
@@ -116,7 +117,8 @@ export default class Utils {
   static convertUTCtoTimeString(timestamp: any): string {
     // 1682295394786 => 7:16 AM
     const date = new Date(timestamp);
-    const timeString = date.toLocaleTimeString([], {
+    const format = new Date(date.getTime() - 7 * 60 * 60 * 1000);
+    const timeString = format.toLocaleTimeString([], {
       hour: 'numeric',
       minute: '2-digit',
     });

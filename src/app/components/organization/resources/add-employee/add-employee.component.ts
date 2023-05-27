@@ -5,6 +5,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { J, el } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, map } from 'rxjs';
+import { AssignedPermission } from 'src/app/_models/organization';
 import { ApiResponse, DataListResponse } from 'src/app/_models/response';
 import {
   AssignScheduleRequestBody,
@@ -75,6 +76,9 @@ export class AddEmployeeComponent implements OnInit {
   morningScheduleId: number = -1;
   afternoonScheduleId: number = -1;
   fullTimeScheduleId: number = -1;
+  selectedAssignPermission: string = '';
+  disableButtonAssignEventHoster: boolean = false;
+  disableButtonAssignPublicEventHoster: boolean = false;
   constructor(
     private sanitizer: DomSanitizer,
     private organizationService: OrganizationService,
@@ -85,6 +89,7 @@ export class AddEmployeeComponent implements OnInit {
   listEmployee: UserBusinessDetail[] = [];
   allSelected: boolean = false;
   listAssignEmployeeIDs: number[] = [];
+  currentGrantedUserIndex: number = -1;
   file: any;
   ngOnInit(): void {
     this.getUserInOrganization(this.defaultPageIndex, this.defaultPageSize + 1);
@@ -108,7 +113,7 @@ export class AddEmployeeComponent implements OnInit {
           (response: ApiResponse<DataListResponse<UserBusinessDetail[]>>) => {
             if (response.statusCode === 200) {
               this.defaultNumberUsers = response.data.totalElements - 1;
-              let indexOfDefaultUser: number = 0;
+              let indexOfDefaultUser: number = -1;
               response.data.content.forEach((element, index) => {
                 if (element.fullname === 'User Default') {
                   indexOfDefaultUser = index;
@@ -136,7 +141,8 @@ export class AddEmployeeComponent implements OnInit {
                 //   response.data.content[index].shift = result;
                 // });
               });
-              response.data.content.splice(indexOfDefaultUser, 1);
+              if (indexOfDefaultUser != -1)
+                response.data.content.splice(indexOfDefaultUser, 1);
               this.listEmployee = response.data.content;
               this.dataSource = new MatTableDataSource<any>(this.listEmployee);
             }
@@ -382,6 +388,78 @@ export class AddEmployeeComponent implements OnInit {
             });
           } else {
             debugger;
+          }
+        });
+    } catch (error) {
+      debugger;
+    }
+  }
+  handleAssignPermissionClicked() {
+    const findCheckBoxUser: number = this.listEmployee.findIndex(
+      (item) => item.selected == true
+    );
+    this.currentGrantedUserIndex = -1;
+    this.disableButtonAssignEventHoster = false;
+    this.disableButtonAssignPublicEventHoster = false;
+    this.selectedAssignPermission = '';
+    if (findCheckBoxUser !== -1) {
+      {
+        if (
+          this.listEmployee[findCheckBoxUser].eventHosterFlag &&
+          this.listEmployee[findCheckBoxUser].createPublicEventFlag
+        ) {
+          this.disableButtonAssignEventHoster = true;
+          this.disableButtonAssignPublicEventHoster = true;
+        } else if (this.listEmployee[findCheckBoxUser].eventHosterFlag) {
+          this.disableButtonAssignEventHoster = true;
+        } else if (this.listEmployee[findCheckBoxUser].createPublicEventFlag) {
+          this.disableButtonAssignPublicEventHoster = true;
+        }
+        this.currentGrantedUserIndex = findCheckBoxUser;
+      }
+    }
+  }
+  handleRadioButtonAssignPermissionClicked(option: string) {
+    if (this.currentGrantedUserIndex !== -1) {
+      let requestBody: AssignedPermission = {
+        createEventFlag: option === 'event-hoster' ? true : false,
+        createPublicEventFlag: option === 'public-event-hoster' ? true : false,
+        grantedUserId: this.listEmployee[this.currentGrantedUserIndex].id,
+        managerFlag: false,
+      };
+      if (this.listEmployee[this.currentGrantedUserIndex].createPublicEventFlag)
+        requestBody.createPublicEventFlag = true;
+      if (this.listEmployee[this.currentGrantedUserIndex].eventHosterFlag)
+        requestBody.createEventFlag = true;
+      this._assignAuthority(requestBody);
+    }
+  }
+  _assignAuthority(requestBody: AssignedPermission) {
+    try {
+      this.organizationService
+        .assignAuthority(requestBody)
+        .subscribe((response: ApiResponse<AssignedPermission>) => {
+          if (response.statusCode === 200) {
+            if (response.data.createEventFlag)
+              this.listEmployee[this.currentGrantedUserIndex].eventHosterFlag =
+                true;
+            if (response.data.createPublicEventFlag)
+              this.listEmployee[
+                this.currentGrantedUserIndex
+              ].createPublicEventFlag = true;
+            this.toastrService.success(
+              `Assign Authority Permission For User ${
+                this.listEmployee[this.currentGrantedUserIndex].fullname
+              } successfully.`,
+              'SUCCESS',
+              Utils.toastrConfig
+            );
+          } else {
+            this.toastrService.error(
+              response.errors.errorMessage,
+              'ERROR',
+              Utils.toastrConfig
+            );
           }
         });
     } catch (error) {

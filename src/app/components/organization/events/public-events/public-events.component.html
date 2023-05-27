@@ -1,1 +1,56 @@
-<p>public-events works!</p>
+<div class="container">
+    <div class="active-calendar">
+        <div class="row text-center header">
+            <div class="col-md-4">
+                <div class="btn-group">
+                    <div class="btn btn-success" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                        (viewDateChange)="closeOpenMonthViewDay()">
+                        Previous
+                    </div>
+                    <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
+                        Today
+                    </div>
+                    <div class="btn btn-success" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                        (viewDateChange)="closeOpenMonthViewDay()">
+                        Next
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 dayview">
+                <span>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</span>
+            </div>
+        </div>
+        <div class="calendar-view" [ngSwitch]="view">
+            <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="monthEvents">
+            </mwl-calendar-week-view>
+        </div>
+    </div>
+    <div class="sidenav">
+        <mat-sidenav-container>
+            <mat-sidenav #sidenav position="end" [opened]="isShowing">
+                <mat-icon class="close-icon" (click)="toggleCloseNav()">close</mat-icon>
+                <div class='title'>
+                    <span>{{dayClickSelected}}</span>
+                </div>
+                <div class="time">
+                    <div class="time-data" *ngFor="let event of eventsRendered" [ngClass]="{ 'event': event.event,
+          'morning-work': event.title=='Morning Work', 'afternoon-work': event.title =='Afternoon Work' }">
+                        <span class="time-title">
+                            <mat-icon>event_available</mat-icon>
+                            {{event.title}}
+                        </span>
+                        <div class="time-element start">
+                            <span class="item1">Start</span>
+                            <span class="item2">{{event.startTime}}</span>
+                        </div>
+                        <div class="time-element end">
+                            <span class="item1">End</span>
+                            <span class="item2">{{event.endTime}}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-sidenav>
+        </mat-sidenav-container>
+    </div>
+</div>

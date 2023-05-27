@@ -1,1 +1,88 @@
-<p>approve-dashboard works!</p>
+<div class="container">
+    <div class="return-device-page" (click)="onNavigateBackToDeviceDashboard()">
+        <mat-icon>arrow_left</mat-icon>
+        <span>Back to Device Dashboard</span>
+    </div>
+    <div class="container-2">
+        <div class="title">
+            <span>
+                Requests For Borrowing Devices
+            </span>
+        </div>
+        <div class="requests">
+            <div class="requests-table">
+                <div>
+                    <mat-paginator #matPaginator [length]="defaultPageSize" [pageSizeOptions]="[defaultPageSize]"
+                        (page)="pageChanged($event)" aria-label="Select page">
+                    </mat-paginator>
+                </div>
+                <table mat-table [dataSource]="dataSourceRequests" matSort style="width: 100%">
+                    <!-- <ng-container matColumnDef="device-code" class="device-code">
+                        <th mat-header-cell *matHeaderCellDef>Device Code</th>
+                        <td mat-cell *matCellDef="let element">{{element.deviceCode}}</td>
+                    </ng-container> -->
+                    <ng-container matColumnDef="device-name" class="device-name">
+                        <th mat-header-cell *matHeaderCellDef>Device Name</th>
+                        <td mat-cell *matCellDef="let element">{{element.deviceName}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="event-name" class="event-name">
+                        <th mat-header-cell *matHeaderCellDef>Event Name</th>
+                        <td mat-cell *matCellDef="let element">{{element.eventName}}</td>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="requester-name" class="requester-name">
+                        <th mat-header-cell *matHeaderCellDef>Requester Name</th>
+                        <td mat-cell *matCellDef="let element">{{element.requesterFullName}}</td>
+                    </ng-container> -->
+                    <ng-container matColumnDef="requester-email" class="requester-email">
+                        <th mat-header-cell *matHeaderCellDef>Requester Email</th>
+                        <td mat-cell *matCellDef="let element" matTooltipTrigger="hover" matTooltipPosition="right"
+                            [matTooltip]="element.requesterEmail">{{element.requesterEmail}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="date" class="date">
+                        <th mat-header-cell *matHeaderCellDef>Date Borrow</th>
+                        <td mat-cell *matCellDef="let element">{{element.date}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="time" class="time">
+                        <th mat-header-cell *matHeaderCellDef>Time</th>
+                        <td mat-cell *matCellDef="let element">{{element.startTime}} - {{element.endTime}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="borrow-state" class="borrow-state">
+                        <th mat-header-cell *matHeaderCellDef>Status</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span *ngIf="element.borrowState === 'WAITING'"
+                                [ngClass]="{'pending-event': element.borrowState === 'WAITING'}">
+                                PENDING
+                            </span>
+                            <span *ngIf="element.borrowState === 'ACCEPT'"
+                                [ngClass]="{'success-event': element.borrowState === 'ACCEPT'}">
+                                ACCEPTED
+                            </span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="approval" class="approval">
+                        <th mat-header-cell *matHeaderCellDef>Approve/ Reject</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div>
+                                <!-- <mat-icon style="color: rgb(4, 122, 77)">check_circle</mat-icon>
+                                <mat-icon style="color: rgba(189, 8, 8, 0.652)">cancel</mat-icon> -->
+                                <button mat-raised-button style="background-color:  rgb(192, 225, 213)"
+                                    (click)="onClickApproveOrDeny(element,true)"
+                                    [disabled]="element.borrowState === 'ACCEPT'">
+                                    <mat-icon style="color: rgb(4, 122, 77)">check_circle</mat-icon>
+                                </button>
+                                <button mat-raised-button style="background-color:  rgb(226, 208, 204)"
+                                    (click)="onClickApproveOrDeny(element,false)"
+                                    [disabled]="element.borrowState === 'ACCEPT'">
+                                    <mat-icon style="color: rgba(189, 8, 8, 0.652)">cancel</mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

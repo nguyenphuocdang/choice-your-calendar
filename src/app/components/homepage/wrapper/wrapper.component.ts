@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserProfile } from 'src/app/_models/user';
 import { LocalStorageService } from 'src/app/_services/local-storage.service';
+import { SocketService } from 'src/app/_services/socket.service';
 import { UserService } from 'src/app/_services/user.service';
 
 @Component({
@@ -37,7 +38,8 @@ export class WrapperComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
     private toastrService: ToastrService,
-    private storageService: LocalStorageService
+    private storageService: LocalStorageService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +68,7 @@ export class WrapperComponent implements OnInit {
         ) {
           this.user = response.data;
           this.storageService.setUserProfile(this.user);
+          this._handleWebsocket(response.data.id);
           const roleResponse: any = await this.userService.getRolePromise();
           this.role = roleResponse.data[0].code;
         } else {
@@ -85,4 +88,15 @@ export class WrapperComponent implements OnInit {
   }
 
   profileMouseEnter() {}
+  _handleWebsocket(userId: number) {
+    this.socketService.subscribe(
+      '/user/notify/private-messages',
+      (message: any) => {
+        debugger;
+        const messageData = JSON.parse(message.body);
+        console.log(messageData);
+      },
+      userId
+    );
+  }
 }

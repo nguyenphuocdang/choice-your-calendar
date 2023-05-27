@@ -1,0 +1,106 @@
+.container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  background-color: #eaeff2;
+  .title {
+    width: 100%;
+    height: 5%;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    background-color: #36bb7c;
+    span {
+      font-size: medium;
+      font-weight: 500;
+      color: #ffffff;
+      display: flex;
+      margin: auto;
+      height: 100%;
+      align-items: center;
+      width: 98%;
+    }
+  }
+  .container-2 {
+    display: flex;
+    flex-direction: column;
+    width: 99%;
+    height: 90%;
+    background-color: white;
+    border-radius: 10px;
+    margin: auto;
+    .requests {
+      padding: 1%;
+      .requests-table {
+        border: 1px solid rgb(221, 212, 212);
+        width: 100%;
+        td {
+          padding-right: 1%;
+        }
+        .header {
+          text-align: center;
+        }
+        .mat-header-cell.mat-column-event-name,
+        .mat-cell.mat-column-event-name {
+          width: 18%;
+        }
+        .mat-header-cell.mat-column-device-name,
+        .mat-cell.mat-column-device-name {
+          width: 12%;
+        }
+        .mat-header-cell.mat-column-requester-email,
+        .mat-cell.mat-column-requester-email {
+          width: 20%;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .mat-header-cell.mat-column-date,
+        .mat-cell.mat-column-date {
+          width: 13%;
+        }
+        .mat-header-cell.mat-column-time,
+        .mat-cell.mat-column-time {
+          width: 13%;
+        }
+        .mat-header-cell.mat-column-borrow-state,
+        .mat-cell.mat-column-borrow-state {
+          width: 8%;
+        }
+        .mat-header-cell.mat-column-approval,
+        .mat-cell.mat-column-approval {
+          width: 13%;
+          div {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+            gap: 1px;
+          }
+        }
+      }
+    }
+  }
+  .return-device-page {
+    font-weight: 500;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+.pending-event {
+  border: 1px solid #ffd86f;
+  border-radius: 5px;
+  padding: 0.5rem;
+  color: #b69812;
+  background-color: #ffefc3;
+}
+.success-event {
+  border: 1px solid #ffd86f;
+  border-radius: 5px;
+  padding: 0.5rem;
+  color: #66042b;
+  background-color: #f0c3d0;
+}

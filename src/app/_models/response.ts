@@ -5,6 +5,7 @@ export interface ApiResponse<T> {
   statusMessage: string;
   timeTook: number;
   data: T;
+  errors?: any;
 }
 
 export interface DataListResponse<T> {
@@ -37,8 +38,15 @@ export interface DataListResponse<T> {
 }
 
 export class CustomError {
-  errors!: any[];
+  errors!: ErrorData;
   constructor(error: any) {
-    this.errors = error;
+    this.errors = error[0];
   }
+}
+
+export class ErrorData {
+  error!: {
+    errorCode: string;
+    errorMessage: string;
+  };
 }

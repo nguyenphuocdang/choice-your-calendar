@@ -75,3 +75,14 @@ export class AssignScheduleRequestBody {
   listMemberId?: number[];
   scheduleId!: number;
 }
+
+export class PublicScheduleData {
+  day!: string;
+  timeDatas!: PublicTimeData[];
+}
+export class PublicTimeData {
+  freetimeType?: string;
+  startTime!: string;
+  endTime!: string;
+  eventId!: number;
+}

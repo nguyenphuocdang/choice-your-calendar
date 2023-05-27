@@ -46,6 +46,7 @@
     "date-fns": "^2.29.3",
     "google-one-tap": "^1.0.6",
     "i": "^0.3.7",
+    "mat-select-filter": "^2.4.1",
     "material-expansion-panel": "^1.0.0",
     "ngx-bootstrap": "^8.0.0",
     "ngx-mat-timepicker": "^13.2.5",

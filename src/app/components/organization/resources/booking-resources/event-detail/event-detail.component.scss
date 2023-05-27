@@ -1,0 +1,119 @@
+.event-detail {
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  .close-icon {
+    font-size: 30px;
+    color: #24931e;
+    margin-left: auto;
+    cursor: pointer;
+  }
+  .date {
+    font-size: large;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: rgb(3, 119, 61);
+  }
+  .title {
+    font-size: x-large;
+    font-weight: 500;
+  }
+  .description {
+    font-size: medium;
+  }
+  .line {
+    width: 100%;
+    height: 0.1px;
+    background-color: #bbb3b3;
+  }
+  .with-icon {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    span {
+      font-size: medium;
+    }
+    mat-icon {
+      color: rgb(3, 119, 61);
+    }
+  }
+  .room {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    .pending {
+      border: 1px solid #ffd86f;
+      border-radius: 5px;
+      padding: 0.5%;
+      padding-left: 2%;
+      padding-right: 2%;
+      color: #b69812;
+      background-color: #ffefc3;
+    }
+    .success {
+      border: 1px solid #ffd86f;
+      border-radius: 5px;
+      padding: 0.5%;
+      padding-left: 2%;
+      padding-right: 2%;
+      color: #66042b;
+      background-color: #f0c3d0;
+    }
+  }
+
+  .button-class {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 1rem;
+    button {
+      display: flex;
+      color: white;
+      ::ng-deep .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+    }
+    .reschedule-button {
+      background-color: rgb(43, 2, 153);
+    }
+    .cancel-button {
+      background-color: rgb(185, 42, 2);
+    }
+    .join-button {
+      background-color: #0cbb67;
+    }
+    .participating-button {
+      color: #036d28;
+      background-color: #99d299;
+    }
+  }
+}
+
+::ng-deep .mat-menu-user-list {
+  position: absolute;
+  bottom: 12rem;
+  left: 5rem;
+  width: fit-content;
+  min-width: 20rem;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  .mat-menu-content {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    gap: 0.75rem;
+  }
+}
+
+::ng-deep .mat-menu-panel {
+  min-height: 42px !important;
+}

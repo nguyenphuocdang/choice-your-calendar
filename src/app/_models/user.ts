@@ -69,3 +69,10 @@ export class UserBusinessDetail {
   shift?: string;
   scheduleName!: string;
 }
+
+export class UserOfEvent {
+  id!: number;
+  fullname!: string;
+  email!: string;
+  hostEventFlag!: boolean;
+}

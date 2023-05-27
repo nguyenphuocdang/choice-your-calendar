@@ -10,10 +10,14 @@ import {
 } from 'rxjs';
 import {
   BookingSlotRequest,
+  BookPublicRequest,
   EventCreateRequest,
   EventDetail,
   EventSearchRequest,
+  JoinEventRequest,
+  MakeEventRequest,
   SharedCalendarDetails,
+  SingleEventDetail,
 } from '../_models/event';
 import Utils from '../_utils/utils';
 import {
@@ -22,6 +26,8 @@ import {
   DataListResponse,
 } from '../_models/response';
 import { ScheduleData, ScheduleDatas } from '../_models/schedule';
+import { DeviceOfEvent } from '../_models/resource';
+import { UserOfEvent } from '../_models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -45,27 +51,30 @@ export class EventService {
 
   createNewEvent(requestBody: EventCreateRequest): Observable<any> {
     debugger;
-    return this.http.post(`${Utils.EVENT_API}/add`, requestBody).pipe(
-      map((response: any) => {
-        debugger;
-        if (response.statusCode === 200) {
+    return this.http
+      .post(`${Utils.ORGANIZATION_API}/event/add`, requestBody)
+      .pipe(
+        map((response: any) => {
+          debugger;
+          if (response.statusCode === 200) {
+            return response;
+          }
           return response;
-        }
-        return response;
-      }),
-      catchError((err) => {
-        debugger;
-        return 'error';
-      })
-    );
+        }),
+        catchError((err) => {
+          debugger;
+          return 'error';
+        })
+      );
   }
 
   getEventList(
     requestBody: EventSearchRequest,
     page: number,
-    size: number
+    size: number,
+    sortCondition: string
   ): Observable<ApiResponse<DataListResponse<EventDetail[]>>> {
-    const requestUrl = `${Utils.EVENT_API}/list?page=${page}&size=${size}`;
+    const requestUrl = `${Utils.EVENT_API}/list?page=${page}&size=${size}&sort=${sortCondition}`;
     return this.http
       .post<ApiResponse<DataListResponse<EventDetail[]>>>(
         requestUrl,
@@ -178,8 +187,160 @@ export class EventService {
           return response;
         }),
         catchError((error: any) => {
-          return throwError(new CustomError(error));
+          return throwError(error);
         })
       );
+  }
+
+  makeNewEvent(requestBody: MakeEventRequest): Observable<any> {
+    return this.http
+      .post(`${Utils.ORGANIZATION_API}/event/add`, requestBody)
+      .pipe(
+        map((response: any) => {
+          if (response.statusCode === 200) {
+            return response;
+          }
+          return new CustomError(response.errors);
+        }),
+        catchError((err: any) => {
+          debugger;
+          return throwError(err);
+        })
+      );
+  }
+  getEventDetail(eventId: number): Observable<any> {
+    return this.http
+      .get<ApiResponse<SingleEventDetail>>(
+        `${Utils.EVENT_API}/detail/${eventId}`
+      )
+      .pipe(
+        map((response: ApiResponse<SingleEventDetail>) => {
+          if (response.statusCode === 200) return response;
+          else return new CustomError(response.errors);
+        }),
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  getAllDeviceInYourEvent(eventId: number): Observable<any> {
+    return this.http
+      .get<ApiResponse<DeviceOfEvent[]>>(
+        `${Utils.ORGANIZATION_API}/device/get-all-device-of-event/${eventId}`
+      )
+      .pipe(
+        map((response: ApiResponse<DeviceOfEvent[]>) => {
+          if (response.statusCode === 200) return response;
+          else return new CustomError(response.errors);
+        }),
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+
+  getAllUserInYourEvent(eventId: number): Observable<any> {
+    return this.http
+      .get<ApiResponse<UserOfEvent[]>>(
+        `${Utils.ORGANIZATION_API}/user/get-all-user-of-event/${eventId}`
+      )
+      .pipe(
+        map((response: ApiResponse<UserOfEvent[]>) => {
+          if (response.statusCode === 200) return response;
+          else return new CustomError(response.errors);
+        }),
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+  getAllOrganizationEvents(
+    startTime: string,
+    endTime: string,
+    hostEmail: string
+  ): Observable<any> {
+    const requestUrl = `${Utils.ORGANIZATION_API}/event/get-all-public-event-of-your-organization`;
+    const requestBody: any = {
+      startTime: startTime,
+      endTime: endTime,
+      hostEmail: hostEmail,
+    };
+    return this.http
+      .post<ApiResponse<SingleEventDetail[]>>(requestUrl, requestBody)
+      .pipe(
+        map((response: ApiResponse<SingleEventDetail[]>) => {
+          if (response.statusCode === 200) return response;
+          else return new CustomError(response.errors);
+        }),
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      );
+  }
+  joinOrganizationEvent(
+    eventId: number,
+    listEmailJoining: string[]
+  ): Observable<any> {
+    const requestUrl = `${Utils.ORGANIZATION_API}/event/join`;
+    const requestBody: any = {
+      eventId: eventId,
+      listEmailJoining: listEmailJoining,
+    };
+    return this.http.put<ApiResponse<any>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        return throwError(error);
+      })
+    );
+  }
+
+  getPublicShareInfo(pathMapping: string, shareCode: string): Observable<any> {
+    const requestUrl = `${Utils.PUBLIC_API}/get-public-share-info/${pathMapping}?shareCode=${shareCode}`;
+    debugger;
+    return this.http.get<ApiResponse<any>>(requestUrl).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        return throwError(error);
+      })
+    );
+  }
+
+  getPublicScheduleCalendarInfo(
+    pathMapping: string,
+    shareCode: string
+  ): Observable<any> {
+    const requestUrl = `${Utils.PUBLIC_API}/calendar-info/${pathMapping}?shareCode=${shareCode}`;
+    return this.http.get<ApiResponse<any>>(requestUrl).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        return throwError(error);
+      })
+    );
+  }
+
+  confirmBookingPublicSlot(requestBody: BookPublicRequest): Observable<any> {
+    const requestUrl = `${Utils.PUBLIC_EVENT_API}/add`;
+    debugger;
+    return this.http.post<ApiResponse<any>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<any>) => {
+        debugger;
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        debugger;
+        return throwError(error);
+      })
+    );
   }
 }

@@ -1,1 +1,81 @@
-<p>internal-events works!</p>
+<div class="container">
+    <div class="container2">
+        <div class="title">
+            <span>
+                Company Events
+            </span>
+        </div>
+        <div class="filter">
+            <div class="filter-by-time">
+                <mat-form-field appearance="fill">
+                    <mat-select [(ngModel)]="selectedOption" (selectionChange)="onSelectionChange()">
+                        <mat-option value="upcoming-company-events">
+                            Upcoming Company Events
+                        </mat-option>
+                        <mat-option value="personal-upcoming-events">
+                            My Upcoming Events
+                        </mat-option>
+                        <mat-option value="personal-previous-events">
+                            My Previous Events
+                        </mat-option>
+                        <mat-option value="all-company-events">
+                            All Company Events
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="filter-by-hoster-name">
+                <mat-form-field appearance="fill">
+                    <mat-select [(ngModel)]="selectedPeople" (selectionChange)="onSelectionEventHosterChange()">
+                        <mat-option value="all-hoster">
+                            All Hosters
+                        </mat-option>
+                        <mat-option *ngFor="let eventHoster of eventHostersList" [value]="eventHoster.email">
+                            {{eventHoster.email}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="events-grid-container">
+            <div class="events-grid-item" *ngFor="let element of displayedCompanyEvents">
+                <mat-card>
+                    <mat-card-content appMaterialElevation>
+                        <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1684854218/event-image/public_event_vluu7p.jpg"
+                            alt="">
+                        <span class="date">
+                            <mat-icon style="color: #23a669;;">date_range</mat-icon>
+                            {{element.date}}
+                        </span>
+                        <span class="event-name">
+                            {{element.eventName}}
+                        </span>
+                        <span class="time">
+                            <mat-icon style="color:#23a669;">alarm</mat-icon>
+                            {{element.startTime}} - {{element.endTime}}
+                        </span>
+                        <span class="view-detail" (click)="onViewAndJoinEvent(element.id, false)"
+                            *ngIf="!element.participantFlag">
+                            View Details and Join Event
+                        </span>
+                        <span class="view-detail" (click)="onViewAndJoinEvent(element.id, true)"
+                            *ngIf="element.participantFlag">
+                            View Details
+                        </span>
+
+                        <!-- <span class="status" *ngIf="event.appointmentUrl != ''">
+                            <mat-icon
+                                style="color: #00705a;;">check_circle</mat-icon>
+                            Online
+                        </span>
+                        <span class="status" *ngIf="event.appointmentUrl == ''">
+                            <mat-icon
+                                style="color: rgb(204, 4, 4);">check_circle</mat-icon>
+                            Offline
+                        </span> -->
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

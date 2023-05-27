@@ -1,11 +1,12 @@
 .container {
-  width: 81.25vw;
+  width: 100vw;
   min-height: 100vh;
+  height: -moz-fit-content;
   height: fit-content;
   position: relative;
   display: flex;
-  background-color: #eaeff2;
-  margin-left: 0;
+  background-color: #ffffff;
+  /* margin-left: 0; */
   padding: 2%;
   .container2 {
     display: flex;
@@ -42,36 +43,12 @@
       mat-form-field {
         width: 15rem;
       }
-      ::ng-deep .mat-form-field-underline {
-        display: none;
-      }
-      ::ng-deep .mat-form-field-appearance-fill {
-        .mat-form-field-flex {
-          background-color: rgb(255, 255, 255);
-          border-radius: 5px;
-          border: 2px solid rgb(221, 212, 212);
-          padding-top: 0;
-        }
-      }
-      ::ng-deep .mat-select-trigger {
-        height: 2em;
-      }
-      // ::ng-deep .mat-form-field-appearance-fill .mat-form-field-infix {
-      //   padding: 0 !important;
-      //   padding-bottom: 0.75em;
-      // }
-
-      ::ng-deep .mat-form-field-appearance-fill .mat-form-field-infix {
-        padding-top: 0;
-      }
-      ::ng-deep .mat-form-field-appearance-fill .mat-select-arrow-wrapper {
-        transform: translateY(0);
-      }
+      margin-bottom: 1%;
     }
     .events-grid-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-auto-rows: calc(22vw);
+      grid-auto-rows: calc(20vw);
       gap: 20px;
       width: 100%;
       height: fit-content;
@@ -110,19 +87,35 @@
               font-weight: 500;
               text-transform: uppercase;
             }
-            .view-detail {
-              text-decoration: underline;
+            .button-join {
               font-weight: 500;
-              color: #086d3e;
+
               display: flex;
               justify-content: end;
               padding-right: 1rem !important;
               cursor: pointer;
               font-size: medium;
+              position: relative;
+              button {
+                background-color: #086d3e;
+                color: white;
+                position: absolute;
+              }
             }
           }
         }
       }
     }
   }
+}
+
+input {
+  border-radius: 5px;
+  border: 2px solid rgb(221, 212, 212);
+  padding-left: 2%;
+  padding-right: 2%;
+  margin-bottom: 2%;
+  margin: auto;
+  height: 2.5rem;
+  width: 17rem;
 }

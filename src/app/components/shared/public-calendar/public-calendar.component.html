@@ -1,138 +1,48 @@
-<!-- <div class="calendar">
-    <div class="public-calendar">
-        <mat-card>
-            <mat-card-content>
+<div class="container">
+  <div class="container2">
+    <div class="filter">
+      <div class="filter-by-time">
 
-                <div class="partner-detail" style="margin-top: 1%">
-                    <mat-icon>person</mat-icon>
-                    <span>Partner's Email: {{partnerEmail}}</span>
-                </div>
+        <input type="text" placeholder="Type your email" [(ngModel)]="partnerEmail">
 
-                <div class="partner-detail">
-                    <mat-icon>date_range</mat-icon>
-                    <span>In Active For Booking From: {{fromDate}} - {{toDate}}</span>
-                </div>
-
-                <div class="partner-detail">
-                  <mat-icon>watch_later</mat-icon>
-                  <span>Duration: {{duration}}</span>
-              </div>
-
-                <div *ngIf="expression">
-                  <full-calendar
-                  [options]='calendarOptions'>
-                  </full-calendar>
-                </div>
-
-                <div class="header-title">
-                  PARTNER'S FREE-TIME SLOTS
-                </div>
-
-                <div style="width: 100%; height: 100%; margin-top: 1%;">
-                  <ul class="no-bullets">
-                    <li *ngFor="let slot of freeTimeScheduleSlots.listTimeWorkingDatas; let i = index;">
-                      <div class="element-card" (click)="onSelectFreeTimeSlot(slot)">
-                        <mat-card>
-                          <mat-card-content>
-                            <div class = 'slot'>
-                              <div class = 'slot-day'>
-                                {{slot.weekday}}
-                              </div>
-                              <div class ='slot-time-period'>
-                                {{slot.startTime}} - {{slot.endTime}}
-                              </div>
-                            </div>
-                          </mat-card-content>
-                        </mat-card>
-
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-
-            </mat-card-content>
-        </mat-card>
+      </div>
+      <!-- <div class="filter-by-hoster-name">
+        <mat-form-field appearance="fill">
+          <mat-select>
+            <mat-option value="all-hoster">
+              All Hosters
+            </mat-option>
+            <mat-option *ngFor="let eventHoster of eventHostersList" [value]="eventHoster.email">
+              {{eventHoster.email}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div> -->
     </div>
-
-    <div class="booking">
+    <div class="events-grid-container">
+      <div class="events-grid-item" *ngFor="let element of publicBookingSlots.timeDatas">
         <mat-card>
-            <mat-card-content>
-                <div class="header-title">
-                        BOOKING MEETING
-                </div>
+          <mat-card-content appMaterialElevation>
+            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1684854218/event-image/public_event_vluu7p.jpg"
+              alt="">
+            <span class="date">
+              <mat-icon style="color: #23a669;;">date_range</mat-icon>
+              {{publicBookingSlots.day}}
+            </span>
+            <span class="event-name">
+              {{element.freetimeType}}
+            </span>
+            <span class="time">
+              <mat-icon style="color:#23a669;">alarm</mat-icon>
+              {{element.startTime}} - {{element.endTime}}
+            </span>
+            <span class="button-join">
+              <button mat-raised-button (click)="onClickJoinPublicEventBookingSlot(element)"> BOOK </button>
 
-              <button mat-raised-button class="merge-calendar" (click)="getComparedCalendar()">
-                  <mat-icon style="margin-right: 3%;">calendar_today</mat-icon>
-                  <span style="font-size: 15px;">Compare with your free time</span>
-              </button>
-              <button mat-raised-button class="all-time-slots" (click)="getAllTimeSlots()">
-                <mat-icon style="margin-right: 3%;">calendar_today</mat-icon>
-                <span style="font-size: 15px;">Only partner's time slots</span>
-            </button>
-                <div class ='booking-form'>
-                    <div>
-                      <mat-form-field class='email' appearance="outline">
-                        <mat-label>Partner's Email</mat-label>
-                        <input matInput name="user-email" [readonly]="true" [(ngModel)]="partnerEmail"/>
-                      </mat-form-field>
-                    </div>
-                    <div>
-                      <mat-form-field class='title' appearance="outline">
-                        <mat-label>Event Title</mat-label>
-                        <input matInput placeholder = 'Event Meeting 01' required name="title" [(ngModel)]="bookingEvent.eventName"/>
-                      </mat-form-field>
-                    </div>
-                    <div>
-                      <span>Description</span>
-                      <mat-form-field class='description' appearance="outline">
-                        <input matInput name="description" [(ngModel)]="bookingEvent.eventDescription"/>
-                      </mat-form-field>
-                    </div>
-                    <div>
-                      <mat-form-field class='date' appearance="outline">
-                        <mat-label>Date</mat-label>
-                        <input matInput name="date" [(ngModel)]="date"/>
-                      </mat-form-field>
-                    </div>
-                    <div>
-                      <mat-form-field class='start' appearance="outline">
-                        <mat-label>Start Time</mat-label>
-                        <input matInput name="start" [(ngModel)]="bookingEvent.startTime"/>
-                      </mat-form-field>
-                    </div>
-                    <div>
-                      <mat-form-field class='end' appearance="outline">
-                        <mat-label>End Time</mat-label>
-                        <input matInput name="end" [(ngModel)]="bookingEvent.endTime"/>
-                      </mat-form-field>
-                    </div>
-                    <div>
-                      <mat-form-field color="accent" appearance="fill" style="width: 90%">
-                          <mat-label>Booking Date</mat-label>
-                          <input matInput [matDatepicker]="picker2"  [(ngModel)]="date"/>
-                          <mat-hint>MM/DD/YYYY</mat-hint>
-                          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                          <mat-datepicker #picker2></mat-datepicker>
-                      </mat-form-field>
-                    </div>
-                    <div style="margin-top: 2%">
-                        Start Time:
-                        <mat-form-field appearance="outline">
-                          <input type="time" matInput name="startTime" [(ngModel)]="bookingEvent.startTime">
-                       </mat-form-field>
-                    </div>
-                    <div>
-                      End Time:
-                      <mat-form-field appearance="outline">
-                        <input type="time" matInput name="endTime" [(ngModel)]="bookingEvent.endTime">
-                     </mat-form-field>
-                  </div>
-                  <div style="margin-left: 25%">
-                    <button mat-flat-button color="warn" (click)="_addEvent()">Submit Booking</button>
-                  </div>
-              </div>
-            </mat-card-content>
+            </span>
+          </mat-card-content>
         </mat-card>
+      </div>
     </div>
+  </div>
 </div>
-<router-outlet></router-outlet> -->

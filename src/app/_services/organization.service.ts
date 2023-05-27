@@ -8,7 +8,10 @@ import {
   DataListResponse,
 } from '../_models/response';
 import { UserBusinessDetail } from '../_models/user';
-import { OrganizationDetails } from '../_models/organization';
+import {
+  AssignedPermission,
+  OrganizationDetails,
+} from '../_models/organization';
 import {
   AssignScheduleRequestBody,
   ScheduleDatas,
@@ -175,5 +178,22 @@ export class OrganizationService {
         return throwError(CustomError);
       })
     );
+  }
+  assignAuthority(requestBody: AssignedPermission): Observable<any> {
+    const requestUrl = `${Utils.ORGANIZATION_API}/user/edit`;
+    return this.http
+      .put<ApiResponse<AssignedPermission>>(requestUrl, requestBody)
+      .pipe(
+        map((response: ApiResponse<AssignedPermission>) => {
+          if (response.statusCode === 200) {
+            return response;
+          } else {
+            return new CustomError(response.errors);
+          }
+        }),
+        catchError((error: any) => {
+          return throwError(CustomError);
+        })
+      );
   }
 }

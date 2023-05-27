@@ -6,3 +6,9 @@ export class OrganizationDetails {
   organizationType!: string;
   numberUsers?: number;
 }
+export class AssignedPermission {
+  createEventFlag!: boolean;
+  createPublicEventFlag!: boolean;
+  grantedUserId!: number;
+  managerFlag!: boolean;
+}

@@ -70,9 +70,19 @@ export class UserService {
       );
   }
 
-  logout() {
-    this.storageService.clearStorage();
-  }
+  // logout() {
+  //   this.storageService.clearStorage();
+  //   const requestUrl = `${Utils.AUTH_API}/logout`
+  //   return this.http.post<ApiResponse<any>>(requestUrl).pipe(
+  //     map((response: ApiResponse<any>) => {
+  //       if (response.statusCode === 200) return response;
+  //       else return new CustomError(response.errors);
+  //     }),
+  //     catchError((error: any) => {
+  //       return throwError(error);
+  //     })
+  //   );
+  // }
 
   roleMatch(allowedRole: string): boolean {
     let isMatch = false;

@@ -53,10 +53,10 @@ const routes: Routes = [
         path: 'invite-partners',
         component: InvitePartnersComponent,
       },
-      {
-        path: 'public-calendar/:pathMapping',
-        component: PublicCalendarComponent,
-      },
+      // {
+      //   path: 'public-calendar/:pathMapping',
+      //   component: PublicCalendarComponent,
+      // },
       {
         path: 'private',
         component: PrivateCalendarComponent,
@@ -86,13 +86,17 @@ const routes: Routes = [
         component: BookingResourcesComponent,
       },
       {
-        path: 'approve-dashboard',
+        path: 'device/approve-dashboard',
         component: ApproveDashboardComponent,
       },
       {
         path: 'public-events',
         component: PublicEventsComponent,
       },
+      // {
+      //   path: 'company-events/event-detail/:pathMapping/:shareCode',
+      //   component: InternalEventsComponent,
+      // },
       {
         path: 'company-events',
         component: InternalEventsComponent,

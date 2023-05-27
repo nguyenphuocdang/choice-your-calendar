@@ -1,29 +1,117 @@
 <div class="container">
-    <div class="device-grid-container">
-        <div class="device-grid-item create-button" *ngIf="role != 'ROLE_BASIC_USER'">
-            <button>
-                <mat-icon>add</mat-icon>
-                <span>Add New Resource</span>
-            </button>
+    <div class="container2">
+        <div class="filter">
+            <mat-form-field appearance="fill">
+                <mat-select [formControl]='selectedResourceType' (selectionChange)="onSelectResourceTypeSelection()">
+                    <mat-option value="all-resources">
+                        All Resources
+                    </mat-option>
+                    <mat-option value="room">
+                        Room
+                    </mat-option>
+                    <mat-option value="television">
+                        Television
+                    </mat-option>
+                    <mat-option value="desktop">
+                        Desktop
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="view-device-approval-table" (click)="navigateToApproveDashboard()">
+                <span>View Devices Request Approval Table</span>
+                <mat-icon>arrow_right</mat-icon>
+            </div>
         </div>
-        <div class="device-grid-item" *ngFor="let item of devices, let index = index">
-            <mat-card>
-                <mat-card-content appMaterialElevation>
-                    <div class="device-name">
-                        <span> {{item.name}}</span>
+        <div class="device-grid-container">
+            <div class="device-grid-item create-button" *ngIf="role != 'ROLE_BASIC_USER'">
+                <button>
+                    <mat-icon>add</mat-icon>
+                    <span>Add New Device</span>
+                </button>
+            </div>
+            <div class="device-grid-item" *ngFor="let item of deviceListDisplayed, let index = index">
+                <mat-card>
+                    <mat-card-content appMaterialElevation (click)="onDeviceClick(item, index)">
+                        <div class="device-name">
+                            <span> {{item.name}}</span>
+                        </div>
+                        <div class="image">
+                            <!-- <mat-icon *ngIf="item.deviceType == 'ROOM'"
+                                style="color: rgb(8, 98, 8);">meeting_room</mat-icon>
+                            <mat-icon *ngIf="item.deviceType == 'DEVICE'"
+                                style="color: rgb(230, 146, 116);">important_devices</mat-icon> -->
+                            <img src={{item.imagePath}} alt="">
+                        </div>
+                        <div class="approver">
+                            <span>Approver</span>
+                            <input value="{{item.approverFullName}}">
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <div class="device-detail-sidenav">
+            <mat-sidenav-container>
+                <mat-sidenav #sideNav position="end" [opened]="isOpenDeviceDetail">
+                    <mat-icon class="close-icon" (click)="onCloseSidenav()">close</mat-icon>
+                    <div class="device-detail">
+                        <div class="basic-device-info">
+                            <div class="title">
+                                <span>Details</span>
+                            </div>
+                            <div>
+                                <span class="key">Name</span>
+                                <span class="value">{{currentSelectedDevice.name}}</span>
+                            </div>
+                            <div>
+                                <span class="key">Code</span>
+                                <span class="value">{{currentSelectedDevice.code}}</span>
+                            </div>
+                            <div>
+                                <span class="key">Status</span>
+                                <span class="value"> {{currentSelectedDevice.enable === true ? 'In Active' :
+                                    'Not Active'}}</span>
+                            </div>
+                            <div class="approver">
+                                <span class="key">Approver</span>
+                                <span class="value">
+                                    <mat-form-field appearance="fill">
+                                        <mat-select [formControl]="selectedAssignee" matTooltipTrigger="hover"
+                                            matTooltipPosition="above" [matTooltip]="selectedAssignee.value.fullname"
+                                            [matTooltipClass]="{'mat-tooltip-style': true}">
+                                            <mat-option *ngFor="let employee of listEmployee" [value]="employee"
+                                                matTooltipTrigger="hover" matTooltipPosition="left"
+                                                [matTooltip]="employee.fullname"
+                                                [matTooltipClass]="{'mat-tooltip-style': true}">
+                                                <span>
+                                                    <img src={{employee.imagePath}} alt="" style=" width: 7%;
+                                                    height: 7%;
+                                                    border-radius: 30%;">
+                                                </span>
+                                                <span>
+                                                    {{ employee.email }}
+                                                </span>
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-icon>edit</mat-icon>
+                                    </mat-form-field>
+                                    <button mat-raised-button class="save-info-button" (click)="_updateApprover()">
+                                        <mat-icon>save</mat-icon>
+                                        <span>UPDATE APPROVER</span>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- <div class="schedule">
+                                <span class="key">Schedule</span>
+                            </div> -->
+                        </div>
+                        <!-- <button mat-raised-button class="save-info-button">
+                            <mat-icon>save</mat-icon>
+                            Save Information
+                        </button> -->
                     </div>
-                    <div class="icon">
-                        <mat-icon *ngIf="item.deviceType == 'ROOM'"
-                            style="color: rgb(8, 98, 8);">meeting_room</mat-icon>
-                        <mat-icon *ngIf="item.deviceType == 'DEVICE'"
-                            style="color: rgb(230, 146, 116);">important_devices</mat-icon>
-                    </div>
-                    <div class="approver">
-                        <span>Approver</span>
-                        <input value="{{item.approverFullName}}">
-                    </div>
-                </mat-card-content>
-            </mat-card>
+                </mat-sidenav>
+            </mat-sidenav-container>
         </div>
     </div>
 </div>

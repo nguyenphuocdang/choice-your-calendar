@@ -9,28 +9,61 @@
         <div class="button">
             <div class="add-employee-button" (click)="toggleSidenav()">
                 <button mat-raised-button>
-                    <span style="display: flex;">
-                        <mat-icon style="color: white; margin: auto">add</mat-icon>
+                    <span>
+                        <mat-icon>add</mat-icon>
                         Employee
                     </span>
                 </button>
             </div>
-            <!-- <div class="add-default-calendar-button" (click)="toggleSidenavDefaultCalendar()">
-                <button mat-raised-button>
-                    <span style="display: flex;">
-                        <mat-icon style="color: white; margin: auto">add</mat-icon>
-                        Assign Calendar
-                    </span>
-                </button>
-            </div> -->
-
             <div class="add-default-calendar-button" (click)="toggleSidenavAssign()">
                 <button mat-raised-button>
-                    <span style="display: flex;">
-                        <mat-icon style="color: white; margin: auto">add</mat-icon>
+                    <span>
+                        <mat-icon>add</mat-icon>
                         Assign Calendar
                     </span>
                 </button>
+            </div>
+            <div class="assign-permission">
+                <button mat-raised-button [matMenuTriggerFor]="menu" (click)="handleAssignPermissionClicked()">
+                    <span>
+                        <mat-icon>add</mat-icon>
+                        Assign Authority
+                    </span>
+                </button>
+                <mat-menu #menu="matMenu" class="mat-menu-permissions">
+                    <mat-radio-group aria-label="Select an option" (click)="$event.stopPropagation()"
+                        [(ngModel)]="selectedAssignPermission">
+                        <div class="company-event">
+                            <mat-radio-button value="event-hoster" [disabled]="disableButtonAssignEventHoster"
+                                [ngClass]="{ 'disabled': disableButtonAssignEventHoster}"
+                                (click)="handleRadioButtonAssignPermissionClicked('event-hoster')">
+                                <span class="option">
+                                    Assign Hosting Company Event Permission
+                                </span>
+                                <span class="note">
+                                    User will have permission to organize event for the company. Such as annual
+                                    anniversary,
+                                    weekly or monthly meetings, internal discussion.
+                                </span>
+                            </mat-radio-button>
+                        </div>
+                        <div class="public-events">
+                            <mat-radio-button value="public-event-hoster"
+                                [disabled]="disableButtonAssignPublicEventHoster"
+                                [ngClass]="{ 'disabled': disableButtonAssignPublicEventHoster}"
+                                (click)="handleRadioButtonAssignPermissionClicked('public-event-hoster')">
+                                <span class="option">
+                                    Assign Hosting Public Work Meeting Permission
+                                </span>
+                                <span class="note">
+                                    User will have permission to organize public work meetings. Such as interviews,
+                                    promotion,
+                                    discussion.
+                                </span>
+                            </mat-radio-button>
+                        </div>
+                    </mat-radio-group>
+                </mat-menu>
             </div>
         </div>
         <div class="employee">

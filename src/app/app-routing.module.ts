@@ -10,6 +10,7 @@ import { AdminDashboardComponent } from './components/admin/admin-dashboard/admi
 import { PricingComponent } from './components/pricing/pricing.component';
 import { ProvideInformationComponent } from './components/authentication/register/provide-information/provide-information/provide-information.component';
 import { CompletePaymentComponent } from './components/authentication/register/complete-payment/complete-payment.component';
+import { PublicCalendarComponent } from './components/shared/public-calendar/public-calendar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -36,7 +37,10 @@ const routes: Routes = [
     path: 'authorize/oauth2/user/callback',
     component: GoogleAuthenComponent,
   },
-
+  {
+    path: 'public-calendar',
+    component: PublicCalendarComponent,
+  },
   { path: 'forbidden', component: ForbiddenComponent },
   {
     path: '',
