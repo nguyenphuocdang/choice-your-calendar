@@ -25,11 +25,12 @@ export class EventDetail {
   eventStatus!: string;
   sendEmailFlag!: boolean;
   publicModeFlag!: boolean;
+  cexternalEventFlag!: boolean;
   appointmentUrl?: string;
   reason?: string;
   constructor(data?: any) {
     this.id = data?.id;
-    this.hostFlag = data?.hostFlag ?? '';
+    this.hostFlag = data?.hostFlag ?? false;
     this.hostName = data?.hostFlag ?? '';
     this.partnerName = data?.partnerName ?? '';
     this.organizationName = data?.organizationName ?? '';
@@ -43,6 +44,7 @@ export class EventDetail {
     this.publicModeFlag = data?.publicModeFlag ?? false;
     this.appointmentUrl = data?.appointmentUrl ?? '';
     this.reason = data?.reason ?? '';
+    this.cexternalEventFlag = data?.cexternalEventFlag ?? false;
   }
 }
 
@@ -63,6 +65,7 @@ export class SingleEventDetail {
   date?: string;
   location?: string;
   hostEmail?: string;
+  hostFlag?: boolean;
   hostFullName?: string;
   participantFlag?: boolean;
   constructor(data?: any) {
@@ -77,6 +80,7 @@ export class SingleEventDetail {
     this.eventStatus = data?.eventStatus ?? '';
     this.numberOfParticipants = data?.numberOfParticipants;
     this.hostEmail = data?.hostEmail ?? '';
+    this.hostFlag = data?.hostFlag ?? false;
     this.hostFullName = data?.hostFullName ?? '';
     this.publicModeFlag = data?.publicModeFlag ?? false;
     this.participantFlag = data?.participantFlag ?? false;
@@ -158,7 +162,28 @@ export class BookPublicRequest {
   eventExternalSlotId!: number;
   eventName!: string;
   listPartnerEmail!: string[];
-  location!: string;
   pathMappingKey!: string;
   shareCode!: string;
+  // startTime!: string;
+  // endTime!: string;
+}
+
+export class CreateExternalSlotRequest {
+  startTime!: string;
+  endTime!: string;
+  eventName!: string;
+  generateMeetingLink!: boolean;
+  listDeviceId!: string[];
+  location!: string;
+}
+
+export class MakePublicShareRequest {
+  startTime!: string;
+  endTime!: string;
+  eventDuration!: number;
+  eventType!: string;
+  freeTimeType!: string;
+  publicNewEventFlag!: boolean;
+  shareFreeTimeScheduleFlag!: boolean;
+  sharePublicEventFlag!: boolean;
 }

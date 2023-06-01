@@ -83,17 +83,18 @@
         </span>
 
         <div class="button-class">
-            <button mat-raised-button class="reschedule-button" *ngIf="!publicModeFlag">
+            <button mat-raised-button class="reschedule-button" *ngIf="hostFlag" (click)="onClickReschedulingEvent()">
                 Reschedule Event
             </button>
-            <button mat-raised-button class="cancel-button" *ngIf="!publicModeFlag">
+            <button mat-raised-button class="cancel-button" *ngIf="hostFlag">
                 Cancel Event
             </button>
-            <button mat-raised-button class="join-button" *ngIf="publicModeFlag && !participantFlag"
+            <button mat-raised-button class="join-button" *ngIf="publicModeFlag && !participantFlag && !hostFlag"
                 (click)="joinOrganizationEvent()">
                 JOIN EVENT
             </button>
-            <button mat-raised-button class="participating-button" *ngIf="participantFlag" [disabled]="participantFlag">
+            <button mat-raised-button class="participating-button" *ngIf="participantFlag && !hostFlag"
+                [disabled]="participantFlag">
                 <mat-icon>stars</mat-icon>
                 IS PARTICIPATING
             </button>

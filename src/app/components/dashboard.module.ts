@@ -48,6 +48,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { MatChipsModule } from '@angular/material/chips';
+
 // import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import {
   NgxMatDatetimePickerModule,
@@ -155,6 +157,7 @@ const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
     MatTabsModule,
     // Full Calendar
     FullCalendarModule,
+    MatChipsModule,
     //Bootstrap
     NgbModule,
     ToastrModule.forRoot(),

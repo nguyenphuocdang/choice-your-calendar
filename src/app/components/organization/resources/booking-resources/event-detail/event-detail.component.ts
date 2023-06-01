@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { el } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
@@ -16,8 +16,10 @@ import Utils from 'src/app/_utils/utils';
   styleUrls: ['./event-detail.component.scss'],
 })
 export class EventDetailComponent implements OnInit {
+  @Output() triggerEvent = new EventEmitter<SingleEventDetail>();
   eventId: number = 0;
   publicModeFlag: boolean = false;
+  hostFlag: boolean = false;
   eventInformation: SingleEventDetail = {
     id: 0,
     eventName: '',
@@ -55,7 +57,8 @@ export class EventDetailComponent implements OnInit {
   ngOnInit(): void {
     this.eventId = this.data.eventId;
     this.publicModeFlag = this.data.publicModeFlag;
-    this.participantFlag = this.data.participantFlag;
+    this.participantFlag = this.data.participantFlag ?? false;
+    this.hostFlag = this.data.hostFlag;
     this._getEventDetail(this.eventId);
     this._getDevicesInEvent(this.eventId);
     this._getUserInEvent(this.eventId);
@@ -66,6 +69,7 @@ export class EventDetailComponent implements OnInit {
         .getEventDetail(eventId)
         .subscribe((response: ApiResponse<SingleEventDetail>) => {
           if (response.statusCode === 200) {
+            debugger;
             this.eventInformation = new SingleEventDetail(response.data);
           } else {
             debugger;
@@ -90,6 +94,7 @@ export class EventDetailComponent implements OnInit {
             this.displayLocation = this.roomList
               .map((element) => element.name)
               .join(', ');
+            this.eventInformation.location = this.displayLocation;
           } else {
             debugger;
           }
@@ -151,5 +156,10 @@ export class EventDetailComponent implements OnInit {
     } catch (error) {
       debugger;
     }
+  }
+
+  onClickReschedulingEvent() {
+    this.triggerEvent.emit(this.eventInformation);
+    this.dialogRef.close();
   }
 }

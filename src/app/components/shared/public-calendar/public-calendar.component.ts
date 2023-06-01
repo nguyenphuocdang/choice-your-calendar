@@ -24,35 +24,10 @@ import Utils from 'src/app/_utils/utils';
 export class PublicCalendarComponent implements OnInit {
   partnerEmail: string = '';
   partnerPathMapping: string = '';
-  shareCode: string = 'oOP7CL8VCrJHZ2gxAl3Y0g==';
+  shareCode: string = '';
   publicBookingSlots: PublicScheduleData = {
-    day: '2023-05-29',
-    timeDatas: [
-      // {
-      //   eventId: 91,
-      //   freetimeType: 'Interview SEO',
-      //   startTime: '09:00',
-      //   endTime: '09:30',
-      // },
-      // {
-      //   eventId: 92,
-      //   freetimeType: 'Interview SEO',
-      //   startTime: '10:00',
-      //   endTime: '10:30',
-      // },
-      // {
-      //   eventId: 93,
-      //   freetimeType: 'Interview SEO',
-      //   startTime: '10:00',
-      //   endTime: '10:30',
-      // },
-      // {
-      //   eventId: 94,
-      //   freetimeType: 'Interview SEO',
-      //   startTime: '11:00',
-      //   endTime: '11:30',
-      // },
-    ],
+    day: '',
+    timeDatas: [],
   };
 
   constructor(
@@ -68,7 +43,7 @@ export class PublicCalendarComponent implements OnInit {
   ngOnInit(): void {
     this.Activatedroute.queryParamMap.subscribe((params) => {
       this.partnerPathMapping = params.get('partnerPathMapping') ?? '';
-      // this.shareCode = params.get('shareCode') ?? '';
+      this.shareCode = params.get('shareCode') ?? '';
       this._getPublicShareInfo();
     });
   }
@@ -93,7 +68,6 @@ export class PublicCalendarComponent implements OnInit {
                       }
                     }
                   );
-                  debugger;
                 }
               });
           } else {
@@ -105,13 +79,12 @@ export class PublicCalendarComponent implements OnInit {
     }
   }
 
-  onClickJoinPublicEventBookingSlot(element: PublicTimeData) {
+  onClickJoinPublicEventBookingSlot(element: PublicTimeData, index: number) {
     const requestBody: BookPublicRequest = {
       eventDescription: '',
-      eventExternalSlotId: element.eventId,
+      eventExternalSlotId: element.eventId!,
       eventName: element.freetimeType ?? '',
       listPartnerEmail: [this.partnerEmail],
-      location: '',
       pathMappingKey: this.partnerPathMapping,
       shareCode: this.shareCode,
     };
@@ -132,5 +105,12 @@ export class PublicCalendarComponent implements OnInit {
     } catch (error) {
       debugger;
     }
+  }
+
+  _combineTimeAndDateForRequestType(dateYYYYMMDD: string, time: string) {
+    const combinedString = `${dateYYYYMMDD}T${time}:00.000Z`;
+    const combinedDate = new Date(combinedString);
+    const requestTime: string = combinedDate.toISOString();
+    return requestTime;
   }
 }

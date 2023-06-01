@@ -1,5 +1,10 @@
 <div class="container">
   <div class="container2">
+    <div class="title">
+      <span>
+        Book Slots
+      </span>
+    </div>
     <div class="filter">
       <div class="filter-by-time">
 
@@ -20,10 +25,10 @@
       </div> -->
     </div>
     <div class="events-grid-container">
-      <div class="events-grid-item" *ngFor="let element of publicBookingSlots.timeDatas">
+      <div class="events-grid-item" *ngFor="let element of publicBookingSlots.timeDatas, let index = index">
         <mat-card>
           <mat-card-content appMaterialElevation>
-            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1684854218/event-image/public_event_vluu7p.jpg"
+            <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1683194746/website-image/interview_ll0mzx.jpg"
               alt="">
             <span class="date">
               <mat-icon style="color: #23a669;;">date_range</mat-icon>
@@ -37,7 +42,7 @@
               {{element.startTime}} - {{element.endTime}}
             </span>
             <span class="button-join">
-              <button mat-raised-button (click)="onClickJoinPublicEventBookingSlot(element)"> BOOK </button>
+              <button mat-raised-button (click)="onClickJoinPublicEventBookingSlot(element, index)"> BOOK </button>
 
             </span>
           </mat-card-content>

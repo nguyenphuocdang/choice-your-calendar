@@ -253,9 +253,7 @@
             }
             .selected-day {
               display: flex;
-              justify-content: space-between;
-              padding: 5%;
-              padding-top: 0% !important;
+              justify-content: center;
               span {
                 display: flex;
                 align-items: center;
@@ -264,11 +262,18 @@
                 font-weight: 500;
                 font-size: large;
               }
-              .previous-week {
-                text-decoration: underline;
+              // .previous-week {
+              //   text-decoration: underline;
+              // }
+              // .next-week {
+              //   text-decoration: underline;
+              // }
+              mat-form-field {
+                width: 0% !important;
               }
-              .next-week {
-                text-decoration: underline;
+              ::ng-deep .mat-raised-button {
+                min-width: none;
+                padding: 0;
               }
             }
             .weekday {
@@ -436,6 +441,13 @@
             }
           }
         }
+
+        .generate-external-slot {
+          .booking-resource-info {
+            height: 20%;
+          }
+        }
+
         .confirm-booking-sidenav {
           .mat-sidenav {
             position: fixed;
@@ -498,6 +510,12 @@
                 color: white;
               }
             }
+          }
+        }
+
+        .reschedule-booking-sidenav {
+          .mat-sidenav {
+            height: 50% !important;
           }
         }
       }

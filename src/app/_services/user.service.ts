@@ -11,6 +11,8 @@ import {
 import { AuthService } from './auth.service';
 import { LocalStorageService } from './local-storage.service';
 import Utils from '../_utils/utils';
+import { ApiResponse, CustomError } from '../_models/response';
+import { NotificationData } from '../_models/notify';
 
 const requestHeader = new HttpHeaders({ 'No-Auth': 'True' });
 
@@ -130,6 +132,21 @@ export class UserService {
         return response;
       }),
       catchError((err) => {
+        return err;
+      })
+    );
+  }
+
+  getNotifyData(): Observable<any> {
+    const defaultSize: number = 100;
+    const requestUrl: string = `${Utils.NOTIFY_API}/list?size=${defaultSize}`;
+    return this.http.get<ApiResponse<NotificationData>>(requestUrl).pipe(
+      map((response: ApiResponse<NotificationData>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((err) => {
+        debugger;
         return err;
       })
     );

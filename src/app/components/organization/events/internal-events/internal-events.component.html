@@ -54,11 +54,11 @@
                             <mat-icon style="color:#23a669;">alarm</mat-icon>
                             {{element.startTime}} - {{element.endTime}}
                         </span>
-                        <span class="view-detail" (click)="onViewAndJoinEvent(element.id, false)"
+                        <span class="view-detail" (click)="onViewAndJoinEvent(element, false)"
                             *ngIf="!element.participantFlag">
                             View Details and Join Event
                         </span>
-                        <span class="view-detail" (click)="onViewAndJoinEvent(element.id, true)"
+                        <span class="view-detail" (click)="onViewAndJoinEvent(element, true)"
                             *ngIf="element.participantFlag">
                             View Details
                         </span>

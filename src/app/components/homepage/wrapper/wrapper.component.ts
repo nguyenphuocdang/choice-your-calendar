@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NotificationData, NotificationContent } from 'src/app/_models/notify';
+import { ApiResponse } from 'src/app/_models/response';
 import { UserProfile } from 'src/app/_models/user';
 import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { SocketService } from 'src/app/_services/socket.service';
@@ -15,6 +17,7 @@ import { UserService } from 'src/app/_services/user.service';
 export class WrapperComponent implements OnInit {
   isExpanded: boolean = true;
   isSelected: boolean = false;
+  isShowingNotificationSidenav: boolean = false;
   role: string = '';
   user: UserProfile = {
     id: 0,
@@ -31,7 +34,7 @@ export class WrapperComponent implements OnInit {
   };
   isShowing = false;
   showSubmenu: boolean = false;
-
+  notificationList: NotificationContent[] = [];
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -98,5 +101,38 @@ export class WrapperComponent implements OnInit {
       },
       userId
     );
+  }
+
+  toggleAppMenuSidenav() {
+    this.isExpanded = !this.isExpanded;
+  }
+
+  toggleNotificationSidenav() {
+    this.isShowingNotificationSidenav = !this.isShowingNotificationSidenav;
+    this._getNotificationData();
+  }
+
+  _getNotificationData() {
+    try {
+      this.userService
+        .getNotifyData()
+        .subscribe((response: ApiResponse<NotificationData>) => {
+          if (response.statusCode === 200) {
+            let notificationDataList: NotificationContent[] = [];
+            response.data.content.forEach(
+              (notification: any, index: number) => {
+                const newNotification: NotificationContent =
+                  new NotificationContent(notification);
+                notificationDataList.push(newNotification);
+              }
+            );
+            this.notificationList = notificationDataList;
+          } else {
+            debugger;
+          }
+        });
+    } catch (error: any) {
+      debugger;
+    }
   }
 }

@@ -1,56 +1,55 @@
 <div class="container">
-    <div class="active-calendar">
-        <div class="row text-center header">
-            <div class="col-md-4">
-                <div class="btn-group">
-                    <div class="btn btn-success" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-                        (viewDateChange)="closeOpenMonthViewDay()">
-                        Previous
-                    </div>
-                    <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
-                        Today
-                    </div>
-                    <div class="btn btn-success" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
-                        (viewDateChange)="closeOpenMonthViewDay()">
-                        Next
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 dayview">
-                <span>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</span>
-            </div>
+    <div class="container2">
+        <div class="title">
+            <span>
+                Public Sharing Slots
+            </span>
         </div>
-        <div class="calendar-view" [ngSwitch]="view">
-            <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="monthEvents">
-            </mwl-calendar-week-view>
-        </div>
-    </div>
-    <div class="sidenav">
-        <mat-sidenav-container>
-            <mat-sidenav #sidenav position="end" [opened]="isShowing">
-                <mat-icon class="close-icon" (click)="toggleCloseNav()">close</mat-icon>
-                <div class='title'>
-                    <span>{{dayClickSelected}}</span>
-                </div>
-                <div class="time">
-                    <div class="time-data" *ngFor="let event of eventsRendered" [ngClass]="{ 'event': event.event,
-          'morning-work': event.title=='Morning Work', 'afternoon-work': event.title =='Afternoon Work' }">
-                        <span class="time-title">
-                            <mat-icon>event_available</mat-icon>
-                            {{event.title}}
-                        </span>
-                        <div class="time-element start">
-                            <span class="item1">Start</span>
-                            <span class="item2">{{event.startTime}}</span>
-                        </div>
-                        <div class="time-element end">
-                            <span class="item1">End</span>
-                            <span class="item2">{{event.endTime}}</span>
-                        </div>
-                    </div>
-                </div>
+        <div class="filter">
+            <div class="filter-by-title">
+                <mat-form-field appearance="fill">
+                    <mat-select [formControl]="selecteFreeTimeType" (selectionChange)="onFreeTimeTypeSelectChange()">
+                        <mat-option *ngFor="let freeTimeType of listFreeTimeType" [value]="freeTimeType">
+                            {{freeTimeType}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="email-textfield">
+                <mat-form-field appearance="fill">
+                    <mat-chip-list #chipList>
+                        <mat-chip *ngFor="let email of emails" [removable]="true" (removed)="remove(email)">
+                            {{ email }}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                    </mat-chip-list>
+                    <input placeholder="Enter your partner's email ... "
+                        (keydown.enter)="addChip(chipInput.value); chipInput.value=''" #chipInput>
+                </mat-form-field>
+            </div>
 
-            </mat-sidenav>
-        </mat-sidenav-container>
+            <button mat-raised-button (click)="onSharingSlotClick()">
+                <mat-icon>public</mat-icon>
+                <span>Share Slots</span>
+            </button>
+        </div>
+        <div class="select-all">
+            <mat-checkbox [(ngModel)]="allSelectedSlotFlag" (change)="selectAllSharingSlot()">Select All</mat-checkbox>
+        </div>
+        <div class="container-3">
+            <mat-card>
+                <mat-card-content *ngFor="let slot of renderedPublicSlots">
+                    <div>
+                        <mat-checkbox [(ngModel)]="slot.selectFlag"></mat-checkbox>
+                        <span class="day">
+                            {{slot.dayString}}
+                        </span>
+                        <span class="time">
+                            {{slot.timeDatas[0].startTime}} - {{slot.timeDatas[0].endTime}}
+                        </span>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
 </div>

@@ -11,6 +11,7 @@ import { PricingComponent } from './components/pricing/pricing.component';
 import { ProvideInformationComponent } from './components/authentication/register/provide-information/provide-information/provide-information.component';
 import { CompletePaymentComponent } from './components/authentication/register/complete-payment/complete-payment.component';
 import { PublicCalendarComponent } from './components/shared/public-calendar/public-calendar.component';
+import { PublicEventDetailsComponent } from './components/organization/events/internal-events/public-event-details/public-event-details/public-event-details.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -40,6 +41,10 @@ const routes: Routes = [
   {
     path: 'public-calendar',
     component: PublicCalendarComponent,
+  },
+  {
+    path: 'public-event/event-detail',
+    component: PublicEventDetailsComponent,
   },
   { path: 'forbidden', component: ForbiddenComponent },
   {

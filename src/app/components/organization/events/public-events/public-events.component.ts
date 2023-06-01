@@ -20,7 +20,7 @@ import { CalendarService } from 'src/app/_services/calendar.service';
 import { DatePipe } from '@angular/common';
 import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { catchError, from, lastValueFrom } from 'rxjs';
+import { catchError, from, last, lastValueFrom } from 'rxjs';
 import { LocalStorageService } from 'src/app/_services/local-storage.service';
 
 import { ToastrService } from 'ngx-toastr';
@@ -34,6 +34,8 @@ import { PopupService } from 'src/app/_services/popup.service';
 import {
   FreeTimeScheduleSlots,
   ListTimeWorkingDatas,
+  PublicScheduleData,
+  PublicTimeData,
   ScheduleDatas,
   TimeData,
 } from 'src/app/_models/schedule';
@@ -46,6 +48,10 @@ import { socketRequest } from 'src/app/_models/request';
 import { ApiResponse } from 'src/app/_models/response';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { UserProfile } from 'src/app/_models/user';
+import { EventService } from 'src/app/_services/event.service';
+import { FormControl } from '@angular/forms';
+import { MakePublicShareRequest } from 'src/app/_models/event';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-public-events',
@@ -53,203 +59,166 @@ import { UserProfile } from 'src/app/_models/user';
   styleUrls: ['./public-events.component.scss'],
 })
 export class PublicEventsComponent implements OnInit {
-  views: CalendarView = CalendarView.Week;
-  view: CalendarView = CalendarView.Week;
-  CalendarView = CalendarView;
-  viewDate: Date = new Date();
-  monthEvents: CalendarEvent[] = [];
-  eventsRendered: TimeData[] = [];
-  dayClickSelected: string = '';
-  isShowing: boolean = false;
-  weekdays: string[] = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
-  calendarOptions!: CalendarOptions;
-  ACTIVE_EVENTS: EventInput[] = [];
-  defaultDate: Date = new Date();
-  defaultFromDate: string = this.defaultDate.toISOString().replace(/T.*$/, '');
-  defaultToDate: string = new Date(
-    this.defaultDate.getFullYear(),
-    this.defaultDate.getMonth(),
-    this.defaultDate.getDate() + 30
-  )
-    .toISOString()
-    .replace(/T.*$/, '');
-  defaultToDateFree: string = new Date(
-    this.defaultDate.getFullYear(),
-    this.defaultDate.getMonth(),
-    this.defaultDate.getDate() + 10
-  )
-    .toISOString()
-    .replace(/T.*$/, '');
-  selectInfo!: DateSelectArg;
-  scheduleId!: number;
-  freeScheduleId!: number;
-  googleAuthenUrl: string =
-    'https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.email&access_type=online&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http://localhost:4200/authorize/oauth2/user/callback&client_id=460639175107-rb3km6k5eac1aq9oihqcq1htkhvbqfif.apps.googleusercontent.com';
-  freeTimeScheduleSlots: FreeTimeScheduleSlots = {
-    name: '',
-    brief: '',
-    freeScheduleFlag: true,
-    listTimeWorkingDatas: [],
-  };
-
   constructor(
-    @Optional() private dialog: MatDialog,
-    private route: ActivatedRoute,
-    private calendarService: CalendarService,
-    private socketService: SocketService,
-    private toastrService: ToastrService,
-    private popupService: PopupService,
-    private organizationService: OrganizationService,
-    private storageService: LocalStorageService,
-    @Inject(DOCUMENT) private document: Document
+    private eventService: EventService,
+    private toastrService: ToastrService
   ) {}
+  publicSlots: PublicScheduleData[] = [];
+  renderedPublicSlots: PublicScheduleData[] = [];
+  listFreeTimeType: string[] = [];
+  selecteFreeTimeType = new FormControl('');
+  allSelectedSlotFlag: boolean = false;
+  listEmails: string[] = [];
+  listEmailsFormControl = new FormControl();
+  emails: string[] = [];
 
-  async ngOnInit(): Promise<void> {
-    this._getUserActiveCalendar();
+  ngOnInit(): void {
+    this._getAllExternalSlots();
   }
 
-  private async _getUserActiveCalendar() {
-    try {
-      const freeScheduleFlag: boolean = false;
-      const today: Date = new Date();
-      const currentMonth: number = today.getMonth() + 1;
-      const currentYear: number = today.getFullYear();
-      const _firstDayOfCurrentMonth: string = this._convertYYYYMMDD(
-        1,
-        currentMonth,
-        currentYear
-      );
-      const _firstDayOfNextMonth: string = this._convertYYYYMMDD(
-        1,
-        currentMonth + 1,
-        currentYear
-      );
+  _getAllExternalSlots() {
+    const currentDate: Date = new Date();
+    let lastMonthDate: Date = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() - 1,
+      currentDate.getDate()
+    );
 
-      const user: UserProfile = this.storageService.getUserProfile();
-      const userId: number = user.id;
-      this.organizationService
-        .viewActiveCalendar(
-          userId,
-          freeScheduleFlag,
-          _firstDayOfCurrentMonth,
-          _firstDayOfNextMonth
-        )
-        .subscribe((response: ApiResponse<ScheduleDatas>) => {
-          if (response.statusCode === 200) {
-            const eventsMapping: CalendarEvent[] = [];
-            response.data.scheduleDatas.forEach((schedule, index) => {
-              if (schedule.timeDatas.length > 0) {
-                schedule.timeDatas.forEach((timeData, index) => {
-                  const startTime: string = `${schedule.day}T${timeData.startTime}`;
-                  const endTime: string = `${schedule.day}T${timeData.endTime}`;
-                  const eventDataMapping: CalendarEvent = {
-                    start: new Date(startTime),
-                    end: new Date(endTime),
-                    title: `${timeData.title}`,
-                    cssClass: 'event-schedule',
-                  };
-                  if (timeData.event)
-                    eventDataMapping.color = {
-                      primary: '#005ECA',
-                      secondary: '#DFEEFF',
-                      secondaryText: '#000000',
-                    };
-                  else {
-                    if (timeData.title === 'Morning Work') {
-                      eventDataMapping.color = {
-                        primary: '#EED600',
-                        secondary: '#F3E77E',
-                        secondaryText: '#000000',
-                      };
-                    } else {
-                      eventDataMapping.color = {
-                        primary: '#F36529',
-                        secondary: '#F5D3C4',
-                        secondaryText: '#000000',
-                      };
-                    }
-                  }
-                  eventsMapping.push(eventDataMapping);
+    let nextMonthDate: Date = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      currentDate.getDate()
+    );
+    let isoCurrentDate: string = currentDate.toISOString();
+    let isoLastMonthDate: string = lastMonthDate.toISOString();
+    let isoNextMonthDate: string = nextMonthDate.toISOString();
+    this.eventService
+      .getAllExternalSlots(isoLastMonthDate, isoNextMonthDate)
+      .subscribe((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) {
+          this.listFreeTimeType = response.data.listFreeTimeType;
+          response.data.scheduleDatas.forEach(
+            (scheduleData: PublicScheduleData) => {
+              if (scheduleData.timeDatas.length > 0) {
+                scheduleData.timeDatas.forEach((timeData: PublicTimeData) => {
+                  const publicSlotElement: PublicScheduleData =
+                    new PublicScheduleData(scheduleData.day, [timeData]);
+                  this.publicSlots.push(publicSlotElement);
                 });
               }
-            });
-            this.monthEvents = eventsMapping;
-          } else {
-            debugger;
-            this.toastrService.error('Error getting Active Calendar', 'ERROR');
-          }
-        });
-    } catch (error) {
-      debugger;
-      this.toastrService.error('Error getting Active Calendar', 'ERROR');
-    }
-  }
-
-  _convertYYYYMMDD(day: number, month: number, year: number): string {
-    const dayString: string = day < 10 ? `0${day}` : `${day}`;
-    const monthString: string = month < 10 ? `0${month}` : `${month}`;
-    const yearString: string = `${year}`;
-    const formatDay: string = `${yearString}-${monthString}-${dayString}`;
-    return formatDay;
-  }
-
-  onDayClicked(day: CalendarMonthViewDay) {
-    let dateSelected: Date = new Date(day.date);
-    this.dayClickSelected = `${
-      this.weekdays[dateSelected.getDay()]
-    }, ${Utils.convertFromDatetoDDMMYY(dateSelected)}`;
-    if (day.events.length == 0) {
-      if (this.isShowing) {
-        this.isShowing = !this.isShowing;
-        this.eventsRendered = [];
-      }
-    } else {
-      if (this.isShowing) {
-        {
-          this.isShowing = !this.isShowing;
-          this.eventsRendered = [];
+            }
+          );
+          this._getFreeTimeTypes();
         }
-      } else {
-        this.isShowing = !this.isShowing;
-        day.events.forEach((element: CalendarEvent) => {
-          const start = new Date(element.start);
-          const startTime = start.toLocaleString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
+      });
+  }
+  _getFreeTimeTypes() {
+    if (this.listFreeTimeType.length > 0) {
+      this.selecteFreeTimeType.setValue(this.listFreeTimeType[0]);
+      this._getExternalSlotsByFreeTimeType(this.selecteFreeTimeType.value!);
+    }
+  }
+  _getExternalSlotsByFreeTimeType(freeTimeType: string) {
+    if (this.publicSlots.length > 0) {
+      const tempRenderedPublicSlots: PublicScheduleData[] = [];
+      this.publicSlots.forEach((element: PublicScheduleData) => {
+        if (element.timeDatas[0].freetimeType === freeTimeType)
+          tempRenderedPublicSlots.push(element);
+      });
+      this.renderedPublicSlots = tempRenderedPublicSlots;
+    }
+  }
+  onFreeTimeTypeSelectChange() {
+    this._getExternalSlotsByFreeTimeType(this.selecteFreeTimeType.value!);
+  }
+
+  selectAllSharingSlot() {
+    this.renderedPublicSlots.forEach((slot: PublicScheduleData) => {
+      slot.selectFlag = this.allSelectedSlotFlag;
+    });
+  }
+
+  onSharingSlotClick() {
+    const selectSharingSlot: PublicScheduleData[] = [];
+    if (this.renderedPublicSlots.length > 0) {
+      this.renderedPublicSlots.forEach((publicSlot: PublicScheduleData) => {
+        if (publicSlot.selectFlag) selectSharingSlot.push(publicSlot);
+      });
+      const startTime = this._combineTimeAndDateForRequestType(
+        selectSharingSlot[0].day,
+        selectSharingSlot[0].timeDatas[0].startTime!
+      );
+      const endTime = this._combineTimeAndDateForRequestType(
+        selectSharingSlot[selectSharingSlot.length - 1].day,
+        selectSharingSlot[selectSharingSlot.length - 1].timeDatas[0].endTime!
+      );
+      const requestBody: MakePublicShareRequest = {
+        startTime: startTime,
+        endTime: endTime,
+        eventDuration: 0,
+        eventType: 'Online',
+        freeTimeType: this.selecteFreeTimeType.value!,
+        publicNewEventFlag: false,
+        shareFreeTimeScheduleFlag: true,
+        sharePublicEventFlag: false,
+      };
+      debugger;
+      try {
+        this.eventService
+          .createPublicShare(requestBody)
+          .subscribe((response: any) => {
+            debugger;
+            if (response.statusCode === 200) {
+              const publicShareId: number = response.data.id;
+              this.eventService
+                .sharePublicSlots(this.emails, publicShareId)
+                .subscribe((response: any) => {
+                  if (response.statusCode === 200) {
+                    this.toastrService.success(
+                      'Your slots have been shared successfully',
+                      'SUCCESS'
+                    );
+                  }
+                });
+            } else {
+              debugger;
+            }
           });
-          const end = new Date(element.end!) ?? '';
-          const endTime = end.toLocaleString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-          });
-          const timeData: TimeData = {
-            title: element.title,
-            startTime: startTime,
-            endTime: endTime,
-            event: element.color?.primary == '#005ECA' ? true : false,
-          };
-          this.eventsRendered.push(timeData);
-        });
+      } catch (error) {
+        debugger;
       }
     }
   }
-  toggleCloseNav() {
-    if (this.isShowing) this.isShowing = !this.isShowing;
-    this.eventsRendered = [];
-  }
-  closeOpenMonthViewDay() {}
 
-  setView(view: CalendarView) {
-    this.view = view;
+  _combineTimeAndDateForRequestType(dateYYYYMMDD: string, time: string) {
+    const combinedString = `${dateYYYYMMDD}T${time}:00.000Z`;
+    const combinedDate = new Date(combinedString);
+    // const _earlier7hourTime: Date = new Date(
+    //   combinedDate.getTime() + 7 * 60 * 60 * 1000
+    // );
+    const requestTime: string = combinedDate.toISOString();
+    return requestTime;
+  }
+
+  addChip(chip: string): void {
+    if (chip.trim()) {
+      this.emails.push(chip.trim());
+    }
+  }
+
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.listEmails.push(value);
+    }
+    event.chipInput!.clear();
+    this.listEmailsFormControl.setValue(null);
+  }
+
+  remove(email: string): void {
+    const index = this.listEmails.indexOf(email);
+    if (index >= 0) {
+      this.listEmails.splice(index, 1);
+    }
   }
 }

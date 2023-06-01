@@ -182,15 +182,16 @@ export class InternalEventsComponent implements OnInit {
     }
   }
 
-  onViewAndJoinEvent(eventId: number, participantFlag: boolean) {
+  onViewAndJoinEvent(event: SingleEventDetail, participantFlag: boolean) {
     const dialogRef = this.dialog.open(EventDetailComponent, {
       width: '800px',
       height: 'fit-content',
       minHeight: '500px',
       data: {
-        eventId: eventId,
+        eventId: event.id,
         publicModeFlag: true,
         participantFlag: participantFlag,
+        hostFlag: false,
       },
     });
   }

@@ -125,6 +125,17 @@ export default class Utils {
     return timeString;
   }
 
+  static convertYYYYMMDDtoDateString(timeString: string) {
+    //'2023-05-25' => 'Thursday, May 25, 2023
+    const date = new Date(timeString);
+    const convertedDate = date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+    return convertedDate;
+  }
   static toastrConfig = {
     timeOut: 1500, // Time duration in milliseconds for how long the toastr will be displayed
     extendedTimeOut: 1000, // Time duration in milliseconds for how long the toastr will be displayed after mouse hover

@@ -1,3 +1,5 @@
+import Utils from '../_utils/utils';
+
 export class Schedule {
   name!: string;
   brief!: string;
@@ -70,6 +72,12 @@ export class BookingSlot {
   timeDatas!: TimeData;
 }
 
+export class PublicBookingSlot {
+  selectFlag!: boolean;
+  timeDatas!: TimeData;
+  date!: Date;
+}
+
 export class AssignScheduleRequestBody {
   listDeviceId?: number[];
   listMemberId?: number[];
@@ -79,10 +87,18 @@ export class AssignScheduleRequestBody {
 export class PublicScheduleData {
   day!: string;
   timeDatas!: PublicTimeData[];
+  dayString?: string;
+  selectFlag?: boolean;
+  constructor(day?: string, timeDatas?: PublicTimeData[]) {
+    this.day = day!;
+    this.timeDatas = timeDatas!;
+    this.dayString = Utils.convertYYYYMMDDtoDateString(day!);
+    this.selectFlag = false;
+  }
 }
 export class PublicTimeData {
   freetimeType?: string;
-  startTime!: string;
-  endTime!: string;
-  eventId!: number;
+  startTime?: string;
+  endTime?: string;
+  eventId?: number;
 }
