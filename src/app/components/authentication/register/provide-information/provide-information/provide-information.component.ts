@@ -128,7 +128,8 @@ export class ProvideInformationComponent implements OnInit {
         accountType: this.accountType,
         authorizationCode: this.authCode,
         error: '',
-        redirecetUri: 'http://localhost:4200/authorize/oauth2/user/callback',
+        redirecetUri:
+          'https://timechoice.solutions/authorize/oauth2/user/callback',
       };
       requestBody.gender =
         this.registerForm.value.gender == 'male' ? true : false;

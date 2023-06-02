@@ -144,54 +144,8 @@ import * as SockJS from 'sockjs-client';
     MatTabsModule,
     ReactiveFormsModule,
     FullCalendarModule,
-    // FullCalendarModule.forRoot({
-    //   plugins: [ dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin ]
-    // })
     NgbModule,
     ToastrModule.forRoot(),
-
-    //NgxMaterialTimepickerModule
-    //   MsalModule.forRoot( new PublicClientApplication({ // MSAL Configuration
-    //     auth: {
-    //       clientId: '45aeb46b-f1a4-4110-a6f0-255178752ed3',
-    //       authority: 'https://login.microsoftonline.com/f069fbab-b0f7-4e8c-a14c-d042ab513525',
-    //       redirectUri: 'http://localhost:4200',
-    //         postLogoutRedirectUri: "http://localhost:4200/",
-    //         navigateToLoginRequestUrl: true
-    //     },
-    //     cache: {
-    //         cacheLocation : BrowserCacheLocation.LocalStorage,
-    //         storeAuthStateInCookie: true, // set to true for IE 11
-    //     },
-    //     system: {
-    //         loggerOptions: {
-    //             loggerCallback: () => {},
-    //             piiLoggingEnabled: false
-    //         }
-    //     }
-    // }),
-    //   {
-    //       interactionType: InteractionType.Popup, // MSAL Guard Configuration
-    //       authRequest: {
-    //         scopes: ['user.read']
-    //       },
-    //       loginFailedRoute: "/login-failed"
-    //   }
-    // ,
-    //   {
-    //       interactionType: InteractionType.Redirect, // MSAL Interceptor Configuration
-    //       protectedResourceMap: new Map
-    //       (
-    //         [
-    //           ['https://graph.microsoft.com/v1.0/me', ['user.read']]
-    //         ]
-    //       )
-    //   }
-    // ),
-    // CalendarModule.forRoot({
-    //   provide: DateAdapter,
-    //   useFactory: adapterFactory,
-    // }),
 
     CalendarModule.forRoot({
       provide: DateAdapter,

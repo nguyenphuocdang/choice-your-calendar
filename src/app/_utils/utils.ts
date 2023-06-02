@@ -1,12 +1,7 @@
 import { PopupTemplateComponent } from '../components/popup/popup-template/popup-template.component';
 
 export default class Utils {
-  //static baseUrl: string = 'http://localhost:8000/api';
-
   static baseUrl: string = 'https://api.timechoice.solutions:8000/api';
-
-  // static baseUrl: string = 'http://52.221.252.133:8000/api';
-
   static AUTH_API: string = Utils.baseUrl + '/auth';
   static SCHEDULE_API: string = Utils.baseUrl + '/schedule';
   static EVENT_API: string = Utils.baseUrl + '/event';
@@ -21,11 +16,11 @@ export default class Utils {
   static SOCKET_API: string = Utils.baseUrl + '/send-message-to-socket';
 
   static CALLBACK_AUTH_BOOK: string =
-    'http://localhost:4200/authorize/oauth2/user/callback';
+    'https://timechoice.solutions/authorize/oauth2/user/callback';
   static CALLBACK_AUTH_SYNC: string =
-    'http://localhost:4200/authorize/oauth2/user/callback';
+    'https://timechoice.solutions/authorize/oauth2/user/callback';
 
-  static signUpGoogleUrl: string = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.email&access_type=online&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http://localhost:4200/authorize/oauth2/user/callback&client_id=460639175107-rb3km6k5eac1aq9oihqcq1htkhvbqfif.apps.googleusercontent.com`;
+  static signUpGoogleUrl: string = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.email&access_type=online&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=https://timechoice.solutions/authorize/oauth2/user/callback&client_id=460639175107-rb3km6k5eac1aq9oihqcq1htkhvbqfif.apps.googleusercontent.com`;
 
   //Confirm Asking Messages
   static confirmSyncGoogle: string =
