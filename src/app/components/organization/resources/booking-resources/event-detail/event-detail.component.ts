@@ -17,8 +17,7 @@ import Utils from 'src/app/_utils/utils';
 export class EventDetailComponent implements OnInit {
   @Output() triggerEvent = new EventEmitter<SingleEventDetail>();
   eventId: number = 0;
-  publicModeFlag: boolean = false;
-  hostFlag: boolean = false;
+  cexternalFlag: boolean = false;
   eventInformation: SingleEventDetail = {
     id: 0,
     eventName: '',
@@ -55,9 +54,7 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventId = this.data.eventId;
-    this.publicModeFlag = this.data.publicModeFlag;
     this.participantFlag = this.data.participantFlag ?? false;
-    this.hostFlag = this.data.hostFlag;
     this._getEventDetail(this.eventId);
     this._getDevicesInEvent(this.eventId);
     this._getUserInEvent(this.eventId);
@@ -68,8 +65,8 @@ export class EventDetailComponent implements OnInit {
         .getEventDetail(eventId)
         .subscribe((response: ApiResponse<SingleEventDetail>) => {
           if (response.statusCode === 200) {
-            debugger;
             this.eventInformation = new SingleEventDetail(response.data);
+            debugger;
           } else {
             debugger;
           }

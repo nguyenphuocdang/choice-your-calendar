@@ -28,10 +28,10 @@
         <mat-icon> location_on</mat-icon>
         <span *ngFor="let item of roomList" class="room">
             {{item.name}}
-            <span class="event-status pending" *ngIf="!publicModeFlag && item.status==='WAITING'">
+            <span class="event-status pending" *ngIf="item.status==='WAITING'">
                 PENDING FOR APPROVAL
             </span>
-            <span class="event-status success" *ngIf="!publicModeFlag && item.status==='ACCEPT'">
+            <span class="event-status success" *ngIf="item.status==='ACCEPT'">
                 AVAILABLE TO USE
             </span>
         </span>
@@ -58,42 +58,24 @@
                             <span style="overflow: hidden; word-wrap: break-word;">{{item.email}}</span>
                         </span>
                     </span>
-
-
-                    <!--
-                    <span style="display: flex; flex-direction: column; width: 100%; gap: 1rem">
-                        <span *ngFor="let item of userList"
-                            style="display: flex; gap: 1rem; height: 1.5rem; width: 100%; align-items: center;">
-                            <span style="display: flex; gap: 0.25rem; width: 100%; align-items: center;">
-                                <mat-icon style="color: #24931e; width: 2rem;">person</mat-icon>
-                                <span style="overflow: hidden; word-wrap: break-word;">{{item.fullname}}</span>
-                            </span>
-                        </span>
-                    </span>
-                    <span style="display: flex; flex-direction: column; width: 100%; gap: 1rem">
-                        <span *ngFor="let item of userList"
-                            style="display: flex; gap: 1rem; height: 1.5rem; width: 100%; align-items: center;">
-                            <span style="display: flex; gap: 0.25rem; width: 100%; align-items: center;">
-                                <mat-icon style="color: #24931e; width: 2rem;"> mail_outline</mat-icon>
-                                <span style="overflow: hidden; word-wrap: break-word;">{{item.email}}</span>
-                            </span>
-                        </span>
-                    </span> -->
                 </mat-menu>
         </span>
 
         <div class="button-class">
-            <button mat-raised-button class="reschedule-button" *ngIf="hostFlag" (click)="onClickReschedulingEvent()">
+            <button mat-raised-button class="reschedule-button" *ngIf="eventInformation.hostFlag"
+                (click)="onClickReschedulingEvent()">
                 Reschedule Event
             </button>
-            <button mat-raised-button class="share-button" *ngIf="hostFlag">
+            <button mat-raised-button class="share-button"
+                *ngIf="eventInformation.cexternalSlotFlag && eventInformation.hostFlag">
                 Share Public Partner
             </button>
-            <button mat-raised-button class="join-button" *ngIf="publicModeFlag && !participantFlag && !hostFlag"
+            <button mat-raised-button class="join-button"
+                *ngIf="eventInformation.publicModeFlag && !participantFlag && !eventInformation.hostFlag"
                 (click)="joinOrganizationEvent()">
                 JOIN EVENT
             </button>
-            <button mat-raised-button class="participating-button" *ngIf="participantFlag && !hostFlag"
+            <button mat-raised-button class="participating-button" *ngIf="participantFlag && !eventInformation.hostFlag"
                 [disabled]="participantFlag">
                 <mat-icon>stars</mat-icon>
                 IS PARTICIPATING

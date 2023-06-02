@@ -184,9 +184,7 @@ export class InternalEventsComponent implements OnInit {
       height: 'fit-content',
       data: {
         eventId: event.id,
-        publicModeFlag: true,
         participantFlag: participantFlag,
-        hostFlag: false,
       },
     });
   }

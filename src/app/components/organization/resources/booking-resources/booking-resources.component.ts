@@ -786,8 +786,6 @@ export class BookingResourcesComponent implements OnInit {
       height: 'fit-content',
       data: {
         eventId: event.id,
-        publicModeFlag: event.publicModeFlag,
-        hostFlag: event.hostFlag,
         participantFlag: true,
       },
     });
