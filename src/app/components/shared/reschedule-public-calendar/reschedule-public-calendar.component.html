@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="container2">
+        <div class="title">
+            <span>
+                Available Slots For Reschedule Booking
+            </span>
+        </div>
+        <div class="filter">
+            <div class="filter-by-time">
+                <input type="text" placeholder="Type your reason" [(ngModel)]="reason">
+            </div>
+        </div>
+        <div class="events-grid-container">
+            <div class="events-grid-item" *ngFor="let element of publicBookingSlots.timeDatas, let index = index">
+                <mat-card>
+                    <mat-card-content appMaterialElevation>
+                        <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1683194746/website-image/interview_ll0mzx.jpg"
+                            alt="">
+                        <span class="date">
+                            <mat-icon style="color: #23a669;;">date_range</mat-icon>
+                            {{publicBookingSlots.day}}
+                        </span>
+                        <span class="event-name">
+                            {{element.freetimeType}}
+                        </span>
+                        <span class="time">
+                            <mat-icon style="color:#23a669;">alarm</mat-icon>
+                            {{element.startTime}} - {{element.endTime}}
+                        </span>
+                        <span class="button-join">
+                            <button mat-raised-button class='book-button'
+                                (click)="rescheduleBookingSlot(element, index)"> BOOK </button>
+                        </span>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

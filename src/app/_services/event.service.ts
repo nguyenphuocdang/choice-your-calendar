@@ -18,6 +18,7 @@ import {
   JoinEventRequest,
   MakeEventRequest,
   MakePublicShareRequest,
+  ReschedulePublicRequest,
   SharedCalendarDetails,
   SingleEventDetail,
 } from '../_models/event';
@@ -334,10 +335,43 @@ export class EventService {
     );
   }
 
+  getPublicSlotsForReschedule(
+    pathMapping: string,
+    shareCode: string
+  ): Observable<any> {
+    const requestUrl = `${Utils.PUBLIC_EVENT_API}/get-slot-for-reschedule/${pathMapping}?shareCode=${shareCode}`;
+    return this.http.get<ApiResponse<any>>(requestUrl).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        return throwError(error);
+      })
+    );
+  }
+
   confirmBookingPublicSlot(requestBody: BookPublicRequest): Observable<any> {
     const requestUrl = `${Utils.PUBLIC_EVENT_API}/add`;
     debugger;
     return this.http.post<ApiResponse<any>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<any>) => {
+        debugger;
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        debugger;
+        return throwError(error);
+      })
+    );
+  }
+
+  rescheduleBookingSlot(requestBody: ReschedulePublicRequest): Observable<any> {
+    debugger;
+    const requestUrl = `${Utils.PUBLIC_EVENT_API}/edit`;
+    debugger;
+    return this.http.put<ApiResponse<any>>(requestUrl, requestBody).pipe(
       map((response: ApiResponse<any>) => {
         debugger;
         if (response.statusCode === 200) return response;

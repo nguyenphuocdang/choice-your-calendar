@@ -13,6 +13,7 @@ import { CompletePaymentComponent } from './components/authentication/register/c
 import { PublicCalendarComponent } from './components/shared/public-calendar/public-calendar.component';
 import { PublicEventDetailsComponent } from './components/organization/events/internal-events/public-event-details/public-event-details/public-event-details.component';
 import { PublicOrganizationEventComponent } from './components/public-organization-event/public-organization-event.component';
+import { ReschedulePublicCalendarComponent } from './components/shared/reschedule-public-calendar/reschedule-public-calendar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -50,6 +51,10 @@ const routes: Routes = [
   {
     path: 'public-event/event-detail',
     component: PublicEventDetailsComponent,
+  },
+  {
+    path: 'public-event/reschedule-event',
+    component: ReschedulePublicCalendarComponent,
   },
   { path: 'forbidden', component: ForbiddenComponent },
   {

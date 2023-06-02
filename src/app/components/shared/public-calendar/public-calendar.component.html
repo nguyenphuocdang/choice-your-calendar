@@ -32,7 +32,7 @@
               alt="">
             <span class="date">
               <mat-icon style="color: #23a669;;">date_range</mat-icon>
-              {{publicBookingSlots.day}}
+              {{bookDay}}
             </span>
             <span class="event-name">
               {{element.freetimeType}}
@@ -42,8 +42,8 @@
               {{element.startTime}} - {{element.endTime}}
             </span>
             <span class="button-join">
-              <button mat-raised-button (click)="onClickJoinPublicEventBookingSlot(element, index)"> BOOK </button>
-
+              <button mat-raised-button class='book-button' (click)="onClickJoinPublicEventBookingSlot(element, index)">
+                BOOK </button>
             </span>
           </mat-card-content>
         </mat-card>

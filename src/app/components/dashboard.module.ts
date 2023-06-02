@@ -65,6 +65,7 @@ import { InternalEventsComponent } from './organization/events/internal-events/i
 import { EventDetailComponent } from './organization/resources/booking-resources/event-detail/event-detail.component';
 import { PublicEventDetailsComponent } from './organization/events/internal-events/public-event-details/public-event-details/public-event-details.component';
 import { PublicOrganizationEventComponent } from './public-organization-event/public-organization-event.component';
+import { ReschedulePublicCalendarComponent } from './shared/reschedule-public-calendar/reschedule-public-calendar.component';
 const lang = 'en-US';
 
 @NgModule({
@@ -89,6 +90,7 @@ const lang = 'en-US';
     EventDetailComponent,
     PublicEventDetailsComponent,
     PublicOrganizationEventComponent,
+    ReschedulePublicCalendarComponent,
   ],
   imports: [
     FormsModule,

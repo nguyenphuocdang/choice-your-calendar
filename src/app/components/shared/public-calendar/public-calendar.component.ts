@@ -29,7 +29,8 @@ export class PublicCalendarComponent implements OnInit {
     day: '',
     timeDatas: [],
   };
-
+  bookFlag: boolean = false;
+  bookDay: string = '';
   constructor(
     @Optional() private dialog: MatDialog,
     private Activatedroute: ActivatedRoute,
@@ -68,6 +69,11 @@ export class PublicCalendarComponent implements OnInit {
                       }
                     }
                   );
+
+                  this.bookDay = Utils.convertYYYYMMDDtoDateString(
+                    this.publicBookingSlots.day
+                  );
+                  debugger;
                 }
               });
           } else {
@@ -100,6 +106,7 @@ export class PublicCalendarComponent implements OnInit {
           if (response.statusCode === 200) {
             debugger;
             this.toastrService.success('Booking slot successfully', 'SUCCESS');
+            this.bookFlag = true;
           }
         });
     } catch (error) {

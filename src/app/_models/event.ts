@@ -117,7 +117,13 @@ export class BookingSlotRequest {
   listDeviceId!: number[];
   listPartnerId!: number[];
 }
-
+export class ReschedulePublicRequest {
+  eventDescription!: string;
+  pathMappingKey!: string;
+  reason!: string;
+  rescheduleExternalSlotId!: number;
+  shareCode!: string;
+}
 export class DateBookingSlot {
   code!: string;
   day!: string;
