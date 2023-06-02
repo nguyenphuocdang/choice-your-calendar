@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -36,7 +35,6 @@ export class WrapperComponent implements OnInit {
   showSubmenu: boolean = false;
   notificationList: NotificationContent[] = [];
   constructor(
-    private http: HttpClient,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,

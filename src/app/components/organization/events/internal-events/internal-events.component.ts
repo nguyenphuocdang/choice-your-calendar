@@ -1,15 +1,12 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { el } from '@fullcalendar/core/internal-common';
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { SingleEventDetail } from 'src/app/_models/event';
 import { ApiResponse, DataListResponse } from 'src/app/_models/response';
 import { UserBusinessDetail } from 'src/app/_models/user';
 import { EventService } from 'src/app/_services/event.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { EventDetailComponent } from '../../resources/booking-resources/event-detail/event-detail.component';
-import { ToastrService } from 'ngx-toastr';
-
 @Component({
   selector: 'app-internal-events',
   templateUrl: './internal-events.component.html',
@@ -30,7 +27,6 @@ export class InternalEventsComponent implements OnInit {
   isoLastYearDate: string = '';
   constructor(
     private eventService: EventService,
-    private toastrService: ToastrService,
     private organizationService: OrganizationService,
     @Optional() private dialog: MatDialog
   ) {}

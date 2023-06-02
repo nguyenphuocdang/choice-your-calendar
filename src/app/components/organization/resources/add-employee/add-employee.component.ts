@@ -1,8 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { J, el } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, map } from 'rxjs';
 import { AssignedPermission } from 'src/app/_models/organization';
@@ -80,7 +78,6 @@ export class AddEmployeeComponent implements OnInit {
   disableButtonAssignEventHoster: boolean = false;
   disableButtonAssignPublicEventHoster: boolean = false;
   constructor(
-    private sanitizer: DomSanitizer,
     private organizationService: OrganizationService,
     private toastrService: ToastrService,
     private calendarService: CalendarService

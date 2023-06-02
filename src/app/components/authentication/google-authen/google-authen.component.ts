@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { EventCreateRequest } from 'src/app/_models/event';
-import { CalendarService } from 'src/app/_services/calendar.service';
-import { EventService } from 'src/app/_services/event.service';
-import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import Utils from 'src/app/_utils/utils';
 
 @Component({
@@ -19,14 +14,7 @@ export class GoogleAuthenComponent implements OnInit {
   messageError: string = Utils.syncErrorDefaultMessage;
   authorizationCode: string = '';
   accountType: string = '';
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private calendarService: CalendarService,
-    private localStorageService: LocalStorageService,
-    private eventService: EventService,
-    private toastrService: ToastrService,
-    private router: Router
-  ) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) {
     if (this.activatedRoute.snapshot.queryParamMap.get('code')) {
       this.authorizationCode =
         this.activatedRoute.snapshot.queryParamMap.get('code') ?? '';

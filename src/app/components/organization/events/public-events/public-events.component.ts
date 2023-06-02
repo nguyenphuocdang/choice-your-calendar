@@ -26,28 +26,9 @@ import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { ToastrService } from 'ngx-toastr';
 import { DOCUMENT } from '@angular/common';
 
-//Google Authen
-import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
-import Utils from 'src/app/_utils/utils';
-
-import { PopupService } from 'src/app/_services/popup.service';
-import {
-  FreeTimeScheduleSlots,
-  ListTimeWorkingDatas,
-  PublicScheduleData,
-  PublicTimeData,
-  ScheduleDatas,
-  TimeData,
-} from 'src/app/_models/schedule';
+import { PublicScheduleData, PublicTimeData } from 'src/app/_models/schedule';
 //Angular Calendar
-import { CalendarEvent } from 'angular-calendar';
-import { CalendarMonthViewDay } from 'angular-calendar';
-import { CalendarView } from 'angular-calendar';
-import { SocketService } from 'src/app/_services/socket.service';
-import { socketRequest } from 'src/app/_models/request';
 import { ApiResponse } from 'src/app/_models/response';
-import { OrganizationService } from 'src/app/_services/organization.service';
-import { UserProfile } from 'src/app/_models/user';
 import { EventService } from 'src/app/_services/event.service';
 import { FormControl } from '@angular/forms';
 import { MakePublicShareRequest } from 'src/app/_models/event';

@@ -1,8 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import {
   Component,
   EventEmitter,
-  Inject,
   OnInit,
   Optional,
   Output,
@@ -14,18 +12,12 @@ import {
   UntypedFormBuilder,
   NgForm,
 } from '@angular/forms';
-// import { MsalBroadcastService, MsalGuardConfiguration, MsalService, MSAL_GUARD_CONFIG } from '@azure/msal-angular';
-// import { InteractionStatus, RedirectRequest } from '@azure/msal-browser';
-// import { RedirectHandler } from '@azure/msal-browser/dist/internals';
 import { Router } from '@angular/router';
-import { filter, take } from 'rxjs';
-import { AuthService } from '../../../_services/auth.service';
 import { UserService } from '../../../_services/user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LocalStorageService } from '../../../_services/local-storage.service';
 import { AuthComponent } from '../register/signup-google/auth.component';
 import { ToastrService } from 'ngx-toastr';
-import { PaymentService } from 'src/app/_services/payment.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -41,12 +33,7 @@ export class LoginComponent implements OnInit {
   loginForm!: UntypedFormGroup;
   constructor(
     private fb: UntypedFormBuilder,
-    // @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig : MsalGuardConfiguration,
-    // private msalBroadCastService : MsalBroadcastService,
-    // private msService : MsalService,
-    private http: HttpClient,
     private router: Router,
-    //injecting Services into Component
     private userService: UserService,
     private storageService: LocalStorageService,
     @Optional() public dialogRef: MatDialogRef<LoginComponent>,

@@ -1,16 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
-import { el } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
 import { OrganizationDetails } from 'src/app/_models/organization';
 import { ApiResponse, DataListResponse } from 'src/app/_models/response';
-import {
-  ListTimeWorkingDatas,
-  ScheduleResponse,
-} from 'src/app/_models/schedule';
+import { ScheduleResponse } from 'src/app/_models/schedule';
 import { UserBusinessDetail } from 'src/app/_models/user';
-import { CalendarService } from 'src/app/_services/calendar.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import Utils from 'src/app/_utils/utils';
 
@@ -170,7 +165,6 @@ export class OrgDashboardComponent implements OnInit {
   constructor(
     private fb: UntypedFormBuilder,
     private organizationService: OrganizationService,
-    private calendarService: CalendarService,
     private toastrService: ToastrService
   ) {}
 

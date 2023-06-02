@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { el } from '@fullcalendar/core/internal-common';
 import { ToastrService } from 'ngx-toastr';
 import { SingleEventDetail } from 'src/app/_models/event';
 import { DeviceOfEvent } from 'src/app/_models/resource';

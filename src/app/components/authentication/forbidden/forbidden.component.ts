@@ -1,6 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-forbidden',
@@ -8,11 +6,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./forbidden.component.css'],
 })
 export class ForbiddenComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private location: Location
-  ) {}
+  constructor() {}
 
   statusCode: string = '403 FORBIDDEN';
   errorMessage: string = 'You are not allowed to access this page';

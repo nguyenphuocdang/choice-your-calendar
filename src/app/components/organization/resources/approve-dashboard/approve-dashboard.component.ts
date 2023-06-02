@@ -5,10 +5,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DeviceBorrowRequest, socketRequest } from 'src/app/_models/request';
 import { ApiResponse, DataListResponse } from 'src/app/_models/response';
-import { OrganizationService } from 'src/app/_services/organization.service';
 import { DeviceService } from 'src/app/_services/resource.service';
-import { SocketService } from 'src/app/_services/socket.service';
-
 @Component({
   selector: 'app-approve-dashboard',
   templateUrl: './approve-dashboard.component.html',
@@ -32,7 +29,6 @@ export class ApproveDashboardComponent implements OnInit {
   numberOfRequests: number = 0;
   public dataSourceRequests!: MatTableDataSource<DeviceBorrowRequest>;
   constructor(
-    private socketService: SocketService,
     private toastrService: ToastrService,
     private resourceService: DeviceService,
     private router: Router

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { UserProfile } from 'src/app/_models/user';
-import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { UserService } from 'src/app/_services/user.service';
 import Utils from 'src/app/_utils/utils';
 
@@ -27,7 +26,6 @@ export class UserProfileComponent implements OnInit {
   role: string = '';
   constructor(
     private userService: UserService,
-    private storageService: LocalStorageService,
     private toastrService: ToastrService
   ) {}
 

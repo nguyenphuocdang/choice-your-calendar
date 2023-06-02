@@ -1,16 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit, Optional } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LocalStorageService } from './_services/local-storage.service';
-import { SocketService } from './_services/socket.service';
-//FullCalendar
-// import { CalendarOptions, defineFullCalendarElement } from '@fullcalendar/web-component';
-// import dayGridPlugin from '@fullcalendar/daygrid';
-
-// make the <full-calendar> element globally available by calling this function at the top-level
-// defineFullCalendarElement();
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

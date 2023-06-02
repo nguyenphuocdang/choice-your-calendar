@@ -3,15 +3,12 @@ import { ToastrService } from 'ngx-toastr';
 import { ResourceDetail, SearchDevice } from 'src/app/_models/resource';
 import { ScheduleData } from 'src/app/_models/schedule';
 import { DeviceService } from 'src/app/_services/resource.service';
-import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { FormControl } from '@angular/forms';
 import { UserBusinessDetail, UserProfile } from 'src/app/_models/user';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { ApiResponse, DataListResponse } from 'src/app/_models/response';
 import Utils from 'src/app/_utils/utils';
 import { Router } from '@angular/router';
-import { SocketService } from 'src/app/_services/socket.service';
-
 @Component({
   selector: 'app-add-device',
   templateUrl: './add-device.component.html',
@@ -59,8 +56,6 @@ export class AddDeviceComponent implements OnInit {
     private deviceService: DeviceService,
     private toastrService: ToastrService,
     private organizationService: OrganizationService,
-    private storageService: LocalStorageService,
-    private socketService: SocketService,
     private router: Router
   ) {
     this.selectedAssignee.setValue(this.intialAsignee);

@@ -7,8 +7,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { WrapperComponent } from './homepage/wrapper/wrapper.component';
 import { ActiveCalendarComponent } from './calendar/active-calendar/active-calendar.component';
-import { ProfileComponent } from './authentication/profile/profile.component';
-import { PublicPopupComponent } from './popup/public-popup/public-popup.component';
 import { PopupTemplateComponent } from './popup/popup-template/popup-template.component';
 import { PublicCalendarComponent } from './shared/public-calendar/public-calendar.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
@@ -22,16 +20,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 // import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { MatSortable } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
@@ -40,8 +35,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatChipsModule } from '@angular/material/chips';
-
-// import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import {
   NgxMatDatetimePickerModule,
   NgxMatNativeDateModule,
@@ -58,9 +51,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 //Other library packages Module
 import { ToastrModule } from 'ngx-toastr';
-import { timeout } from 'rxjs';
 import { AddEmployeeComponent } from './organization/resources/add-employee/add-employee.component';
-import { AddCalendarComponent } from './organization/resources/add-calendar/add-calendar.component';
 import { AddDeviceComponent } from './organization/devices/add-device/add-device.component';
 import { UserProfileComponent } from './organization/resources/user-profile/user-profile.component';
 import { OrgDashboardComponent } from './organization/org-dashboard/org-dashboard.component';
@@ -80,15 +71,12 @@ const lang = 'en-US';
     WrapperComponent,
     CreateScheduleComponent,
     ActiveCalendarComponent,
-    ProfileComponent,
-    PublicPopupComponent,
     PopupTemplateComponent,
     PublicCalendarComponent,
     GoogleAuthenComponent,
     AdminDashboardComponent,
     CustomPopupComponent,
     AddEmployeeComponent,
-    AddCalendarComponent,
     AddDeviceComponent,
     UserProfileComponent,
     OrgDashboardComponent,

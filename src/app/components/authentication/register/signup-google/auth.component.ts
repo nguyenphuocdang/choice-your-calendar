@@ -1,19 +1,10 @@
 import { Component, OnInit, Optional } from '@angular/core';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { AccountRegister, AccountVerify } from 'src/app/_models/user';
 import { UserService } from 'src/app/_services/user.service';
 import { Router } from '@angular/router';
-import Utils from 'src/app/_utils/utils';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',

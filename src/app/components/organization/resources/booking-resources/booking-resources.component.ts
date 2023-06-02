@@ -1,30 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  Optional,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { Component, OnInit, Optional, ViewChild } from '@angular/core';
 import {
   FormControl,
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import {
-  MatBottomSheet,
-  MatBottomSheetConfig,
-  MatBottomSheetRef,
-} from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  MatDrawerContainer,
-  MatSidenav,
-  MatSidenavContainer,
-} from '@angular/material/sidenav';
+import { MatSidenav } from '@angular/material/sidenav';
 import { ToastrService } from 'ngx-toastr';
 import {
   BookingSlotRequest,
@@ -35,18 +17,12 @@ import {
   MakeEventRequest,
   SingleEventDetail,
 } from 'src/app/_models/event';
-import { socketRequest } from 'src/app/_models/request';
 import { SearchDevice } from 'src/app/_models/resource';
 import { ResourceBasicInfo, ResourceDetail } from 'src/app/_models/resource';
-import {
-  ApiResponse,
-  CustomError,
-  DataListResponse,
-} from 'src/app/_models/response';
+import { ApiResponse, DataListResponse } from 'src/app/_models/response';
 import {
   BookingSlot,
   PublicBookingSlot,
-  ScheduleData,
   ScheduleDatas,
   TimeData,
 } from 'src/app/_models/schedule';
@@ -56,7 +32,6 @@ import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { DeviceService } from 'src/app/_services/resource.service';
 import { SocketService } from 'src/app/_services/socket.service';
-import { UserService } from 'src/app/_services/user.service';
 import Utils from 'src/app/_utils/utils';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 import { MatDatepicker } from '@angular/material/datepicker';

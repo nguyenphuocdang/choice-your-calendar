@@ -16,7 +16,7 @@ import {
 import { AccountRegister } from 'src/app/_models/user';
 import { UserService } from 'src/app/_services/user.service';
 import { PaymentService } from 'src/app/_services/payment.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { CustomPopupComponent } from 'src/app/components/popup/custom-popup/custom-popup.component';
 import { PopupService } from 'src/app/_services/popup.service';
 

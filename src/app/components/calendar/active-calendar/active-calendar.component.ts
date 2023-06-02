@@ -1,12 +1,5 @@
-import { Component, OnInit, forwardRef, Optional, Inject } from '@angular/core';
-//FullCalendar For Angular 14
-// import { CalendarOptions, defineFullCalendarElement } from '@fullcalendar/web-component';
-import dayGridPlugin from '@fullcalendar/daygrid';
-// import interactionPlugin from '@fullcalendar/interaction';
-import { Calendar, EventInput } from '@fullcalendar/core';
-
-//FullCalendar For Angular 13
-// import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput} from '@fullcalendar/angular';
+import { Component, OnInit, Optional } from '@angular/core';
+import { EventInput } from '@fullcalendar/core';
 import {
   CalendarOptions,
   DateSelectArg,
@@ -14,20 +7,11 @@ import {
   EventApi,
 } from '@fullcalendar/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
 import { CalendarService } from 'src/app/_services/calendar.service';
-import { DatePipe } from '@angular/common';
-import { formatDate } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { catchError, from, lastValueFrom } from 'rxjs';
 import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { ToastrService } from 'ngx-toastr';
-import { DOCUMENT } from '@angular/common';
-
 //Google Authen
-import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
 import Utils from 'src/app/_utils/utils';
-import { PopupTemplateComponent } from '../../popup/popup-template/popup-template.component';
 import { PopupService } from 'src/app/_services/popup.service';
 import {
   FreeTimeScheduleSlots,
@@ -39,8 +23,6 @@ import {
 import { CalendarEvent } from 'angular-calendar';
 import { CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarView } from 'angular-calendar';
-import { SocketService } from 'src/app/_services/socket.service';
-import { socketRequest } from 'src/app/_models/request';
 import { ApiResponse } from 'src/app/_models/response';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { UserProfile } from 'src/app/_models/user';
@@ -100,14 +82,11 @@ export class ActiveCalendarComponent implements OnInit {
 
   constructor(
     @Optional() private dialog: MatDialog,
-    private route: ActivatedRoute,
     private calendarService: CalendarService,
-    private socketService: SocketService,
     private toastrService: ToastrService,
     private popupService: PopupService,
     private organizationService: OrganizationService,
-    private storageService: LocalStorageService,
-    @Inject(DOCUMENT) private document: Document
+    private storageService: LocalStorageService
   ) {}
 
   async ngOnInit(): Promise<void> {

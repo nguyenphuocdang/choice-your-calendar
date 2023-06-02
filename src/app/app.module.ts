@@ -1,4 +1,4 @@
-import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -38,7 +38,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 //Bootstrap
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-//import { NgbNavModule, NgbCollapseModule, NgbTooltipModule,} from '@ng-bootstrap/ng-bootstrap';
 
 //Components
 import { NavComponent } from './components/homepage/nav/nav.component';
@@ -50,21 +49,13 @@ import { MaterialElevationDirective } from './custom-style/material-elevation.di
 import { LayoutComponent } from './components/homepage/layout/layout.component';
 import { CompletePaymentComponent } from './components/authentication/register/complete-payment/complete-payment.component';
 import { ProvideInformationComponent } from './components/authentication/register/provide-information/provide-information/provide-information.component';
-//Azure MSAL
-// import { MsalGuard, MsalInterceptor, MsalModule, MsalRedirectComponent, MSAL_INSTANCE} from '@azure/msal-angular';
-// import { BrowserCacheLocation, InteractionType, IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 
 //Angular Authentication
 import { AuthInterceptor } from './_authentication/auth.interceptor';
-import { AuthGuard } from './_authentication/auth.guard';
 import { ForbiddenComponent } from './components/authentication/forbidden/forbidden.component';
 
 //Angular FullCalendar
 import { FullCalendarModule } from '@fullcalendar/angular';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
-import interactionPlugin from '@fullcalendar/interaction';
 
 //Other libary packages
 import { ToastrModule } from 'ngx-toastr';
@@ -72,31 +63,6 @@ import { ToastrModule } from 'ngx-toastr';
 //Service
 import { CalendarService } from './_services/calendar.service';
 import { UserService } from './_services/user.service';
-
-const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
-
-const lang = 'en-US';
-
-// export function MSALinstanceFactory(): IPublicClientApplication
-// {
-//   return new PublicClientApplication({
-//     auth:
-//     {
-//       clientId: '45aeb46b-f1a4-4110-a6f0-255178752ed3',
-//       authority: 'https://login.microsoftonline.com/f069fbab-b0f7-4e8c-a14c-d042ab513525',
-//       redirectUri: 'http://localhost:4200',
-//     },
-//     cache:
-//     {
-//       cacheLocation: 'localStorage',
-//       storeAuthStateInCookie: false,
-//     }
-//   })
-// }
-
-import { Stomp, StompConfig } from '@stomp/stompjs';
-import { Socket } from 'socket.io-client';
-import * as SockJS from 'sockjs-client';
 @NgModule({
   declarations: [
     AppComponent,

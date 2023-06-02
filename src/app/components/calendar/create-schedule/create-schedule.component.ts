@@ -1,21 +1,14 @@
-import { AnimationMetadataType } from '@angular/animations';
 import { Component, OnInit, Optional, ViewChild } from '@angular/core';
 import {
-  AbstractControl,
   UntypedFormArray,
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Time } from 'src/app/_models/time';
 import { CalendarService } from 'src/app/_services/calendar.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialogRef } from '@angular/material/dialog';
-import { BehaviorSubject } from 'rxjs';
 import { ListTimeWorkingDatas, Schedule } from 'src/app/_models/schedule';
 
 @Component({
