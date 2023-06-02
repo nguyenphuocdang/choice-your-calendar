@@ -86,8 +86,8 @@
             <button mat-raised-button class="reschedule-button" *ngIf="hostFlag" (click)="onClickReschedulingEvent()">
                 Reschedule Event
             </button>
-            <button mat-raised-button class="cancel-button" *ngIf="hostFlag">
-                Cancel Event
+            <button mat-raised-button class="share-button" *ngIf="hostFlag">
+                Share Public Partner
             </button>
             <button mat-raised-button class="join-button" *ngIf="publicModeFlag && !participantFlag && !hostFlag"
                 (click)="joinOrganizationEvent()">

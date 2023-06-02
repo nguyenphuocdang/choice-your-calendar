@@ -186,7 +186,6 @@ export class InternalEventsComponent implements OnInit {
     const dialogRef = this.dialog.open(EventDetailComponent, {
       width: '800px',
       height: 'fit-content',
-      minHeight: '500px',
       data: {
         eventId: event.id,
         publicModeFlag: true,

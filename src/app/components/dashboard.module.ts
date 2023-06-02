@@ -6,22 +6,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 //Components
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { WrapperComponent } from './homepage/wrapper/wrapper.component';
-import { CalendarComponent } from './calendar/all-schedule-list/calendar.component';
-import { BookingEventsComponent } from './booking/booking-events/booking-events.component';
 import { ActiveCalendarComponent } from './calendar/active-calendar/active-calendar.component';
-import { DetailScheduleComponent } from './calendar/detail-schedule/detail-schedule.component';
-import { CreateBookingComponent } from './booking/create-booking/create-booking.component';
 import { ProfileComponent } from './authentication/profile/profile.component';
-import { InvitePartnersComponent } from './shared/invite-partners/invite-partners.component';
 import { PublicPopupComponent } from './popup/public-popup/public-popup.component';
 import { PopupTemplateComponent } from './popup/popup-template/popup-template.component';
 import { PublicCalendarComponent } from './shared/public-calendar/public-calendar.component';
-import { PrivateCalendarComponent } from './shared/private-calendar/private-calendar.component';
-import { ModifyEventComponent } from './popup/modify-event/modify-event.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { GoogleAuthenComponent } from './authentication/google-authen/google-authen.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
-import { FreeSlotsComponent } from './calendar/free-slots/free-slots.component';
 import { CustomPopupComponent } from './popup/custom-popup/custom-popup.component';
 
 // Angular Material Modules
@@ -47,7 +39,6 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatSelectFilterModule } from 'mat-select-filter';
 import { MatChipsModule } from '@angular/material/chips';
 
 // import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
@@ -58,12 +49,6 @@ import {
 } from '@angular-material-components/datetime-picker';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
-//Angular FullCalendar
-import { FullCalendarModule } from '@fullcalendar/angular';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
-import interactionPlugin from '@fullcalendar/interaction';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../_authentication/auth.interceptor';
 import { CreateScheduleComponent } from './calendar/create-schedule/create-schedule.component';
@@ -90,26 +75,17 @@ import { EventDetailComponent } from './organization/resources/booking-resources
 import { PublicEventDetailsComponent } from './organization/events/internal-events/public-event-details/public-event-details/public-event-details.component';
 const lang = 'en-US';
 
-const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
 @NgModule({
   declarations: [
     WrapperComponent,
-    CalendarComponent,
     CreateScheduleComponent,
     ActiveCalendarComponent,
-    DetailScheduleComponent,
-    BookingEventsComponent,
-    CreateBookingComponent,
     ProfileComponent,
-    InvitePartnersComponent,
-    PrivateCalendarComponent,
     PublicPopupComponent,
     PopupTemplateComponent,
     PublicCalendarComponent,
-    ModifyEventComponent,
     GoogleAuthenComponent,
     AdminDashboardComponent,
-    FreeSlotsComponent,
     CustomPopupComponent,
     AddEmployeeComponent,
     AddCalendarComponent,
@@ -156,7 +132,6 @@ const plugins = [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin];
     MatTooltipModule,
     MatTabsModule,
     // Full Calendar
-    FullCalendarModule,
     MatChipsModule,
     //Bootstrap
     NgbModule,

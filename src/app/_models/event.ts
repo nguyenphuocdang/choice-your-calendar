@@ -68,6 +68,7 @@ export class SingleEventDetail {
   hostFlag?: boolean;
   hostFullName?: string;
   participantFlag?: boolean;
+  cexternalSlotFlag?: boolean;
   constructor(data?: any) {
     this.id = data?.id;
     this.date = Utils.convertUTCtoDateString(data?.startTime, true);
@@ -84,6 +85,7 @@ export class SingleEventDetail {
     this.hostFullName = data?.hostFullName ?? '';
     this.publicModeFlag = data?.publicModeFlag ?? false;
     this.participantFlag = data?.participantFlag ?? false;
+    this.cexternalSlotFlag = data?.cexternalSlotFlag ?? false;
   }
 }
 

@@ -4,7 +4,6 @@ import { Component, OnInit, forwardRef, Optional, Inject } from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 // import interactionPlugin from '@fullcalendar/interaction';
 import { Calendar, EventInput } from '@fullcalendar/core';
-import timeGridPlugin from '@fullcalendar/timegrid';
 
 //FullCalendar For Angular 13
 // import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput} from '@fullcalendar/angular';
@@ -22,7 +21,6 @@ import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { catchError, from, lastValueFrom } from 'rxjs';
 import { LocalStorageService } from 'src/app/_services/local-storage.service';
-import { ModifyEventComponent } from '../../popup/modify-event/modify-event.component';
 import { ToastrService } from 'ngx-toastr';
 import { DOCUMENT } from '@angular/common';
 
@@ -323,16 +321,6 @@ export class ActiveCalendarComponent implements OnInit {
     return INITIAL_EVENTS;
   }
 
-  addMoreEventClick() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      title: 'ADD MORE EVENT',
-      scheduleId: this.scheduleId,
-      selectInfo: this.selectInfo,
-    };
-    this.dialog.open(ModifyEventComponent, dialogConfig);
-  }
-
   handleDateSelect(selectInfo: DateSelectArg) {
     const calendarApi = selectInfo.view.calendar;
 
@@ -355,69 +343,6 @@ export class ActiveCalendarComponent implements OnInit {
       startTime: _convertSelectedStartTime,
       endTime: _convertSelectedEndTime,
     };
-    // this.dialog.open(ModifyEventComponent, dialogConfig);
-
-    const dialogRef = this.dialog.open(ModifyEventComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe((response: any) => {
-      debugger;
-      if (response.isModified == true) {
-        calendarApi.addEvent({
-          id: '',
-          title: response.title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-        });
-      } else {
-      }
-    });
-
-    //   for (let i = 0; i < this.ACTIVE_EVENTS.length; i++)
-    //   {
-    //     let _convertStartToString: string = this.ACTIVE_EVENTS[i].start?.toLocaleString() ?? '';
-    //     let _convertStartToDate = new Date(_convertStartToString);
-    //     let _convertStartToDateString = _convertStartToDate.toDateString();
-    //     if (_selectedDate == _convertStartToDateString)
-    //     {
-    //       let _convertStartToTimeString = _convertStartToDate.toTimeString();
-    //       let _convertEndToString: string = this.ACTIVE_EVENTS[i].end?.toLocaleString() ?? '';
-    //       let _convertEndToDate = new Date(_convertEndToString);
-    //       let _convertEndToTimeString = _convertEndToDate.toTimeString();
-
-    //       const dialogConfig = new MatDialogConfig();
-    //       console.log(this.scheduleId);
-    //       dialogConfig.data =
-    //       {
-    //         title: 'ADD MORE EVENT',
-    //         scheduleId: this.scheduleId,
-    //         selectInfo: this.selectInfo,
-    //         date: _selectedDate,
-    //         startTime: _convertSelectedStartTime,
-    //         endTime: _convertSelectedEndTime,
-    //       };
-
-    //       // this.dialog.open(ModifyEventComponent, dialogConfig);
-
-    //       const dialogRef = this.dialog.open(ModifyEventComponent, dialogConfig);
-
-    //       dialogRef.afterClosed().subscribe((response: any) =>
-    //       {
-    //         debugger
-    //       });
-
-    //       // if (this._isOverlap(_convertSelectedStartTime,_convertSelectedEndTime,_convertStartToTimeString,_convertEndToTimeString))
-    //       // {
-    //       //   this.toastrService.error('Time Overlapping', 'Error');
-    //       // }
-
-    //       // else
-    //       // {
-
-    //       //   // this.date = _selectedDate;
-    //       //   // this.bookingEvent.startTime = selectInfo.startStr.toString();
-    //       //   // this.bookingEvent.endTime = selectInfo.endStr.toString();
-    //     }
-    // }
   }
 
   _isOverlap(

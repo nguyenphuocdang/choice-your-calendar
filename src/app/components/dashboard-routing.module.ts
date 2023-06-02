@@ -1,15 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CalendarComponent } from './calendar/all-schedule-list/calendar.component';
 import { WrapperComponent } from './homepage/wrapper/wrapper.component';
 import { ActiveCalendarComponent } from './calendar/active-calendar/active-calendar.component';
-import { BookingEventsComponent } from './booking/booking-events/booking-events.component';
-import { CreateBookingComponent } from './booking/create-booking/create-booking.component';
-import { ProfileComponent } from './authentication/profile/profile.component';
 import { CreateScheduleComponent } from './calendar/create-schedule/create-schedule.component';
-import { InvitePartnersComponent } from './shared/invite-partners/invite-partners.component';
 import { PublicCalendarComponent } from './shared/public-calendar/public-calendar.component';
-import { PrivateCalendarComponent } from './shared/private-calendar/private-calendar.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { UserProfileComponent } from './organization/resources/user-profile/user-profile.component';
 import { OrgDashboardComponent } from './organization/org-dashboard/org-dashboard.component';
@@ -30,10 +24,6 @@ const routes: Routes = [
     component: WrapperComponent,
     children: [
       {
-        path: 'booking-events',
-        component: BookingEventsComponent,
-      },
-      {
         path: 'create-calendar',
         component: CreateScheduleComponent,
       },
@@ -42,25 +32,13 @@ const routes: Routes = [
         component: ActiveCalendarComponent,
       },
       {
-        path: 'all-schedule',
-        component: CalendarComponent,
-      },
-      {
         path: 'user-profile',
         component: UserProfileComponent,
-      },
-      {
-        path: 'invite-partners',
-        component: InvitePartnersComponent,
       },
       // {
       //   path: 'public-calendar/:pathMapping',
       //   component: PublicCalendarComponent,
       // },
-      {
-        path: 'private',
-        component: PrivateCalendarComponent,
-      },
       {
         path: 'user-profile',
         component: UserProfileComponent,
