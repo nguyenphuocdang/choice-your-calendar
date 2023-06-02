@@ -1,0 +1,222 @@
+.container {
+  max-width: 100%;
+  height: 100vh;
+  background-image: linear-gradient(to right, #8aeed3, #f0f0f0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .public-event-info {
+    width: 60%;
+    height: 70%;
+    mat-card {
+      mat-card-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        background-color: white;
+        position: relative;
+        .web-title {
+          height: 7%;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          user-select: none;
+          margin: 1%;
+          .logo {
+            height: 70%;
+          }
+        }
+        .page-title {
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+            Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+            sans-serif;
+          font-size: xx-large;
+          font-weight: 700;
+          text-align: center;
+          height: 10%;
+          top: 10%;
+          user-select: none;
+        }
+
+        .event-information {
+          width: 90%;
+          margin: auto;
+          padding-bottom: 2rem;
+          .event-detail {
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+            .close-icon {
+              font-size: 30px;
+              color: #24931e;
+              margin-left: auto;
+              cursor: pointer;
+            }
+            .date {
+              font-size: large;
+              font-weight: 500;
+              text-transform: uppercase;
+              color: rgb(3, 119, 61);
+            }
+            .title {
+              font-size: x-large;
+              font-weight: 500;
+            }
+            .description {
+              font-size: medium;
+            }
+            .line {
+              width: 100%;
+              height: 0.1px;
+              background-color: #bbb3b3;
+            }
+            .with-icon {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+              span {
+                font-size: medium;
+              }
+              mat-icon {
+                color: rgb(3, 119, 61);
+              }
+            }
+            .room {
+              display: flex;
+              flex: 1;
+              flex-direction: row;
+              align-items: center;
+              gap: 1rem;
+              .pending {
+                border: 1px solid #ffd86f;
+                border-radius: 5px;
+                padding: 0.5%;
+                padding-left: 2%;
+                padding-right: 2%;
+                color: #b69812;
+                background-color: #ffefc3;
+              }
+              .success {
+                border: 1px solid #ffd86f;
+                border-radius: 5px;
+                padding: 0.5%;
+                padding-left: 2%;
+                padding-right: 2%;
+                color: #66042b;
+                background-color: #f0c3d0;
+              }
+            }
+
+            .email-textfield {
+              mat-form-field {
+                height: fit-content;
+                width: 35rem;
+                border-radius: 5px;
+                background-color: rgb(255, 255, 255);
+              }
+              ::ng-deep .mat-form-field-infix {
+                border-top: 0 !important;
+              }
+              ::ng-deep .mat-form-field-underline {
+                display: none;
+              }
+              ::ng-deep .mat-form-field-flex {
+                background-color: #f7f7f7;
+              }
+              ::ng-deep .mat-form-field-wrapper {
+                border-radius: 5px;
+                background-color: rgb(255, 255, 255);
+                padding-bottom: 0;
+              }
+              input {
+                border: 1px solid white;
+                background-color: white;
+                width: 20rem;
+                height: 2.25rem;
+                padding-left: 2px;
+                padding-left: 1rem;
+              }
+            }
+
+            .button-class {
+              display: flex;
+              flex-direction: row;
+              justify-content: end;
+              gap: 1rem;
+              button {
+                display: flex;
+                color: white;
+                ::ng-deep .mat-button-wrapper {
+                  display: flex;
+                  align-items: center;
+                  gap: 0.25rem;
+                }
+              }
+              .reschedule-button {
+                background-color: rgb(43, 2, 153);
+              }
+              .share-button {
+                background-color: rgb(14, 146, 104);
+              }
+              .join-button {
+                background-color: #0cbb67;
+              }
+              .participating-button {
+                background-color: rgb(43, 2, 153);
+              }
+            }
+          }
+
+          ::ng-deep .mat-menu-user-list {
+            position: absolute;
+            bottom: 12rem;
+            left: 5rem;
+            width: fit-content;
+            min-width: 20rem;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            .mat-menu-content {
+              padding: 10px;
+              display: flex;
+              flex-direction: column;
+              height: 100%;
+              width: 100%;
+              gap: 0.75rem;
+            }
+          }
+
+          ::ng-deep .mat-menu-panel {
+            min-height: 42px !important;
+          }
+        }
+      }
+    }
+  }
+
+  .default-font {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+      sans-serif;
+    font-size: large;
+    font-weight: 500;
+    margin: auto 0;
+    user-select: none;
+  }
+}
+
+input {
+  border-radius: 5px;
+  border: 2px solid rgb(221, 212, 212);
+  padding-left: 2%;
+  padding-right: 2%;
+  margin-bottom: 2%;
+  margin: auto;
+  height: 2.5rem;
+  width: 20rem;
+}
