@@ -12,6 +12,7 @@ import { ProvideInformationComponent } from './components/authentication/registe
 import { CompletePaymentComponent } from './components/authentication/register/complete-payment/complete-payment.component';
 import { PublicCalendarComponent } from './components/shared/public-calendar/public-calendar.component';
 import { PublicEventDetailsComponent } from './components/organization/events/internal-events/public-event-details/public-event-details/public-event-details.component';
+import { PublicOrganizationEventComponent } from './components/public-organization-event/public-organization-event.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'authorize/oauth2/user/callback',
     component: GoogleAuthenComponent,
+  },
+  {
+    path: 'public-event',
+    component: PublicOrganizationEventComponent,
   },
   {
     path: 'public-calendar',

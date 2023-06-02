@@ -467,4 +467,38 @@ export class EventService {
       })
     );
   }
+
+  sharePublicEventToPartner(
+    eventId: number,
+    listPartnerEmail: string[]
+  ): Observable<any> {
+    const requestUrl: string = `${Utils.ORGANIZATION_API}/event/share-public-event`;
+    const requestBody: any = {
+      eventId: eventId,
+      listPartnerEmail: listPartnerEmail,
+    };
+    return this.http.post<ApiResponse<any>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        return throwError(error);
+      })
+    );
+  }
+
+  joinPublicEventByPublicPartner(requestBody: any): Observable<any> {
+    debugger;
+    const requestUrl = `${Utils.PUBLIC_EVENT_API}/join`;
+    return this.http.put<ApiResponse<any>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        return throwError(error);
+      })
+    );
+  }
 }

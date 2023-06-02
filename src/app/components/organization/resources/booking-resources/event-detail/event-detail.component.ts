@@ -1,4 +1,7 @@
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { SingleEventDetail } from 'src/app/_models/event';
@@ -44,6 +47,11 @@ export class EventDetailComponent implements OnInit {
     email: '',
     hostEventFlag: false,
   };
+  emails: string[] = [];
+  mailCtrl = new FormControl();
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  isSelectSharingEvent: boolean = false;
+
   constructor(
     public dialogRef: MatDialogRef<EventDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -59,6 +67,26 @@ export class EventDetailComponent implements OnInit {
     this._getDevicesInEvent(this.eventId);
     this._getUserInEvent(this.eventId);
   }
+
+  addChip(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our fruit
+    if (value) {
+      this.emails.push(value);
+    }
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.mailCtrl.setValue(null);
+  }
+
+  removeChip(email: string): void {
+    const index = this.emails.indexOf(email);
+    if (index >= 0) {
+      this.emails.splice(index, 1);
+    }
+  }
   _getEventDetail(eventId: number) {
     try {
       this.eventService
@@ -66,7 +94,6 @@ export class EventDetailComponent implements OnInit {
         .subscribe((response: ApiResponse<SingleEventDetail>) => {
           if (response.statusCode === 200) {
             this.eventInformation = new SingleEventDetail(response.data);
-            debugger;
           } else {
             debugger;
           }
@@ -157,5 +184,28 @@ export class EventDetailComponent implements OnInit {
   onClickReschedulingEvent() {
     this.triggerEvent.emit(this.eventInformation);
     this.dialogRef.close();
+  }
+
+  onClickShareToPublicPartner() {
+    this.isSelectSharingEvent = true;
+  }
+
+  onSharingEventToPartner() {
+    try {
+      this.eventService
+        .sharePublicEventToPartner(this.eventInformation.id, this.emails)
+        .subscribe((response: ApiResponse<any>) => {
+          if (response.statusCode === 200) {
+            debugger;
+            this.toastrService.success(
+              'Your event has been shared to your partner'
+            );
+          } else {
+            debugger;
+          }
+        });
+    } catch (error) {
+      debugger;
+    }
   }
 }

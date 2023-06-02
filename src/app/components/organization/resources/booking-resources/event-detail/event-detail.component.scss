@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  overflow-y: auto;
   .close-icon {
     font-size: 30px;
     color: #24931e;
@@ -61,6 +62,37 @@
       padding-right: 2%;
       color: #66042b;
       background-color: #f0c3d0;
+    }
+  }
+
+  .email-textfield {
+    mat-form-field {
+      height: fit-content;
+      width: 35rem;
+      border-radius: 5px;
+      background-color: rgb(255, 255, 255);
+    }
+    ::ng-deep .mat-form-field-infix {
+      border-top: 0 !important;
+    }
+    ::ng-deep .mat-form-field-underline {
+      display: none;
+    }
+    ::ng-deep .mat-form-field-flex {
+      background-color: #f7f7f7;
+    }
+    ::ng-deep .mat-form-field-wrapper {
+      border-radius: 5px;
+      background-color: rgb(255, 255, 255);
+      padding-bottom: 0;
+    }
+    input {
+      border: 1px solid white;
+      background-color: white;
+      width: 20rem;
+      height: 2.25rem;
+      padding-left: 2px;
+      padding-left: 1rem;
     }
   }
 

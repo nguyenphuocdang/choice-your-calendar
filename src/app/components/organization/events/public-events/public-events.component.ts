@@ -1,39 +1,11 @@
-import { Component, OnInit, forwardRef, Optional, Inject } from '@angular/core';
-//FullCalendar For Angular 14
-// import { CalendarOptions, defineFullCalendarElement } from '@fullcalendar/web-component';
-import dayGridPlugin from '@fullcalendar/daygrid';
-// import interactionPlugin from '@fullcalendar/interaction';
-import { Calendar, EventInput } from '@fullcalendar/core';
-import timeGridPlugin from '@fullcalendar/timegrid';
-
-//FullCalendar For Angular 13
-// import {CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput} from '@fullcalendar/angular';
-import {
-  CalendarOptions,
-  DateSelectArg,
-  EventClickArg,
-  EventApi,
-} from '@fullcalendar/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { CalendarService } from 'src/app/_services/calendar.service';
-import { DatePipe } from '@angular/common';
-import { formatDate } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { catchError, from, last, lastValueFrom } from 'rxjs';
-import { LocalStorageService } from 'src/app/_services/local-storage.service';
-
+import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { DOCUMENT } from '@angular/common';
-
 import { PublicScheduleData, PublicTimeData } from 'src/app/_models/schedule';
 //Angular Calendar
 import { ApiResponse } from 'src/app/_models/response';
 import { EventService } from 'src/app/_services/event.service';
 import { FormControl } from '@angular/forms';
 import { MakePublicShareRequest } from 'src/app/_models/event';
-import { MatChipInputEvent } from '@angular/material/chips';
-
 @Component({
   selector: 'app-public-events',
   templateUrl: './public-events.component.html',
@@ -148,7 +120,6 @@ export class PublicEventsComponent implements OnInit {
         this.eventService
           .createPublicShare(requestBody)
           .subscribe((response: any) => {
-            debugger;
             if (response.statusCode === 200) {
               const publicShareId: number = response.data.id;
               this.eventService
@@ -187,19 +158,10 @@ export class PublicEventsComponent implements OnInit {
     }
   }
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value) {
-      this.listEmails.push(value);
-    }
-    event.chipInput!.clear();
-    this.listEmailsFormControl.setValue(null);
-  }
-
-  remove(email: string): void {
-    const index = this.listEmails.indexOf(email);
+  removeChip(email: string): void {
+    const index = this.emails.indexOf(email);
     if (index >= 0) {
-      this.listEmails.splice(index, 1);
+      this.emails.splice(index, 1);
     }
   }
 }

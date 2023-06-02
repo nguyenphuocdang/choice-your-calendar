@@ -1,0 +1,70 @@
+<div class="container">
+    <div class="public-event-info">
+        <mat-card>
+            <mat-card-content>
+                <div class="web-title">
+                    <img src='assets/images/register-logo.png' class='logo'>
+                    <span class="default-font">timechoice</span>
+                </div>
+                <div class="page-title">
+                    EVENT INFORMATION
+                </div>
+                <div class="event-information">
+                    <div class="event-detail">
+
+                        <span class="date">
+                            {{eventInformation.date}}
+                        </span>
+                        <span class="title">
+                            {{eventInformation.eventName}}
+                        </span>
+                        <span class="description" *ngIf="eventInformation.eventDescription">
+                            {{eventInformation.eventDescription}}
+                        </span>
+                        <span class=" line"></span>
+                        <span class="time with-icon">
+                            <mat-icon>alarm</mat-icon>
+                            <span>From {{eventInformation.startTime}} to {{eventInformation.endTime}}</span>
+                        </span>
+                        <span class="event-type with-icon">
+                            <mat-icon>event_available</mat-icon>
+                            <span
+                                *ngIf="eventInformation.appointmentUrl && eventInformation.appointmentUrl!.length > 0">
+                                Online Meeting
+                                <a [href]='eventInformation.appointmentUrl'>Open Link</a>
+                            </span>
+                            <span *ngIf="!eventInformation.appointmentUrl">
+                                Offline Meeting
+                            </span>
+                        </span>
+                        <span class="location with-icon">
+                            <mat-icon>location_on</mat-icon>
+                            <span>{{eventInformation.location}}</span>
+                        </span>
+                        <span class="with-icon">
+                            <mat-icon>person</mat-icon>
+                            <span>Host: {{eventInformation.hostEmail}}</span>
+                        </span>
+                        <div class="email">
+                            <input type="text" placeholder="Type your email" [(ngModel)]="partnerEmail">
+                        </div>
+                        <div class="button-class">
+                            <button mat-raised-button class="join-button" *ngIf="!participantFlag"
+                                (click)="onClickJoinPublicEventByPartner()">
+                                JOIN EVENT
+                            </button>
+                            <button mat-raised-button class="participating-button" *ngIf="participantFlag"
+                                [disabled]="participantFlag">
+                                <mat-icon>stars</mat-icon>
+                                IS PARTICIPATING
+                            </button>
+                        </div>
+                        <!-- <span class="list-participants with-icon">
+                            <span *ngFor="let item of userList">{{item.fullname}}</span>
+                        </span> -->
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

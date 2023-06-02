@@ -61,13 +61,36 @@
                 </mat-menu>
         </span>
 
+        <div class="email-textfield  with-icon" *ngIf="isSelectSharingEvent">
+            <mat-icon>mail</mat-icon>
+            <mat-form-field appearance="fill">
+                <mat-chip-list #chipList>
+                    <mat-chip *ngFor="let email of emails" [removable]="true" (removed)="removeChip(email)">
+                        {{ email }}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                </mat-chip-list>
+
+                <div style="display: flex; justify-content: space-between; gap:4rem">
+                    <input placeholder="Enter your partner's email ... " #chipInput [formControl]="mailCtrl"
+                        [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="addChip($event)">
+                    <button mat-raised-button class="share-button"
+                        style="background-color: rgb(14, 146, 104); color: white" (click)="onSharingEventToPartner()">
+                        Share
+                    </button>
+                </div>
+            </mat-form-field>
+        </div>
+
         <div class="button-class">
             <button mat-raised-button class="reschedule-button" *ngIf="eventInformation.hostFlag"
                 (click)="onClickReschedulingEvent()">
                 Reschedule Event
             </button>
             <button mat-raised-button class="share-button"
-                *ngIf="eventInformation.cexternalSlotFlag && eventInformation.hostFlag">
+                *ngIf="!eventInformation.cexternalSlotFlag && eventInformation.hostFlag && eventInformation.publicModeFlag"
+                (click)='onClickShareToPublicPartner()'>
                 Share Public Partner
             </button>
             <button mat-raised-button class="join-button"

@@ -18,7 +18,7 @@
             <div class="email-textfield">
                 <mat-form-field appearance="fill">
                     <mat-chip-list #chipList>
-                        <mat-chip *ngFor="let email of emails" [removable]="true" (removed)="remove(email)">
+                        <mat-chip *ngFor="let email of emails" [removable]="true" (removed)="removeChip(email)">
                             {{ email }}
                             <mat-icon matChipRemove>cancel</mat-icon>
                         </mat-chip>
