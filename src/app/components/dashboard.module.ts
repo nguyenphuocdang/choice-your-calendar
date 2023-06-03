@@ -10,7 +10,7 @@ import { ActiveCalendarComponent } from './organization/active-calendar/active-c
 
 import { PopupTemplateComponent } from './popup/popup-template/popup-template.component';
 
-import { PublicCalendarComponent } from './public/public-calendar/public-calendar.component';
+import { PublicCalendarComponent } from './public/public-booking-slots/public-calendar.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { GoogleAuthenComponent } from './authentication/google-authen/google-authen.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
@@ -65,7 +65,7 @@ import { InternalEventsComponent } from './organization/events/organization-even
 import { EventDetailComponent } from './organization/events/event-detail/event-detail.component';
 import { PublicEventDetailsComponent } from './public/public-event-details/public-event-details.component';
 import { PublicOrganizationEventComponent } from './public/public-organization-event/public-organization-event.component';
-import { ReschedulePublicCalendarComponent } from './public/reschedule-public-calendar/reschedule-public-calendar.component';
+import { ReschedulePublicCalendarComponent } from './public/reschedule-booking-slots/reschedule-public-calendar.component';
 const lang = 'en-US';
 
 @NgModule({

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WrapperComponent } from './homepage/wrapper/wrapper.component';
 import { ActiveCalendarComponent } from './organization/active-calendar/active-calendar.component';
-import { PublicCalendarComponent } from './public/public-calendar/public-calendar.component';
+import { PublicCalendarComponent } from './public/public-booking-slots/public-calendar.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { UserProfileComponent } from './organization/employee/user-profile/user-profile.component';
 import { OrgDashboardComponent } from './organization/org-dashboard/org-dashboard.component';
