@@ -6,7 +6,7 @@ import { ApiResponse, DataListResponse } from 'src/app/_models/response';
 import { UserBusinessDetail } from 'src/app/_models/user';
 import { EventService } from 'src/app/_services/event.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
-import { EventDetailComponent } from '../../resources/booking-resources/event-detail/event-detail.component';
+import { EventDetailComponent } from '../event-detail/event-detail.component';
 @Component({
   selector: 'app-internal-events',
   templateUrl: './internal-events.component.html',

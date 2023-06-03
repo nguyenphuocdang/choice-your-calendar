@@ -1,5 +1,5 @@
 import Utils from '../_utils/utils';
-import { BookingResourcesComponent } from '../components/organization/resources/booking-resources/booking-resources.component';
+import { BookingResourcesComponent } from '../components/organization/booking-resources/booking-resources.component';
 import { DeviceOfEvent } from './resource';
 
 export class EventSearchRequest {

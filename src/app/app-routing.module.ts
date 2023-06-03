@@ -10,10 +10,10 @@ import { AdminDashboardComponent } from './components/admin/admin-dashboard/admi
 import { PricingComponent } from './components/pricing/pricing.component';
 import { ProvideInformationComponent } from './components/authentication/register/provide-information/provide-information/provide-information.component';
 import { CompletePaymentComponent } from './components/authentication/register/complete-payment/complete-payment.component';
-import { PublicCalendarComponent } from './components/shared/public-calendar/public-calendar.component';
-import { PublicEventDetailsComponent } from './components/organization/events/internal-events/public-event-details/public-event-details/public-event-details.component';
-import { PublicOrganizationEventComponent } from './components/public-organization-event/public-organization-event.component';
-import { ReschedulePublicCalendarComponent } from './components/shared/reschedule-public-calendar/reschedule-public-calendar.component';
+import { PublicCalendarComponent } from './components/public/public-calendar/public-calendar.component';
+import { PublicEventDetailsComponent } from './components/public/public-event-details/public-event-details.component';
+import { PublicOrganizationEventComponent } from './components/public/public-organization-event/public-organization-event.component';
+import { ReschedulePublicCalendarComponent } from './components/public/reschedule-public-calendar/reschedule-public-calendar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },

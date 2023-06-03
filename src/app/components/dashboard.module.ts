@@ -6,9 +6,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 //Components
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { WrapperComponent } from './homepage/wrapper/wrapper.component';
-import { ActiveCalendarComponent } from './calendar/active-calendar/active-calendar.component';
+import { ActiveCalendarComponent } from './organization/active-calendar/active-calendar.component';
+
 import { PopupTemplateComponent } from './popup/popup-template/popup-template.component';
-import { PublicCalendarComponent } from './shared/public-calendar/public-calendar.component';
+
+import { PublicCalendarComponent } from './public/public-calendar/public-calendar.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { GoogleAuthenComponent } from './authentication/google-authen/google-authen.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
@@ -44,34 +46,31 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../_authentication/auth.interceptor';
-import { CreateScheduleComponent } from './calendar/create-schedule/create-schedule.component';
-
 //Bootstrap Module
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 //Other library packages Module
 import { ToastrModule } from 'ngx-toastr';
-import { AddEmployeeComponent } from './organization/resources/add-employee/add-employee.component';
+import { AddEmployeeComponent } from './organization/employee/add-employee/add-employee.component';
 import { AddDeviceComponent } from './organization/devices/add-device/add-device.component';
-import { UserProfileComponent } from './organization/resources/user-profile/user-profile.component';
+import { UserProfileComponent } from './organization/employee/user-profile/user-profile.component';
 import { OrgDashboardComponent } from './organization/org-dashboard/org-dashboard.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MaterialElevationDirective } from '../custom-style/material-elevation2.directive';
-import { BookingResourcesComponent } from './organization/resources/booking-resources/booking-resources.component';
-import { ApproveDashboardComponent } from './organization/resources/approve-dashboard/approve-dashboard.component';
-import { PublicEventsComponent } from './organization/events/public-events/public-events.component';
-import { InternalEventsComponent } from './organization/events/internal-events/internal-events.component';
-import { EventDetailComponent } from './organization/resources/booking-resources/event-detail/event-detail.component';
-import { PublicEventDetailsComponent } from './organization/events/internal-events/public-event-details/public-event-details/public-event-details.component';
-import { PublicOrganizationEventComponent } from './public-organization-event/public-organization-event.component';
-import { ReschedulePublicCalendarComponent } from './shared/reschedule-public-calendar/reschedule-public-calendar.component';
+import { BookingResourcesComponent } from './organization/booking-resources/booking-resources.component';
+import { ApproveDashboardComponent } from './organization/devices/approve-dashboard/approve-dashboard.component';
+import { PublicEventsComponent } from './organization/events/public-sharing-slots/public-events.component';
+import { InternalEventsComponent } from './organization/events/organization-events/internal-events.component';
+import { EventDetailComponent } from './organization/events/event-detail/event-detail.component';
+import { PublicEventDetailsComponent } from './public/public-event-details/public-event-details.component';
+import { PublicOrganizationEventComponent } from './public/public-organization-event/public-organization-event.component';
+import { ReschedulePublicCalendarComponent } from './public/reschedule-public-calendar/reschedule-public-calendar.component';
 const lang = 'en-US';
 
 @NgModule({
   declarations: [
     WrapperComponent,
-    CreateScheduleComponent,
     ActiveCalendarComponent,
     PopupTemplateComponent,
     PublicCalendarComponent,

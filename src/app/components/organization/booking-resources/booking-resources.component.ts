@@ -33,7 +33,7 @@ import { OrganizationService } from 'src/app/_services/organization.service';
 import { DeviceService } from 'src/app/_services/resource.service';
 import { SocketService } from 'src/app/_services/socket.service';
 import Utils from 'src/app/_utils/utils';
-import { EventDetailComponent } from './event-detail/event-detail.component';
+import { EventDetailComponent } from '../events/event-detail/event-detail.component';
 import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
