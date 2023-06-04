@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SingleEventDetail } from 'src/app/_models/event';
 import { EventService } from 'src/app/_services/event.service';
+import Utils from 'src/app/_utils/utils';
 
 @Component({
   selector: 'app-public-organization-event',
@@ -54,10 +55,8 @@ export class PublicOrganizationEventComponent implements OnInit {
         )
         .subscribe((response: any) => {
           if (response.statusCode === 200) {
-            debugger;
             this.eventInformation = new SingleEventDetail(response.data);
           } else {
-            debugger;
           }
         });
     } catch (error: any) {
@@ -77,17 +76,17 @@ export class PublicOrganizationEventComponent implements OnInit {
       this.eventService
         .joinPublicEventByPublicPartner(requestBody)
         .subscribe((response: any) => {
-          debugger;
           if (response.statusCode === 200) {
             this.toastrService.success('Your event is ready to go', 'SUCCESS');
             this.participantFlag = true;
           } else {
-            debugger;
-            this.toastrService.error(response.errors.errorMessage);
+            let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+            this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
           }
         });
     } catch (error: any) {
-      debugger;
+      let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+      this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
     }
   }
 }

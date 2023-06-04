@@ -68,7 +68,7 @@
 
       .email-textfield {
         mat-form-field {
-          height: 3.25rem;
+          height: fit-content;
           width: 35rem;
           border-radius: 5px;
           background-color: rgb(255, 255, 255);

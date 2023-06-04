@@ -211,7 +211,7 @@ export class EventService {
         }),
         catchError((err: any) => {
           debugger;
-          return throwError(err);
+          return of(new CustomError(err));
         })
       );
   }
@@ -417,11 +417,9 @@ export class EventService {
   }
 
   createPublicShare(requestBody: MakePublicShareRequest): Observable<any> {
-    debugger;
     const requestUrl = `${Utils.ORGANIZATION_API}/schedule/public-share/add`;
     return this.http.post<ApiResponse<any>>(requestUrl, requestBody).pipe(
       map((response: ApiResponse<any>) => {
-        debugger;
         if (response.statusCode === 200) return response;
         else return new CustomError(response.errors);
       }),
@@ -441,6 +439,7 @@ export class EventService {
       listPartnerEmail: listEmails,
       publicShareId: publicShareId,
     };
+    debugger;
     return this.http.post<ApiResponse<any>>(requestUrl, requestBody).pipe(
       map((response: ApiResponse<any>) => {
         if (response.statusCode === 200) return response;
@@ -531,7 +530,22 @@ export class EventService {
         else return new CustomError(response.errors);
       }),
       catchError((error: any) => {
-        return throwError(error);
+        return of(new CustomError(error));
+      })
+    );
+  }
+
+  suggestTimeForRescheduleByPublicPartner(requestBody: any): Observable<any> {
+    debugger;
+    const requestUrl = `${Utils.PUBLIC_EVENT_API}/suggest-new-time-for-reschedule`;
+    return this.http.put<ApiResponse<any>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        debugger;
+        return of(new CustomError(error));
       })
     );
   }

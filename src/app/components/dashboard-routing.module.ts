@@ -63,7 +63,7 @@ const routes: Routes = [
         component: ApproveDashboardComponent,
       },
       {
-        path: 'public-events',
+        path: 'public-sharing-slots',
         component: PublicEventsComponent,
       },
       // {

@@ -7,10 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { WrapperComponent } from './homepage/wrapper/wrapper.component';
 import { ActiveCalendarComponent } from './organization/active-calendar/active-calendar.component';
-
 import { PopupTemplateComponent } from './popup/popup-template/popup-template.component';
-
-import { PublicCalendarComponent } from './public/public-booking-slots/public-calendar.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { GoogleAuthenComponent } from './authentication/google-authen/google-authen.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
@@ -65,7 +62,6 @@ import { InternalEventsComponent } from './organization/events/organization-even
 import { EventDetailComponent } from './organization/events/event-detail/event-detail.component';
 import { PublicEventDetailsComponent } from './public/public-event-details/public-event-details.component';
 import { PublicOrganizationEventComponent } from './public/public-organization-event/public-organization-event.component';
-import { ReschedulePublicCalendarComponent } from './public/reschedule-booking-slots/reschedule-public-calendar.component';
 const lang = 'en-US';
 
 @NgModule({
@@ -73,7 +69,6 @@ const lang = 'en-US';
     WrapperComponent,
     ActiveCalendarComponent,
     PopupTemplateComponent,
-    PublicCalendarComponent,
     GoogleAuthenComponent,
     AdminDashboardComponent,
     CustomPopupComponent,
@@ -89,7 +84,6 @@ const lang = 'en-US';
     EventDetailComponent,
     PublicEventDetailsComponent,
     PublicOrganizationEventComponent,
-    ReschedulePublicCalendarComponent,
   ],
   imports: [
     FormsModule,

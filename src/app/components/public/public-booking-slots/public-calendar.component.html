@@ -1,3 +1,4 @@
+<app-layout></app-layout>
 <div class="container">
   <div class="container2">
     <div class="title">
@@ -5,24 +6,11 @@
         Book Slots
       </span>
     </div>
-    <div class="filter">
-      <div class="filter-by-time">
-
-        <input type="text" placeholder="Type your email" [(ngModel)]="partnerEmail">
-
-      </div>
-      <!-- <div class="filter-by-hoster-name">
-        <mat-form-field appearance="fill">
-          <mat-select>
-            <mat-option value="all-hoster">
-              All Hosters
-            </mat-option>
-            <mat-option *ngFor="let eventHoster of eventHostersList" [value]="eventHoster.email">
-              {{eventHoster.email}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div> -->
+    <div class="provide-information">
+      <span style="font-weight: 500; color: rgba(15, 4, 165, 0.651); font-size: medium;">
+        Please type your email for booking slot.
+      </span>
+      <input type="text" placeholder="Type your email" [(ngModel)]="partnerEmail">
     </div>
     <div class="events-grid-container">
       <div class="events-grid-item" *ngFor="let element of publicBookingSlots.timeDatas, let index = index">
@@ -51,3 +39,4 @@
     </div>
   </div>
 </div>
+<app-bottom-nav></app-bottom-nav>

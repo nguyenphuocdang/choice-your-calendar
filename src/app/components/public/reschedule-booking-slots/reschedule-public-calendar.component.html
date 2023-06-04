@@ -1,3 +1,4 @@
+<app-layout></app-layout>
 <div class="container">
     <div class="container2">
         <div class="title">
@@ -5,9 +6,16 @@
                 Available Slots For Reschedule Booking
             </span>
         </div>
-        <div class="filter">
-            <div class="filter-by-time">
-                <input type="text" placeholder="Type your reason" [(ngModel)]="reason">
+        <div class="provide-information">
+            <span style="font-weight: 500; color: rgba(15, 4, 165, 0.651); font-size: medium;">
+                Please provide your reason for rescheduling booking slot.
+            </span>
+            <input type="text" placeholder="Type your reason" [(ngModel)]="reason">
+            <div class="suggest-time">
+                <span>No ideal slot? Suggest your available time.</span>
+                <button mat-raised-button (click)="onToggleSidenav()">
+                    Suggest Time Range
+                </button>
             </div>
         </div>
         <div class="events-grid-container">
@@ -18,7 +26,7 @@
                             alt="">
                         <span class="date">
                             <mat-icon style="color: #23a669;;">date_range</mat-icon>
-                            {{publicBookingSlots.day}}
+                            {{displayBookingDate}}
                         </span>
                         <span class="event-name">
                             {{element.freetimeType}}
@@ -36,4 +44,41 @@
             </div>
         </div>
     </div>
+    <div class="time-suggestion-sidenav">
+        <mat-sidenav-container>
+            <mat-sidenav #sidenav position="end" [opened]="isOpenTimeSuggestionSidenav">
+                <mat-icon class="close-icon" (click)="onClosdeSidenav()">close</mat-icon>
+                <div class="container3">
+                    <mat-card class="calendar">
+                        <span>Choose your available date</span>
+                        <mat-calendar [(selected)]="selectedDate"></mat-calendar>
+                        <span>Choose your available start time</span>
+                        <div class="time">
+                            <mat-form-field appearance="fill">
+                                <mat-select [formControl]="startTimeControl">
+                                    <mat-option value={{item}} *ngFor="let item of startTimeArray, let index = index">
+                                        {{item}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <span>Choose your available end time</span>
+                        <div class="time">
+                            <mat-form-field appearance="fill">
+                                <mat-select [formControl]="endTimeControl">
+                                    <mat-option value={{item}} *ngFor="let item of endTimeArray, let index = index">
+                                        {{item}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <button mat-raised-button (click)="onConfirmSuggestTimeReschedule()">
+                            Send Suggestion
+                        </button>
+                    </mat-card>
+                </div>
+            </mat-sidenav>
+        </mat-sidenav-container>
+    </div>
 </div>
+<app-bottom-nav></app-bottom-nav>

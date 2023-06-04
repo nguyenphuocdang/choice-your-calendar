@@ -36,20 +36,24 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatSidenavModule } from '@angular/material/sidenav';
 //Bootstrap
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 //Components
 import { NavComponent } from './components/homepage/nav/nav.component';
+import { BottomNavComponent } from './components/homepage/bottom-nav/bottom-nav.component';
 import { AuthComponent } from './components/authentication/register/signup-google/auth.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { HomeComponent } from './components/homepage/home/home.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { MaterialElevationDirective } from './custom-style/material-elevation.directive';
 import { LayoutComponent } from './components/homepage/layout/layout.component';
+import { BottomLayoutComponent } from './components/homepage/bottom-layout/bottom-layout.component';
 import { CompletePaymentComponent } from './components/authentication/register/complete-payment/complete-payment.component';
 import { ProvideInformationComponent } from './components/authentication/register/provide-information/provide-information/provide-information.component';
-
+import { PublicCalendarComponent } from './components/public/public-booking-slots/public-calendar.component';
+import { ReschedulePublicCalendarComponent } from './components/public/reschedule-booking-slots/reschedule-public-calendar.component';
 //Angular Authentication
 import { AuthInterceptor } from './_authentication/auth.interceptor';
 import { ForbiddenComponent } from './components/authentication/forbidden/forbidden.component';
@@ -67,6 +71,7 @@ import { UserService } from './_services/user.service';
   declarations: [
     AppComponent,
     NavComponent,
+    BottomNavComponent,
     AuthComponent,
     LoginComponent,
     HomeComponent,
@@ -76,6 +81,9 @@ import { UserService } from './_services/user.service';
     ProvideInformationComponent,
     MaterialElevationDirective,
     LayoutComponent,
+    PublicCalendarComponent,
+    ReschedulePublicCalendarComponent,
+    BottomLayoutComponent,
   ],
   imports: [
     //Angular Material Modules
@@ -110,6 +118,7 @@ import { UserService } from './_services/user.service';
     MatTabsModule,
     ReactiveFormsModule,
     FullCalendarModule,
+    MatSidenavModule,
     NgbModule,
     ToastrModule.forRoot(),
 

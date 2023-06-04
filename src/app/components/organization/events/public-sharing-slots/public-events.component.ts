@@ -6,6 +6,7 @@ import { ApiResponse } from 'src/app/_models/response';
 import { EventService } from 'src/app/_services/event.service';
 import { FormControl } from '@angular/forms';
 import { MakePublicShareRequest } from 'src/app/_models/event';
+import { MatChipInputEvent } from '@angular/material/chips';
 @Component({
   selector: 'app-public-events',
   templateUrl: './public-events.component.html',
@@ -21,10 +22,9 @@ export class PublicEventsComponent implements OnInit {
   listFreeTimeType: string[] = [];
   selecteFreeTimeType = new FormControl('');
   allSelectedSlotFlag: boolean = false;
-  listEmails: string[] = [];
   listEmailsFormControl = new FormControl();
   emails: string[] = [];
-
+  mailCtrl = new FormControl();
   ngOnInit(): void {
     this._getAllExternalSlots();
   }
@@ -97,47 +97,49 @@ export class PublicEventsComponent implements OnInit {
       this.renderedPublicSlots.forEach((publicSlot: PublicScheduleData) => {
         if (publicSlot.selectFlag) selectSharingSlot.push(publicSlot);
       });
-      const startTime = this._combineTimeAndDateForRequestType(
-        selectSharingSlot[0].day,
-        selectSharingSlot[0].timeDatas[0].startTime!
-      );
-      const endTime = this._combineTimeAndDateForRequestType(
-        selectSharingSlot[selectSharingSlot.length - 1].day,
-        selectSharingSlot[selectSharingSlot.length - 1].timeDatas[0].endTime!
-      );
-      const requestBody: MakePublicShareRequest = {
-        startTime: startTime,
-        endTime: endTime,
-        eventDuration: 0,
-        eventType: 'Online',
-        freeTimeType: this.selecteFreeTimeType.value!,
-        publicNewEventFlag: false,
-        shareFreeTimeScheduleFlag: true,
-        sharePublicEventFlag: false,
-      };
-      debugger;
-      try {
-        this.eventService
-          .createPublicShare(requestBody)
-          .subscribe((response: any) => {
-            if (response.statusCode === 200) {
-              const publicShareId: number = response.data.id;
-              this.eventService
-                .sharePublicSlots(this.emails, publicShareId)
-                .subscribe((response: any) => {
-                  if (response.statusCode === 200) {
-                    this.toastrService.success(
-                      'Your slots have been shared successfully',
-                      'SUCCESS'
-                    );
-                  }
-                });
-            } else {
-              debugger;
-            }
-          });
-      } catch (error) {
-        debugger;
+      if (selectSharingSlot.length > 0) {
+        const startTime = this._combineTimeAndDateForRequestType(
+          selectSharingSlot[0].day,
+          selectSharingSlot[0].timeDatas[0].startTime!
+        );
+        const endTime = this._combineTimeAndDateForRequestType(
+          selectSharingSlot[selectSharingSlot.length - 1].day,
+          selectSharingSlot[selectSharingSlot.length - 1].timeDatas[0].endTime!
+        );
+        const requestBody: MakePublicShareRequest = {
+          startTime: startTime,
+          endTime: endTime,
+          eventDuration: 0,
+          eventType: 'Online',
+          freeTimeType: this.selecteFreeTimeType.value!,
+          publicNewEventFlag: false,
+          shareFreeTimeScheduleFlag: true,
+          sharePublicEventFlag: false,
+        };
+        try {
+          this.eventService
+            .createPublicShare(requestBody)
+            .subscribe((response: any) => {
+              if (response.statusCode === 200) {
+                const publicShareId: number = response.data.id;
+                this.eventService
+                  .sharePublicSlots(this.emails, publicShareId)
+                  .subscribe((response: any) => {
+                    if (response.statusCode === 200) {
+                      debugger;
+                      this.toastrService.success(
+                        'Your slots have been shared successfully',
+                        'SUCCESS'
+                      );
+                    }
+                  });
+              } else {
+                debugger;
+              }
+            });
+        } catch (error) {
+          debugger;
+        }
       }
     }
   }
@@ -152,10 +154,17 @@ export class PublicEventsComponent implements OnInit {
     return requestTime;
   }
 
-  addChip(chip: string): void {
-    if (chip.trim()) {
-      this.emails.push(chip.trim());
+  addChip(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our fruit
+    if (value) {
+      this.emails.push(value);
     }
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.mailCtrl.setValue(null);
   }
 
   removeChip(email: string): void {

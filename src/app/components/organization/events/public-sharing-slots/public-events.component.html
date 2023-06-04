@@ -23,11 +23,14 @@
                             <mat-icon matChipRemove>cancel</mat-icon>
                         </mat-chip>
                     </mat-chip-list>
-                    <input placeholder="Enter your partner's email ... "
-                        (keydown.enter)="addChip(chipInput.value); chipInput.value=''" #chipInput>
+
+                    <div style="display: flex; align-items: center;">
+                        <mat-icon style="color: #36bb7c;">mail</mat-icon>
+                        <input placeholder="Enter your partner's email ... " #chipInput [formControl]="mailCtrl"
+                            [matChipInputFor]="chipList" (matChipInputTokenEnd)="addChip($event)">
+                    </div>
                 </mat-form-field>
             </div>
-
             <button mat-raised-button (click)="onSharingSlotClick()">
                 <mat-icon>public</mat-icon>
                 <span>Share Slots</span>

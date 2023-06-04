@@ -43,43 +43,8 @@ import { MatDatepicker } from '@angular/material/datepicker';
 })
 export class BookingResourcesComponent implements OnInit {
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
-  resourceType: ResourceBasicInfo[] = [];
-  resourceRoom: ResourceDetail[] = [];
-  resourceSupportDevice: ResourceDetail[] = [];
-  resourcePeople: UserBusinessDetail[] = [];
-  selectedResourceTypeValue: string[] = [];
-  selectedResourceRoom: ResourceDetail[] = [];
-  selectedResourceDevice: ResourceDetail[] = [];
-  selectedResourcePeople: UserBusinessDetail[] = [];
-  isSelectRoom: boolean = false;
-  isSelectDevice: boolean = false;
-  isSelectPeople: boolean = false;
-  selectedResourceFormControl = new FormControl();
-  selectedResourceTypeFormControl = new FormControl();
-  tooltipSelectedResources: string = '';
-  upcomingEvents: EventDetail[] = [];
-  pendingEvents: EventDetail[] = [];
-  cancelEvents: EventDetail[] = [];
-  previousEvents: EventDetail[] = [];
-  organizationEvents: EventDetail[] = [];
-  externalEvents: EventDetail[] = [];
-  isShowingBookSidenav: boolean = false;
-  isShowingConfirmBookSidenav: boolean = false;
-  isShowingConfirmRescheduleBookSidenav: boolean = false;
-  isShowingEventInfoSidenav: boolean = false;
-  isShowingGenerateExternalSlotsSidenav: boolean = false;
-  isShowingRescheduleOrganizationEventSidenav: boolean = false;
-  weekdays: DateBookingSlot[] = [];
-  indexSelectedWeekday: number = 0;
-  // eventDurationFormControl = new FormControl('30 minutes');
-  eventDuration: string = '';
-  bookingSlots: BookingSlot[] = [];
-  rescheduleBookingSlots: BookingSlot[] = [];
-  publicBookingSlots: BookingSlot[] = [];
-  selectedPublicBookingSlots: PublicBookingSlot[] = [];
-  indexSelectedBookingSlot: number = 0;
-  user: UserProfile = this.storageService.getUserProfile();
-  currentIdUser: number = this.user.id;
+
+  //FormGroup
   makeEventForm: UntypedFormGroup = this.fb.group({
     eventDuration: [''],
     freeScheduleFlag: [false],
@@ -99,7 +64,7 @@ export class BookingResourcesComponent implements OnInit {
 
   rescheduleEventForm: UntypedFormGroup = this.fb.group({
     startTime: [''],
-    endTime: [''],
+    endTime: ['', Validators.required],
     eventName: [''],
     eventDescription: [''],
     eventType: [''],
@@ -107,17 +72,68 @@ export class BookingResourcesComponent implements OnInit {
     eventDuration: [''],
   });
 
+  // Events Array
+  upcomingEvents: EventDetail[] = [];
+  pendingEvents: EventDetail[] = [];
+  cancelEvents: EventDetail[] = [];
+  previousEvents: EventDetail[] = [];
+  organizationEvents: EventDetail[] = [];
+  externalEvents: EventDetail[] = [];
+
+  // Resource Array
+  resourceType: ResourceBasicInfo[] = [];
+  resourceRoom: ResourceDetail[] = [];
+  resourceSupportDevice: ResourceDetail[] = [];
+  resourcePeople: UserBusinessDetail[] = [];
+  selectedResourceTypeValue: string[] = [];
+  selectedResourceRoom: ResourceDetail[] = [];
+  selectedResourceDevice: ResourceDetail[] = [];
+  selectedResourcePeople: UserBusinessDetail[] = [];
   displaySelectedResourceRoom: ResourceDetail[] = [];
   displaySelectedResourceDevice: ResourceDetail[] = [];
   displaySelectedResourcePeople: UserBusinessDetail[] = [];
+
+  // Slots Array
+  weekdays: DateBookingSlot[] = [];
+  bookingSlots: BookingSlot[] = [];
+  rescheduleBookingSlots: BookingSlot[] = [];
+  publicBookingSlots: BookingSlot[] = [];
+  selectedPublicBookingSlots: PublicBookingSlot[] = [];
+
+  // Form Control
+  selectedResourceFormControl = new FormControl();
+  selectedResourceTypeFormControl = new FormControl();
+
+  // Flag
+  isSelectRoom: boolean = false;
+  isSelectDevice: boolean = false;
+  isSelectPeople: boolean = false;
+  isShowingBookSidenav: boolean = false;
+  isShowingConfirmBookSidenav: boolean = false;
+  isShowingConfirmRescheduleBookSidenav: boolean = false;
+  isShowingEventInfoSidenav: boolean = false;
+  isShowingGenerateExternalSlotsSidenav: boolean = false;
+  isShowingRescheduleOrganizationEventSidenav: boolean = false;
+
+  // String
+  tooltipSelectedResources: string = '';
+  eventDuration: string = '';
   displayEventLocation: string = '';
   displayEventDevice: string = '';
   displayEventParticipants: string = '';
 
+  // Number and Index
+  indexSelectedWeekday: number = 0;
+  indexSelectedBookingSlot: number = 0;
+
+  // Other Object
+  user: UserProfile = this.storageService.getUserProfile();
+  currentIdUser: number = this.user.id;
   selectedDatePicker: Date = new Date();
   minDate: Date = new Date();
   @ViewChild('datepicker') datepicker!: MatDatepicker<Date>;
   rescheduleEventId: number = 0;
+
   constructor(
     private fb: UntypedFormBuilder,
     private socketService: SocketService,
@@ -130,14 +146,13 @@ export class BookingResourcesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this._handleWebSocket();
     this._getResourceType();
     this._getAllResources();
     this._getAllUserInOrganization();
     this._getEventList();
-    // this._handleWebsocketForReceivingResourceApproval();
   }
 
+  // Get Data Functions
   _getResourceType() {
     try {
       this.resourceService
@@ -224,39 +239,6 @@ export class BookingResourcesComponent implements OnInit {
     }
   }
 
-  onResourceTypeSelectChangeAction(event: any) {
-    this.isSelectRoom = false;
-    this.isSelectDevice = false;
-    this.isSelectPeople = false;
-    this.selectedResourceTypeFormControl.value.forEach((element: any) => {
-      if (element === 'Meeting Room') {
-        this.selectedResourceRoom = this.resourceRoom;
-        this.isSelectRoom = true;
-      }
-      if (element === 'Person') {
-        this.selectedResourcePeople = this.resourcePeople;
-        this.isSelectPeople = true;
-      }
-      if (element === 'Support Device') {
-        this.selectedResourceDevice = this.resourceSupportDevice;
-        this.isSelectDevice = true;
-      }
-    });
-  }
-
-  onResourceSelectionChangeAction(event: any) {
-    if (this.selectedResourceFormControl.value?.length > 2) {
-      const tempTooltipContent: string[] = [];
-      this.selectedResourceFormControl.value
-        .slice(2)
-        .forEach((element: any) => {
-          if (element.deviceType != null) tempTooltipContent.push(element.name);
-          else tempTooltipContent.push(element.fullname);
-        });
-      this.tooltipSelectedResources = tempTooltipContent.join(', ');
-    }
-  }
-
   _getEventList() {
     try {
       let defaultPage: number = 0;
@@ -333,190 +315,6 @@ export class BookingResourcesComponent implements OnInit {
     }
   }
 
-  scheduleBookingResource() {
-    if (
-      this.makeEventForm.get('schedulingEventType')!.value ===
-      'public-sharing-slot'
-    ) {
-      this.triggerPublicSharingSlotSidenav();
-    } else {
-      if (
-        this.makeEventForm.get('schedulingEventType')!.value === 'company-event'
-      ) {
-        this.makeEventForm.get('publicModeFlag')!.setValue(true);
-      }
-      this.triggerBookingSidenav();
-    }
-  }
-
-  triggerBookingSidenav() {
-    this._handleCreateEventForm();
-    const currentDate: Date = new Date();
-    this._handleWeekdays(currentDate);
-    this.makeEventForm!.get('listPartnerId')!.setValue([this.currentIdUser]);
-    this._handleResourceSelection();
-    this._getBookingSlots(0);
-    this.isShowingBookSidenav = true;
-  }
-
-  triggerPublicSharingSlotSidenav() {
-    const currentDate: Date = new Date();
-    this._handleWeekdays(currentDate);
-    this.makeEventForm!.get('listPartnerId')!.setValue([this.currentIdUser]);
-    this._handleResourceSelection();
-    const isOpeningPublicSchedule: boolean = true;
-    this._getBookingSlots(0, isOpeningPublicSchedule);
-    this.isShowingGenerateExternalSlotsSidenav = true;
-  }
-
-  _handleResourceSelection() {
-    //Handle Resource
-    const listDeviceId: number[] = [];
-    const listPartnerId: number[] = [];
-    this.displaySelectedResourceDevice = [];
-    this.displaySelectedResourcePeople = [];
-    this.displaySelectedResourceRoom = [];
-    if (this.selectedResourceFormControl.value) {
-      listPartnerId.push(this.currentIdUser);
-      this.selectedResourceFormControl.value.forEach((element: any) => {
-        if (element.deviceType != null) {
-          listDeviceId.push(element.id);
-          if (element.deviceType === 'ROOM') {
-            this.displaySelectedResourceRoom.push(element);
-          } else if (element.deviceType === 'DEVICE')
-            this.displaySelectedResourceDevice.push(element);
-        } else {
-          listPartnerId.push(element.id);
-          this.displaySelectedResourcePeople.push(element);
-        }
-      });
-      this.makeEventForm!.get('listDeviceId')!.setValue(listDeviceId);
-      this.makeEventForm!.get('listPartnerId')!.setValue(listPartnerId);
-    }
-    if (this.displaySelectedResourcePeople.length > 0)
-      this.displayEventParticipants = this.displaySelectedResourcePeople
-        .map((element) => element.fullname)
-        .join(', ');
-    if (this.displaySelectedResourceRoom.length > 0)
-      this.displayEventLocation = this.displaySelectedResourceRoom
-        .map((element) => element.name)
-        .join(', ');
-    if (this.displayEventLocation.length > 0)
-      this.makeEventForm!.get('eventLocation')!.setValue(
-        this.displayEventLocation
-      );
-    this._handleCreateEventForm();
-  }
-
-  _handleCreateEventForm() {
-    let defaultEventDuration: string = '30 minutes';
-    let defaultEventType: string = '';
-    if (this.makeEventForm.get('listDeviceId')!.value.length > 0)
-      defaultEventType = 'Offline';
-    else {
-      defaultEventType = 'Online';
-      this.makeEventForm.get('eventLocation')?.setValue('Google Meet Link');
-    }
-    this.makeEventForm.get('eventDuration')?.setValue(defaultEventDuration);
-    this.makeEventForm.get('eventType')?.setValue(defaultEventType);
-  }
-  _handleWeekdays(selectedDate: Date) {
-    if (this.weekdays.length > 0) {
-      if (this.weekdays[this.indexSelectedWeekday])
-        this.weekdays[this.indexSelectedWeekday].selectFlag = false;
-      this.indexSelectedWeekday = 0;
-      this.weekdays[0].selectFlag = true;
-    } else {
-      for (let i = 0; i < 7; i++) {
-        let dateFormat = new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          selectedDate.getDate() + i
-        );
-        const weekday: DateBookingSlot = {
-          code: dateFormat.toLocaleString('en-US', { weekday: 'short' }),
-          day:
-            dateFormat.getDate() < 10
-              ? `0${dateFormat.getDate()}`
-              : `${dateFormat.getDate()}`,
-          date_ddmmyy: Utils.convertFromDatetoDDMMYY(dateFormat),
-          date: dateFormat,
-          selectFlag: false,
-        };
-        this.weekdays.push(weekday);
-        this.weekdays[this.indexSelectedWeekday].selectFlag = true;
-      }
-    }
-  }
-
-  onDateChange(date: Date) {
-    this.weekdays = [];
-    this._handleWeekdays(date);
-  }
-
-  closeBookingSidenav() {
-    if (this.isShowingBookSidenav) this.isShowingBookSidenav = false;
-  }
-  closePublicSharingSlotSidenav() {
-    if (this.isShowingGenerateExternalSlotsSidenav)
-      this.isShowingGenerateExternalSlotsSidenav = false;
-  }
-
-  closeRescheduleSidenav() {
-    if (this.isShowingRescheduleOrganizationEventSidenav)
-      this.isShowingRescheduleOrganizationEventSidenav = false;
-  }
-
-  dateSelect(index: number) {
-    if (this.weekdays[this.indexSelectedWeekday])
-      this.weekdays[this.indexSelectedWeekday].selectFlag = false;
-    this.indexSelectedWeekday = index;
-    this.weekdays[this.indexSelectedWeekday].selectFlag = true;
-    if (this.bookingSlots.length > 0) {
-      this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = false;
-    }
-    // this.isShowingConfirmBookSidenav = true;
-    this._getBookingSlots(this.indexSelectedWeekday);
-  }
-
-  dateSelectForPublicBooking(index: number) {
-    if (this.weekdays[this.indexSelectedWeekday])
-      this.weekdays[this.indexSelectedWeekday].selectFlag = false;
-    this.indexSelectedWeekday = index;
-    this.weekdays[this.indexSelectedWeekday].selectFlag = true;
-    const isOpeningPublicSchedule: boolean = true;
-    this._getBookingSlots(this.indexSelectedWeekday, isOpeningPublicSchedule);
-  }
-
-  dateSelectForReschedule(index: number) {
-    if (this.weekdays[this.indexSelectedWeekday])
-      this.weekdays[this.indexSelectedWeekday].selectFlag = false;
-    this.indexSelectedWeekday = index;
-    this.weekdays[this.indexSelectedWeekday].selectFlag = true;
-    if (this.rescheduleBookingSlots.length > 0) {
-      this.rescheduleBookingSlots[this.indexSelectedBookingSlot].selectFlag =
-        false;
-    }
-    this._getBookingSlotsForReschedule(
-      this.rescheduleEventId,
-      this.indexSelectedWeekday
-    );
-  }
-
-  onSelectionChangeEventDuration() {
-    const isOpeningPublicSchedule: boolean = true;
-    this._getBookingSlots(this.indexSelectedWeekday, isOpeningPublicSchedule);
-  }
-
-  onSelectionChangeEventType() {
-    if (this.makeEventForm.get('eventType')!.value === 'Online') {
-      this.makeEventForm.get('eventLocation')?.setValue('Google Meet Link');
-    } else {
-      this.makeEventForm
-        .get('eventLocation')
-        ?.setValue(this.displayEventLocation);
-    }
-  }
   _getBookingSlots(index: number, flag?: boolean) {
     try {
       //Handle Duration
@@ -602,6 +400,226 @@ export class BookingResourcesComponent implements OnInit {
     }
   }
 
+  _getBookingSlotsForReschedule(eventId: number, index: number) {
+    let fromDate: string = '';
+    let selectedDate: Date = new Date(this.weekdays[index].date);
+    if (index == 0) {
+      let currentDate: Date = new Date();
+      currentDate.setHours(currentDate.getHours() + 7);
+      currentDate.setMinutes(Math.ceil(currentDate.getMinutes() / 60) * 60);
+      currentDate.setSeconds(1);
+      currentDate.setMilliseconds(0);
+      fromDate = currentDate.toISOString();
+    } else {
+      selectedDate.setHours(0, 0, 0, 0);
+      const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
+      fromDate = newDate.toISOString();
+    }
+    selectedDate.setHours(23, 59, 0, 0);
+    const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
+    let toDate: string = newDate.toISOString();
+    try {
+      this.eventService
+        .getSlotsForReschedule(fromDate, toDate, eventId)
+        .subscribe((response: ApiResponse<ScheduleDatas>) => {
+          const tempBookingSlots: BookingSlot[] = [];
+          response.data.scheduleDatas[0].timeDatas.forEach(
+            (element: TimeData) => {
+              const bookingSlot: BookingSlot = {
+                selectFlag: false,
+                timeDatas: element,
+              };
+              tempBookingSlots.push(bookingSlot);
+            }
+          );
+          this.rescheduleBookingSlots = tempBookingSlots;
+        });
+    } catch (error) {
+      debugger;
+    }
+  }
+
+  // Booking Resources Form Onchange
+  onResourceTypeSelectChangeAction(event: any) {
+    this.isSelectRoom = false;
+    this.isSelectDevice = false;
+    this.isSelectPeople = false;
+    this.selectedResourceTypeFormControl.value.forEach((element: any) => {
+      if (element === 'Meeting Room') {
+        this.selectedResourceRoom = this.resourceRoom;
+        this.isSelectRoom = true;
+      }
+      if (element === 'Person') {
+        this.selectedResourcePeople = this.resourcePeople;
+        this.isSelectPeople = true;
+      }
+      if (element === 'Support Device') {
+        this.selectedResourceDevice = this.resourceSupportDevice;
+        this.isSelectDevice = true;
+      }
+    });
+  }
+
+  onResourceSelectionChangeAction(event: any) {
+    if (this.selectedResourceFormControl.value?.length > 2) {
+      const tempTooltipContent: string[] = [];
+      this.selectedResourceFormControl.value
+        .slice(2)
+        .forEach((element: any) => {
+          if (element.deviceType != null) tempTooltipContent.push(element.name);
+          else tempTooltipContent.push(element.fullname);
+        });
+      this.tooltipSelectedResources = tempTooltipContent.join(', ');
+    }
+  }
+
+  onDateChange(date: Date) {
+    this.weekdays = [];
+    this._handleWeekdays(date);
+  }
+
+  dateSelect(index: number) {
+    if (this.weekdays[this.indexSelectedWeekday])
+      this.weekdays[this.indexSelectedWeekday].selectFlag = false;
+    this.indexSelectedWeekday = index;
+    this.weekdays[this.indexSelectedWeekday].selectFlag = true;
+    if (this.bookingSlots.length > 0) {
+      this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = false;
+    }
+    // this.isShowingConfirmBookSidenav = true;
+    this._getBookingSlots(this.indexSelectedWeekday);
+  }
+
+  dateSelectForPublicBooking(index: number) {
+    if (this.weekdays[this.indexSelectedWeekday])
+      this.weekdays[this.indexSelectedWeekday].selectFlag = false;
+    this.indexSelectedWeekday = index;
+    this.weekdays[this.indexSelectedWeekday].selectFlag = true;
+    const isOpeningPublicSchedule: boolean = true;
+    this._getBookingSlots(this.indexSelectedWeekday, isOpeningPublicSchedule);
+  }
+
+  dateSelectForReschedule(index: number) {
+    if (this.weekdays[this.indexSelectedWeekday])
+      this.weekdays[this.indexSelectedWeekday].selectFlag = false;
+    this.indexSelectedWeekday = index;
+    this.weekdays[this.indexSelectedWeekday].selectFlag = true;
+    if (this.rescheduleBookingSlots.length > 0) {
+      this.rescheduleBookingSlots[this.indexSelectedBookingSlot].selectFlag =
+        false;
+    }
+    this._getBookingSlotsForReschedule(
+      this.rescheduleEventId,
+      this.indexSelectedWeekday
+    );
+  }
+
+  onSelectionChangeEventDuration() {
+    const isOpeningPublicSchedule: boolean = true;
+    this._getBookingSlots(this.indexSelectedWeekday, isOpeningPublicSchedule);
+  }
+
+  onSelectionChangeEventType() {
+    if (this.makeEventForm.get('eventType')!.value === 'Online') {
+      this.makeEventForm.get('eventLocation')?.setValue('Google Meet Link');
+    } else {
+      this.makeEventForm
+        .get('eventLocation')
+        ?.setValue(this.displayEventLocation);
+    }
+  }
+
+  // Trigger Sidenav
+
+  triggerBookingSidenav() {
+    this._handleCreateEventForm();
+    const currentDate: Date = new Date();
+    this._handleWeekdays(currentDate);
+    this.makeEventForm!.get('listPartnerId')!.setValue([this.currentIdUser]);
+    this._handleResourceSelection();
+    this._getBookingSlots(0);
+    this.isShowingBookSidenav = true;
+  }
+
+  triggerPublicSharingSlotSidenav() {
+    const currentDate: Date = new Date();
+    this._handleWeekdays(currentDate);
+    this.makeEventForm!.get('listPartnerId')!.setValue([this.currentIdUser]);
+    this._handleResourceSelection();
+    const isOpeningPublicSchedule: boolean = true;
+    this._getBookingSlots(0, isOpeningPublicSchedule);
+    this.isShowingGenerateExternalSlotsSidenav = true;
+  }
+  triggerReschedulingSidenav(event: SingleEventDetail) {
+    const currentDate: Date = new Date();
+    // const selectedDate: Date = new Date(event.date!);
+    this._handleWeekdays(currentDate);
+    this.rescheduleEventId = event.id;
+    this.rescheduleEventForm.get('eventName')!.setValue(event.eventName);
+    this.rescheduleEventForm
+      .get('eventDescription')!
+      .setValue(event.eventDescription);
+    if (event.appointmentUrl == '')
+      this.rescheduleEventForm.get('eventType')!.setValue('Offline');
+    else this.rescheduleEventForm.get('eventType')!.setValue('Online');
+
+    // if (event.location == '')
+    //   this.rescheduleEventForm
+    //     .get('eventLocation')!
+    //     .setValue('Google Meeting Link');
+    // else
+    this.rescheduleEventForm.get('eventLocation')!.setValue(event.location);
+    // const eventDuration: string = this._getEventDuration(
+    //   event.startTime,
+    //   event.endTime
+    // );
+    // this.rescheduleEventForm
+    //   .get('eventDuration')!
+    //   .setValue(`${eventDuration} minutes`);
+    this._getBookingSlotsForReschedule(this.rescheduleEventId, 0);
+    this.isShowingRescheduleOrganizationEventSidenav =
+      !this.isShowingRescheduleOrganizationEventSidenav;
+  }
+
+  closeBookingSidenav() {
+    if (this.isShowingBookSidenav) this.isShowingBookSidenav = false;
+  }
+  closePublicSharingSlotSidenav() {
+    if (this.isShowingGenerateExternalSlotsSidenav)
+      this.isShowingGenerateExternalSlotsSidenav = false;
+  }
+
+  closeRescheduleSidenav() {
+    if (this.isShowingRescheduleOrganizationEventSidenav)
+      this.isShowingRescheduleOrganizationEventSidenav = false;
+  }
+
+  onCloseConfirmSidenav() {
+    this.isShowingConfirmBookSidenav = false;
+  }
+
+  onCloseConfirmRescheduleSidenav() {
+    this.isShowingRescheduleOrganizationEventSidenav = false;
+  }
+
+  // Booking Resources Confirm Action
+
+  scheduleBookingResource() {
+    if (
+      this.makeEventForm.get('schedulingEventType')!.value ===
+      'public-sharing-slot'
+    ) {
+      this.triggerPublicSharingSlotSidenav();
+    } else {
+      if (
+        this.makeEventForm.get('schedulingEventType')!.value === 'company-event'
+      ) {
+        this.makeEventForm.get('publicModeFlag')!.setValue(true);
+      }
+      this.triggerBookingSidenav();
+    }
+  }
+
   onSelectBookingSlotClicked(index: number) {
     this.bookingSlots[this.indexSelectedBookingSlot].selectFlag = false;
     this.indexSelectedBookingSlot = index;
@@ -664,24 +682,6 @@ export class BookingResourcesComponent implements OnInit {
     this.isShowingConfirmRescheduleBookSidenav = true;
   }
 
-  _combineTimeAndDateForRequestType(time: string, date: Date): string {
-    const [hours, minutes] = time.split(':');
-    const combinedDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      Number(hours),
-      Number(minutes)
-    );
-    const _earlier7hourTime: Date = new Date(
-      combinedDate.getTime() + 7 * 60 * 60 * 1000
-    );
-    const requestStartTime: string = _earlier7hourTime.toISOString();
-    return requestStartTime;
-  }
-  onCloseConfirmSidenav() {
-    this.isShowingConfirmBookSidenav = false;
-  }
   onConfirmBookingSlot() {
     const makeEventRequestBody: MakeEventRequest = {
       startTime: this.makeEventForm.get('startTime')!.value,
@@ -698,7 +698,6 @@ export class BookingResourcesComponent implements OnInit {
           ? this.makeEventForm.get('eventLocation')!.value
           : '',
     };
-    debugger;
     makeEventRequestBody.listPartnerId.shift();
     try {
       this.eventService
@@ -731,17 +730,15 @@ export class BookingResourcesComponent implements OnInit {
             this.onCloseConfirmSidenav();
           } else {
             debugger;
-            this.toastrService.error('Error In Creating Event');
+            let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+            this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
           }
         });
-    } catch (error) {
+    } catch (error: any) {
       debugger;
-      this.toastrService.error('Error In Creating Event');
+      let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+      this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
     }
-  }
-
-  onCloseConfirmRescheduleSidenav() {
-    this.isShowingRescheduleOrganizationEventSidenav = false;
   }
 
   onReschedule() {
@@ -796,107 +793,6 @@ export class BookingResourcesComponent implements OnInit {
     );
   }
 
-  triggerReschedulingSidenav(event: SingleEventDetail) {
-    const currentDate: Date = new Date();
-    // const selectedDate: Date = new Date(event.date!);
-    this._handleWeekdays(currentDate);
-    this.rescheduleEventId = event.id;
-    this.rescheduleEventForm.get('eventName')!.setValue(event.eventName);
-    this.rescheduleEventForm
-      .get('eventDescription')!
-      .setValue(event.eventDescription);
-    if (event.appointmentUrl == '')
-      this.rescheduleEventForm.get('eventType')!.setValue('Offline');
-    else this.rescheduleEventForm.get('eventType')!.setValue('Online');
-
-    // if (event.location == '')
-    //   this.rescheduleEventForm
-    //     .get('eventLocation')!
-    //     .setValue('Google Meeting Link');
-    // else
-    this.rescheduleEventForm.get('eventLocation')!.setValue(event.location);
-    // const eventDuration: string = this._getEventDuration(
-    //   event.startTime,
-    //   event.endTime
-    // );
-    // this.rescheduleEventForm
-    //   .get('eventDuration')!
-    //   .setValue(`${eventDuration} minutes`);
-    this._getBookingSlotsForReschedule(this.rescheduleEventId, 0);
-    this.isShowingRescheduleOrganizationEventSidenav =
-      !this.isShowingRescheduleOrganizationEventSidenav;
-  }
-
-  _getBookingSlotsForReschedule(eventId: number, index: number) {
-    let fromDate: string = '';
-    let selectedDate: Date = new Date(this.weekdays[index].date);
-    if (index == 0) {
-      let currentDate: Date = new Date();
-      currentDate.setHours(currentDate.getHours() + 7);
-      currentDate.setMinutes(Math.ceil(currentDate.getMinutes() / 60) * 60);
-      currentDate.setSeconds(1);
-      currentDate.setMilliseconds(0);
-      fromDate = currentDate.toISOString();
-    } else {
-      selectedDate.setHours(0, 0, 0, 0);
-      const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
-      fromDate = newDate.toISOString();
-    }
-    selectedDate.setHours(23, 59, 0, 0);
-    const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
-    let toDate: string = newDate.toISOString();
-    try {
-      this.eventService
-        .getSlotsForReschedule(fromDate, toDate, eventId)
-        .subscribe((response: ApiResponse<ScheduleDatas>) => {
-          const tempBookingSlots: BookingSlot[] = [];
-          response.data.scheduleDatas[0].timeDatas.forEach(
-            (element: TimeData) => {
-              const bookingSlot: BookingSlot = {
-                selectFlag: false,
-                timeDatas: element,
-              };
-              tempBookingSlots.push(bookingSlot);
-            }
-          );
-          this.rescheduleBookingSlots = tempBookingSlots;
-        });
-    } catch (error) {
-      debugger;
-    }
-  }
-
-  _getEventDuration(startTime: string, endTime: string): string {
-    // Parse the time strings into Date objects
-    const timeFormat = /\d{1,2}:\d{2} [AP]M/;
-    const time1Match = startTime.match(timeFormat);
-    const time2Match = endTime.match(timeFormat);
-    let result: string = '';
-    if (time1Match && time2Match) {
-      const time1 = new Date(`2000-01-01 ${time1Match[0]}`);
-      const time2 = new Date(`2000-01-01 ${time2Match[0]}`);
-      // Calculate the time difference in milliseconds
-      const timeDiff = time2.getTime() - time1.getTime();
-      // Convert milliseconds to minutes
-      const minutes = Math.floor(timeDiff / (1000 * 60));
-      result = minutes.toString();
-    }
-    return result;
-  }
-
-  _handleWebsocketForReceivingResourceApproval() {
-    const userId: number = this.storageService.getUserProfile().id;
-    this.socketService.subscribe(
-      '/user/notify/private-messages',
-      (message: any) => {
-        debugger;
-        const messageData = JSON.parse(message.body);
-        console.log(messageData);
-      },
-      userId
-    );
-  }
-
   onClickGeneratingPublicSlot() {
     let length: number = this.selectedPublicBookingSlots.length;
     let flag: number = 0;
@@ -945,5 +841,132 @@ export class BookingResourcesComponent implements OnInit {
         debugger;
       }
     });
+  }
+
+  _handleResourceSelection() {
+    //Handle Resource
+    const listDeviceId: number[] = [];
+    const listPartnerId: number[] = [];
+    this.displaySelectedResourceDevice = [];
+    this.displaySelectedResourcePeople = [];
+    this.displaySelectedResourceRoom = [];
+    if (this.selectedResourceFormControl.value) {
+      listPartnerId.push(this.currentIdUser);
+      this.selectedResourceFormControl.value.forEach((element: any) => {
+        if (element.deviceType != null) {
+          listDeviceId.push(element.id);
+          if (element.deviceType === 'ROOM') {
+            this.displaySelectedResourceRoom.push(element);
+          } else if (element.deviceType === 'DEVICE')
+            this.displaySelectedResourceDevice.push(element);
+        } else {
+          listPartnerId.push(element.id);
+          this.displaySelectedResourcePeople.push(element);
+        }
+      });
+      this.makeEventForm!.get('listDeviceId')!.setValue(listDeviceId);
+      this.makeEventForm!.get('listPartnerId')!.setValue(listPartnerId);
+    }
+    if (this.displaySelectedResourcePeople.length > 0)
+      this.displayEventParticipants = this.displaySelectedResourcePeople
+        .map((element) => element.fullname)
+        .join(', ');
+    if (this.displaySelectedResourceRoom.length > 0)
+      this.displayEventLocation = this.displaySelectedResourceRoom
+        .map((element) => element.name)
+        .join(', ');
+    if (this.displayEventLocation.length > 0)
+      this.makeEventForm!.get('eventLocation')!.setValue(
+        this.displayEventLocation
+      );
+    this._handleCreateEventForm();
+  }
+
+  _handleCreateEventForm() {
+    let defaultEventDuration: string = '30 minutes';
+    let defaultEventType: string = '';
+    if (this.makeEventForm.get('listDeviceId')!.value.length > 0)
+      defaultEventType = 'Offline';
+    else {
+      defaultEventType = 'Online';
+      this.makeEventForm.get('eventLocation')?.setValue('Google Meet Link');
+    }
+    this.makeEventForm.get('eventDuration')?.setValue(defaultEventDuration);
+    this.makeEventForm.get('eventType')?.setValue(defaultEventType);
+  }
+  _handleWeekdays(selectedDate: Date) {
+    if (this.weekdays.length > 0) {
+      if (this.weekdays[this.indexSelectedWeekday])
+        this.weekdays[this.indexSelectedWeekday].selectFlag = false;
+      this.indexSelectedWeekday = 0;
+      this.weekdays[0].selectFlag = true;
+    } else {
+      for (let i = 0; i < 7; i++) {
+        let dateFormat = new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          selectedDate.getDate() + i
+        );
+        const weekday: DateBookingSlot = {
+          code: dateFormat.toLocaleString('en-US', { weekday: 'short' }),
+          day:
+            dateFormat.getDate() < 10
+              ? `0${dateFormat.getDate()}`
+              : `${dateFormat.getDate()}`,
+          date_ddmmyy: Utils.convertFromDatetoDDMMYY(dateFormat),
+          date: dateFormat,
+          selectFlag: false,
+        };
+        this.weekdays.push(weekday);
+        this.weekdays[this.indexSelectedWeekday].selectFlag = true;
+      }
+    }
+  }
+
+  _combineTimeAndDateForRequestType(time: string, date: Date): string {
+    const [hours, minutes] = time.split(':');
+    const combinedDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      Number(hours),
+      Number(minutes)
+    );
+    const _earlier7hourTime: Date = new Date(
+      combinedDate.getTime() + 7 * 60 * 60 * 1000
+    );
+    const requestStartTime: string = _earlier7hourTime.toISOString();
+    return requestStartTime;
+  }
+
+  _getEventDuration(startTime: string, endTime: string): string {
+    // Parse the time strings into Date objects
+    const timeFormat = /\d{1,2}:\d{2} [AP]M/;
+    const time1Match = startTime.match(timeFormat);
+    const time2Match = endTime.match(timeFormat);
+    let result: string = '';
+    if (time1Match && time2Match) {
+      const time1 = new Date(`2000-01-01 ${time1Match[0]}`);
+      const time2 = new Date(`2000-01-01 ${time2Match[0]}`);
+      // Calculate the time difference in milliseconds
+      const timeDiff = time2.getTime() - time1.getTime();
+      // Convert milliseconds to minutes
+      const minutes = Math.floor(timeDiff / (1000 * 60));
+      result = minutes.toString();
+    }
+    return result;
+  }
+
+  _handleWebsocketForReceivingResourceApproval() {
+    const userId: number = this.storageService.getUserProfile().id;
+    this.socketService.subscribe(
+      '/user/notify/private-messages',
+      (message: any) => {
+        debugger;
+        const messageData = JSON.parse(message.body);
+        console.log(messageData);
+      },
+      userId
+    );
   }
 }

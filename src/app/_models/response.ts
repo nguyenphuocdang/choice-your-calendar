@@ -38,9 +38,13 @@ export interface DataListResponse<T> {
 }
 
 export class CustomError {
-  errors!: ErrorData;
+  errorCode!: string;
+  errorMessage!: string;
+  fieldError?: string;
   constructor(error: any) {
-    this.errors = error[0];
+    this.errorCode = error[0].errorCode;
+    this.errorMessage = error[0].errorMessage;
+    this.fieldError = error[0].fieldError ?? '';
   }
 }
 
@@ -48,5 +52,6 @@ export class ErrorData {
   error!: {
     errorCode: string;
     errorMessage: string;
+    errorField?: string;
   };
 }
