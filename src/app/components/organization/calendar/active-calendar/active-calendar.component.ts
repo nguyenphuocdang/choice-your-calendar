@@ -112,12 +112,14 @@ export class ActiveCalendarComponent implements OnInit {
 
       const user: UserProfile = this.storageService.getUserProfile();
       const userId: number = user.id;
+      const resourceType: string = 'user';
       this.organizationService
         .viewActiveCalendar(
           userId,
           freeScheduleFlag,
           _firstDayOfCurrentMonth,
-          _firstDayOfNextMonth
+          _firstDayOfNextMonth,
+          resourceType
         )
         .subscribe((response: ApiResponse<ScheduleDatas>) => {
           if (response.statusCode === 200) {

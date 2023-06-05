@@ -34,6 +34,7 @@ export class WrapperComponent implements OnInit {
   isShowing = false;
   showSubmenu: boolean = false;
   notificationList: NotificationContent[] = [];
+  badgeContent: number | '' = '';
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -94,6 +95,8 @@ export class WrapperComponent implements OnInit {
       '/user/notify/private-messages',
       (message: any) => {
         debugger;
+        if (this.badgeContent === '') this.badgeContent = 1;
+        else this.badgeContent++;
         const messageData = JSON.parse(message.body);
         console.log(messageData);
       },
@@ -132,5 +135,14 @@ export class WrapperComponent implements OnInit {
     } catch (error: any) {
       debugger;
     }
+  }
+
+  onNotificationClick(notification: NotificationContent) {
+    window.location.href =
+      'http://localhost:4200/homepage/public-sharing-slots/reschedule-event?eventId=183&fromDate=2023-06-24 15:00&toDate=2023-06-24 17:00';
+  }
+
+  removeBadge() {
+    this.badgeContent = ''; // Empty the badge content to remove it
   }
 }

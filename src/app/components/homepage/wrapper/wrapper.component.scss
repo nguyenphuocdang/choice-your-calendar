@@ -141,6 +141,7 @@ mat-toolbar {
       display: flex;
       flex-direction: row;
       gap: 1rem;
+      cursor: pointer;
       .image {
         width: 20%;
         img {
@@ -170,4 +171,12 @@ mat-toolbar {
   max-height: 100vh; /* Set a maximum height for scrollability */
   overflow-y: auto;
   width: 100%;
+}
+
+::ng-deep
+  .mat-badge-medium.mat-badge-overlap.mat-badge-after
+  .mat-badge-content {
+  // height: 1rem;
+  // width: 1rem;
+  right: -30px;
 }

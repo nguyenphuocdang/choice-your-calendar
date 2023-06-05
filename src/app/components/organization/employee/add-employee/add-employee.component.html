@@ -177,6 +177,14 @@
                             </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="view">
+                            <th mat-header-cell *matHeaderCellDef>Calendar</th>
+                            <td mat-cell *matCellDef="let element">
+                                <span (click)="viewResourceCalendar(element)">View
+                                    <mat-icon>event_note</mat-icon></span>
+                            </td>
+                        </ng-container>
+
                         <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header">
                         </tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>

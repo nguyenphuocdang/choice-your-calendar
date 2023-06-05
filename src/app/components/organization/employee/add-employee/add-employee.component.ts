@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Optional,
+  ViewChild,
+} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
@@ -15,6 +21,8 @@ import { UserBusinessDetail } from 'src/app/_models/user';
 import { CalendarService } from 'src/app/_services/calendar.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import Utils from 'src/app/_utils/utils';
+import { ResourceCalendarComponent } from '../../calendar/resource-calendar/resource-calendar.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-employee',
@@ -40,6 +48,7 @@ export class AddEmployeeComponent implements OnInit {
     'fullname',
     'email',
     'shift',
+    'view',
     'address',
     'imagePath',
     'effectiveDate',
@@ -80,7 +89,8 @@ export class AddEmployeeComponent implements OnInit {
   constructor(
     private organizationService: OrganizationService,
     private toastrService: ToastrService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    @Optional() private dialog: MatDialog
   ) {}
   fileName: string = '';
   listEmployee: UserBusinessDetail[] = [];
@@ -462,5 +472,16 @@ export class AddEmployeeComponent implements OnInit {
     } catch (error) {
       debugger;
     }
+  }
+
+  viewResourceCalendar(user: UserBusinessDetail) {
+    const dialogRef = this.dialog.open(ResourceCalendarComponent, {
+      width: '1200px',
+      height: '680px',
+      data: {
+        id: user.id,
+        resourceType: 'user',
+      },
+    });
   }
 }

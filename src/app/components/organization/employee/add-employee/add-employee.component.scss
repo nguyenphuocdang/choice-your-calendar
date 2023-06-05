@@ -162,9 +162,20 @@
             }
           }
         }
+        .mat-header-cell.mat-column-view,
+        .mat-cell.mat-column-view {
+          width: 8%;
+          span {
+            display: flex;
+            align-items: center;
+            gap: 5%;
+            color: rgb(16, 140, 115);
+            text-decoration: underline;
+          }
+        }
         .mat-header-cell.mat-column-address,
         .mat-cell.mat-column-address {
-          width: 25%;
+          width: 22%;
         }
         .mat-header-cell.mat-column-managerFlag,
         .mat-cell.mat-column-managerFlag {
@@ -530,28 +541,5 @@
         }
       }
     }
-    // mat-checkbox {
-    //   height: 50%;
-    //   width: 100%;
-    //   .mat-checkbox-layout {
-    //     height: 100%;
-    //     width: 100%;
-    //     .mat-checkbox-label {
-    //       display: flex;
-    //       flex-direction: column;
-    //       width: 100%;
-    //       height: 100%;
-    //       .option {
-    //         font-weight: 500;
-    //         color: rgb(16, 140, 115);
-    //       }
-    //       .note {
-    //         flex: 1;
-    //         white-space: normal;
-    //         word-wrap: break-word;
-    //       }
-    //     }
-    //   }
-    // }
   }
 }

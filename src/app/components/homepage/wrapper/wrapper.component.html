@@ -61,9 +61,10 @@
           <span *ngIf="isExpanded" class="organization-item">Public Sharing Slots</span>
         </mat-list-item>
 
-        <mat-list-item (mwlClick)="toggleNotificationSidenav()">
+        <mat-list-item (mwlClick)="toggleNotificationSidenav(); removeBadge()">
           <mat-icon mat-list-icon>notifications</mat-icon>
-          <span *ngIf="isExpanded" class="organization-item">Notifications</span>
+          <span *ngIf="isExpanded" class="organization-item" [matBadge]="badgeContent" matBadgeSize="medium"
+            matBadgeColor="warn">Notifications</span>
         </mat-list-item>
 
         <!-- <mat-list-item [routerLink]="'approve-dashboard'">
@@ -106,7 +107,8 @@
         <span class="title">Notifications</span>
         <div>
           <mat-card *ngIf="notificationList.length > 0">
-            <mat-card-content *ngFor="let notificationContent of notificationList">
+            <mat-card-content *ngFor="let notificationContent of notificationList"
+              (click)="onNotificationClick(notificationContent)">
               <div class="image">
                 <img src="{{notificationContent.notifyImageLink}}" alt="">
               </div>

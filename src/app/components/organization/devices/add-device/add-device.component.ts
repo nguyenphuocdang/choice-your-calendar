@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ResourceDetail, SearchDevice } from 'src/app/_models/resource';
 import { ScheduleData } from 'src/app/_models/schedule';
@@ -9,6 +9,8 @@ import { OrganizationService } from 'src/app/_services/organization.service';
 import { ApiResponse, DataListResponse } from 'src/app/_models/response';
 import Utils from 'src/app/_utils/utils';
 import { Router } from '@angular/router';
+import { ResourceCalendarComponent } from '../../calendar/resource-calendar/resource-calendar.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-add-device',
   templateUrl: './add-device.component.html',
@@ -56,7 +58,8 @@ export class AddDeviceComponent implements OnInit {
     private deviceService: DeviceService,
     private toastrService: ToastrService,
     private organizationService: OrganizationService,
-    private router: Router
+    private router: Router,
+    @Optional() private dialog: MatDialog
   ) {
     this.selectedAssignee.setValue(this.intialAsignee);
   }
@@ -221,5 +224,15 @@ export class AddDeviceComponent implements OnInit {
   }
   navigateToApproveDashboard() {
     this.router.navigateByUrl('/homepage/device/approve-dashboard');
+  }
+  viewResourceCalendar() {
+    const dialogRef = this.dialog.open(ResourceCalendarComponent, {
+      width: '1200px',
+      height: '680px',
+      data: {
+        id: this.currentSelectedDevice.id,
+        resourceType: 'device',
+      },
+    });
   }
 }

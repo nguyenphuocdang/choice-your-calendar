@@ -153,9 +153,10 @@ export class OrganizationService {
     userId: number,
     freeScheduleFlag: boolean,
     fromDate: string,
-    toDate: string
+    toDate: string,
+    resourceType: string
   ): Observable<ApiResponse<ScheduleDatas>> {
-    const requestUrl = `${Utils.ORGANIZATION_API}/schedule/view-default-calendar-for-user/${userId}?freeScheduleFlag=${freeScheduleFlag}&fromDate=${fromDate}&toDate=${toDate}`;
+    const requestUrl = `${Utils.ORGANIZATION_API}/schedule/view-default-calendar-for-${resourceType}/${userId}?freeScheduleFlag=${freeScheduleFlag}&fromDate=${fromDate}&toDate=${toDate}`;
     return this.http.get<ApiResponse<ScheduleDatas>>(requestUrl).pipe(
       map((response: ApiResponse<ScheduleDatas>) => {
         return response;

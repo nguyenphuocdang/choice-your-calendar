@@ -65,6 +65,7 @@ export class TimeData {
   startTime!: string;
   endTime!: string;
   event?: boolean;
+  eventId?: number;
 }
 
 export class BookingSlot {

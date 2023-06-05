@@ -35,6 +35,7 @@ import { SocketService } from 'src/app/_services/socket.service';
 import Utils from 'src/app/_utils/utils';
 import { EventDetailComponent } from '../events/event-detail/event-detail.component';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { ResourceCalendarComponent } from '../calendar/resource-calendar/resource-calendar.component';
 
 @Component({
   selector: 'app-booking-resources',

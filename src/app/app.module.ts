@@ -23,6 +23,7 @@ import {
   NgxMatNativeDateModule,
   NgxMatTimepickerModule,
 } from '@angular-material-components/datetime-picker';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
@@ -96,6 +97,7 @@ import { UserService } from './_services/user.service';
     MatFormFieldModule,
     MatSelectModule,
     MatMenuModule,
+    MatBadgeModule,
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,

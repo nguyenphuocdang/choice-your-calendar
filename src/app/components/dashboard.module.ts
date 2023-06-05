@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 //Components
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { WrapperComponent } from './homepage/wrapper/wrapper.component';
-import { ActiveCalendarComponent } from './organization/active-calendar/active-calendar.component';
+import { ActiveCalendarComponent } from './organization/calendar/active-calendar/active-calendar.component';
 import { PopupTemplateComponent } from './popup/popup-template/popup-template.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { GoogleAuthenComponent } from './authentication/google-authen/google-authen.component';
@@ -17,6 +17,7 @@ import { CustomPopupComponent } from './popup/custom-popup/custom-popup.componen
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatBadgeModule } from '@angular/material/badge';
 // import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -62,6 +63,8 @@ import { InternalEventsComponent } from './organization/events/organization-even
 import { EventDetailComponent } from './organization/events/event-detail/event-detail.component';
 import { PublicEventDetailsComponent } from './public/public-event-details/public-event-details.component';
 import { PublicOrganizationEventComponent } from './public/public-organization-event/public-organization-event.component';
+import { ReschedulePublicSharingSlotsComponent } from './organization/events/reschedule-public-sharing-slots/reschedule-public-sharing-slots.component';
+import { ResourceCalendarComponent } from './organization/calendar/resource-calendar/resource-calendar.component';
 const lang = 'en-US';
 
 @NgModule({
@@ -84,6 +87,8 @@ const lang = 'en-US';
     EventDetailComponent,
     PublicEventDetailsComponent,
     PublicOrganizationEventComponent,
+    ReschedulePublicSharingSlotsComponent,
+    ResourceCalendarComponent,
   ],
   imports: [
     FormsModule,
@@ -94,6 +99,7 @@ const lang = 'en-US';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatBadgeModule,
     // MatToolbarModule,
     MatButtonModule,
     MatDialogModule,

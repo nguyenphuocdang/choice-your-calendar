@@ -95,9 +95,15 @@
                                         </mat-select>
                                         <mat-icon>edit</mat-icon>
                                     </mat-form-field>
-                                    <button mat-raised-button class="save-info-button" (click)="_updateApprover()">
+                                    <button mat-raised-button style="background-color: #2eb474;"
+                                        (click)="_updateApprover()">
                                         <mat-icon>save</mat-icon>
                                         <span>UPDATE APPROVER</span>
+                                    </button>
+                                    <button mat-raised-button style="background-color: #0e1cc0;"
+                                        class="view-calendar-button" (click)="viewResourceCalendar()">
+                                        <mat-icon>event_note</mat-icon>
+                                        <span>VIEW CALENDAR</span>
                                     </button>
                                 </span>
                             </div>

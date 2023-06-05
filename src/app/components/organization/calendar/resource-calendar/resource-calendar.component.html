@@ -1,0 +1,125 @@
+<div class="active-calendar">
+    <mat-icon class="close-icon" (click)="closeComponent()">close</mat-icon>
+    <div class="row text-center header">
+        <div class="col-md-4">
+            <div class="btn-group">
+                <div class="btn btn-success" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay()">
+                    Previous
+                </div>
+                <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
+                    Today
+                </div>
+                <div class="btn btn-success" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay()">
+                    Next
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 dayview">
+            <span>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</span>
+        </div>
+        <div class="col-md-4">
+            <div class="btn-group">
+                <div class="btn btn-success" (click)="setView(CalendarView.Month)"
+                    [class.active]="view === CalendarView.Month">
+                    Month
+                </div>
+                <div class="btn btn-success" (click)="setView(CalendarView.Week)"
+                    [class.active]="view === CalendarView.Week">
+                    Week
+                </div>
+                <div class="btn btn-success" (click)="setView(CalendarView.Day)"
+                    [class.active]="view === CalendarView.Day">
+                    Day
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="calendar-view" [ngSwitch]="view">
+        <div class="description" *ngIf="view==CalendarView.Month && resourceType === 'user'">
+            <span>
+                <i class="circle-icon morning"></i>
+                Morning Work
+            </span>
+            <span>
+                <i class="circle-icon afternoon"></i>
+                Afternoon Work
+            </span>
+            <span>
+                <i class="circle-icon book-resource"></i>
+                Events
+            </span>
+        </div>
+        <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="monthEvents"
+            (dayClicked)="onDayClicked($event.day)">
+
+        </mwl-calendar-month-view>
+
+
+
+        <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="monthEvents">
+
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="monthEvents">
+
+        </mwl-calendar-day-view>
+    </div>
+</div>
+<div class="sidenav">
+    <mat-sidenav-container>
+        <mat-sidenav #sidenav position="end" [opened]="isShowing && resourceType === 'user'" autosize="true">
+            <mat-icon class="close-icon" (click)="toggleCloseNav()">close</mat-icon>
+            <div class='title'>
+                <span>{{dayClickSelected}}</span>
+            </div>
+            <div class="time">
+                <div class="time-data" *ngFor="let event of eventsRendered" [ngClass]="{ 'event': event.event,
+          'morning-work': event.title=='Morning Work', 'afternoon-work': event.title =='Afternoon Work' }">
+                    <span class="time-title">
+                        <mat-icon>event_available</mat-icon>
+                        {{event.title}}
+                    </span>
+                    <div class="time-element start">
+                        <span class="item1">Start</span>
+                        <span class="item2">{{event.startTime}}</span>
+                    </div>
+                    <div class="time-element end">
+                        <span class="item1">End</span>
+                        <span class="item2">{{event.endTime}}</span>
+                    </div>
+                </div>
+            </div>
+
+        </mat-sidenav>
+    </mat-sidenav-container>
+</div>
+
+<div class="sidenav">
+    <mat-sidenav-container>
+        <mat-sidenav #sidenav position="end" [opened]="isShowing && resourceType === 'device'" autosize="true">
+            <mat-icon class="close-icon" (click)="toggleCloseNav()">close</mat-icon>
+            <div class='title'>
+                <span>{{dayClickSelected}}</span>
+            </div>
+            <div class="time">
+                <div class="time-data" *ngFor="let event of eventsRendered" [ngClass]="{ 'event': event.event,
+          'daily-work': !event.event}">
+                    <span class="time-title">
+                        <mat-icon>event_available</mat-icon>
+                        {{event.title}}
+                    </span>
+                    <div class="time-element start">
+                        <span class="item1">Start</span>
+                        <span class="item2">{{event.startTime}}</span>
+                    </div>
+                    <div class="time-element end">
+                        <span class="item1">End</span>
+                        <span class="item2">{{event.endTime}}</span>
+                    </div>
+                </div>
+            </div>
+
+        </mat-sidenav>
+    </mat-sidenav-container>
+</div>

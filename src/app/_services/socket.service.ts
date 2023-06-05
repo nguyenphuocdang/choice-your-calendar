@@ -24,6 +24,7 @@ export class SocketService {
     timeOut: 5000,
     extendedTimeOut: 5000,
   };
+
   constructor(private http: HttpClient, private toastrService: ToastrService) {}
   subscribe(simpleBroker: string, callback: any, roomId: number): void {
     const brokerURL = `https://api.timechoice.solutions:8000/ws?${roomId}`;
@@ -88,6 +89,8 @@ export class SocketService {
       'allNewPartnerEmail',
       'eventName',
     ];
+    const mapResult: any = requiredKeys.every((key) => key in obj);
+    debugger;
     return requiredKeys.every((key) => key in obj);
   }
 
@@ -102,6 +105,7 @@ export class SocketService {
       'requesterFullName',
       'requesterEmail',
     ];
+    debugger;
     return requiredKeys.every((key) => key in obj);
   }
 
@@ -112,6 +116,7 @@ export class SocketService {
       'rejectedDeviceCode',
       'deviceType',
     ];
+    debugger;
     return requiredKeys.every((key) => key in obj);
   }
 }

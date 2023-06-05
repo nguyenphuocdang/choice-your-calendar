@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WrapperComponent } from './homepage/wrapper/wrapper.component';
-import { ActiveCalendarComponent } from './organization/active-calendar/active-calendar.component';
+import { ActiveCalendarComponent } from './organization/calendar/active-calendar/active-calendar.component';
 import { PublicCalendarComponent } from './public/public-booking-slots/public-calendar.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { UserProfileComponent } from './organization/employee/user-profile/user-profile.component';
@@ -16,6 +16,8 @@ import { BookingResourcesComponent } from './organization/booking-resources/book
 import { ApproveDashboardComponent } from './organization/devices/approve-dashboard/approve-dashboard.component';
 import { PublicEventsComponent } from './organization/events/public-sharing-slots/public-events.component';
 import { InternalEventsComponent } from './organization/events/organization-events/internal-events.component';
+import { ReschedulePublicCalendarComponent } from './public/reschedule-booking-slots/reschedule-public-calendar.component';
+import { ReschedulePublicSharingSlotsComponent } from './organization/events/reschedule-public-sharing-slots/reschedule-public-sharing-slots.component';
 const routes: Routes = [
   // Sidenav-Wrapper Component acts like a shell & the active child Component gets rendered into the <router-outlet>
   {
@@ -66,10 +68,10 @@ const routes: Routes = [
         path: 'public-sharing-slots',
         component: PublicEventsComponent,
       },
-      // {
-      //   path: 'company-events/event-detail/:pathMapping/:shareCode',
-      //   component: InternalEventsComponent,
-      // },
+      {
+        path: 'public-sharing-slots/reschedule-event',
+        component: ReschedulePublicSharingSlotsComponent,
+      },
       {
         path: 'company-events',
         component: InternalEventsComponent,
