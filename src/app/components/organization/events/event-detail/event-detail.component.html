@@ -48,6 +48,27 @@
             </span>
         </span>
     </span>
+
+    <span class="location with-icon" *ngIf="deviceList.length > 0">
+        <mat-icon>devices</mat-icon>
+        <span *ngFor="let item of deviceList" class="room">
+            {{item.name}}
+            <span class="event-status pending" *ngIf="item.status==='WAITING'">
+                PENDING FOR APPROVAL
+            </span>
+            <span class="event-status success" *ngIf="item.status==='ACCEPT'">
+                AVAILABLE TO USE
+            </span>
+            <span class="event-status cancel" *ngIf="item.status==='CANCEL'">
+                CANCELLED
+            </span>
+            <span class="event-status cancel" *ngIf="item.status==='DENY'">
+                DENIED
+            </span>
+        </span>
+    </span>
+
+
     <span class="with-icon">
         <mat-icon>person</mat-icon>
         <span>Host: {{eventHoster.fullname}}</span>

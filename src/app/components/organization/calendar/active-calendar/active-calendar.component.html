@@ -86,6 +86,10 @@
               <span class="item1">End</span>
               <span class="item2">{{event.endTime}}</span>
             </div>
+            <span class="time-element" style="text-decoration: underline; cursor: pointer; color: #084387;"
+              *ngIf="event.event" (click)="onViewingEventDetail(event.eventId!)">
+              View Detail
+            </span>
           </div>
         </div>
 

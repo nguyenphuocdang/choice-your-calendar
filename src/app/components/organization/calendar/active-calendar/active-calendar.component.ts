@@ -26,6 +26,8 @@ import { CalendarView } from 'angular-calendar';
 import { ApiResponse } from 'src/app/_models/response';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { UserProfile } from 'src/app/_models/user';
+import { EventDetailComponent } from '../../events/event-detail/event-detail.component';
+import { SingleEventDetail } from 'src/app/_models/event';
 
 @Component({
   selector: 'app-active-calendar',
@@ -134,6 +136,7 @@ export class ActiveCalendarComponent implements OnInit {
                     end: new Date(endTime),
                     title: `${timeData.title}`,
                     cssClass: 'event-schedule',
+                    id: timeData.eventId ?? 0,
                   };
                   if (timeData.event)
                     eventDataMapping.color = {
@@ -216,6 +219,7 @@ export class ActiveCalendarComponent implements OnInit {
             startTime: startTime,
             endTime: endTime,
             event: element.color?.primary == '#005ECA' ? true : false,
+            eventId: element.id != 0 ? element.id : 0,
           };
           this.eventsRendered.push(timeData);
         });
@@ -401,5 +405,16 @@ export class ActiveCalendarComponent implements OnInit {
       ...this.calendarOptions,
       weekends: !this.calendarOptions.weekends,
     };
+  }
+
+  onViewingEventDetail(eventId: any) {
+    const dialogRef = this.dialog.open(EventDetailComponent, {
+      width: '800px',
+      height: 'fit-content',
+      data: {
+        eventId: eventId,
+        participantFlag: true,
+      },
+    });
   }
 }
