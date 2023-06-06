@@ -17,6 +17,13 @@
                 slots.
             </span>
             <span>
+                <mat-icon>check_circle</mat-icon>
+                Event's Name:
+                <span style="color: #270f93;">
+                    {{eventInformation.eventName}}
+                </span>
+            </span>
+            <span>
                 <mat-icon>alarm</mat-icon>
                 Partner's suggest time range:
                 <span style="color: #270f93;">
@@ -82,8 +89,8 @@
                                             <div class="slots-card"
                                                 *ngFor="let slot of bookingSlots, let index = index">
                                                 <mat-card>
-                                                    <mat-card-content
-                                                        [ngClass]="{'selected-booking-slot': slot.selectFlag}"
+                                                    <mat-card-content [ngClass]="{'selected-booking-slot': slot.selectFlag,
+                                                        'out-of-range': !slot.timeDatas.inRange}"
                                                         (click)="onSelectPublicBookingSlotClicked(index)">
                                                         <span>
                                                             {{slot.timeDatas.startTime}} - {{slot.timeDatas.endTime}}

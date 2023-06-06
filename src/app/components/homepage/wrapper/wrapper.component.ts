@@ -156,10 +156,7 @@ export class WrapperComponent implements OnInit {
   }
 
   onNotificationClick(notification: NotificationContent) {
-    debugger;
-    // window.location.href = notification.notifyLink;
-    window.location.href =
-      'http://localhost:4200/homepage/public-sharing-slots/reschedule-event?eventId=249&fromDate=2023-07-25 09:00&toDate=2023-07-25 13:00';
+    window.location.href = notification.notifyLink;
   }
 
   removeBadge() {

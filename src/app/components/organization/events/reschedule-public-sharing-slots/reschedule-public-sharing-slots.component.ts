@@ -4,9 +4,11 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import {
+  CreateExternalSlotRequest,
   MakePublicShareRequest,
   SingleEventDetail,
 } from 'src/app/_models/event';
+import { DeviceOfEvent } from 'src/app/_models/resource';
 import { ApiResponse } from 'src/app/_models/response';
 import {
   BookingSlot,
@@ -51,7 +53,7 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
 
   bookingSlots: BookingSlot[] = [];
   selectedPublicBookingSlots: PublicBookingSlot[] = [];
-
+  listDeviceId: string[] = [];
   constructor(
     private Activatedroute: ActivatedRoute,
     private eventService: EventService,
@@ -62,6 +64,7 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
     this.Activatedroute.queryParamMap.subscribe((params) => {
       this.eventId = parseInt(params.get('eventId')!);
       this._getEventDetail(this.eventId);
+      this._getDevicesInEvent(this.eventId);
       this.fromDate = params.get('fromDate') ?? '';
       this.toDate = params.get('toDate') ?? '';
       this.displayStartDate = `${Utils.convertYYYYMMDDtoDateString(
@@ -132,6 +135,7 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
               }
             );
             this.bookingSlots = tempBookingSlots;
+            debugger;
           } else {
             let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
             this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
@@ -150,6 +154,24 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
         .subscribe((response: ApiResponse<SingleEventDetail>) => {
           if (response.statusCode === 200) {
             this.eventInformation = new SingleEventDetail(response.data);
+          } else {
+            debugger;
+          }
+        });
+    } catch (error: any) {
+      debugger;
+    }
+  }
+
+  _getDevicesInEvent(eventId: number) {
+    try {
+      this.eventService
+        .getAllDeviceInYourEvent(eventId)
+        .subscribe((response: ApiResponse<DeviceOfEvent[]>) => {
+          if (response.statusCode === 200) {
+            response.data.forEach((element) => {
+              this.listDeviceId.push(element.id.toString());
+            });
           } else {
             debugger;
           }
@@ -277,6 +299,8 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
   }
 
   onClickConfirmRescheduleAvailableBookingSlots() {
+    let length: number = this.selectedPublicBookingSlots.length;
+    let flag: number = 0;
     this.selectedPublicBookingSlots.forEach((slot, index) => {
       const startTime: string = this._combineTimeAndDateForRequestTypeAdvanced(
         slot.timeDatas.startTime,
@@ -286,7 +310,79 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
         slot.timeDatas.endTime,
         slot.date
       );
-      debugger;
+      const requestBody: CreateExternalSlotRequest = {
+        startTime: startTime,
+        endTime: endTime,
+        eventName: this.eventInformation.eventName,
+        generateMeetingLink:
+          this.eventInformation.appointmentUrl != '' ? true : false,
+        listDeviceId: this.listDeviceId,
+        location: this.eventInformation.location ?? '',
+      };
+      try {
+        this.eventService
+          .createExternalSlots(requestBody)
+          .subscribe((response: any) => {
+            if (response.statusCode === 200) {
+              flag++;
+              if (flag == length) {
+                debugger;
+                const requestBody: MakePublicShareRequest = {
+                  startTime: startTime,
+                  endTime: endTime,
+                  eventDuration: 0,
+                  eventType: 'Online',
+                  freeTimeType: this.eventInformation.eventName,
+                  publicNewEventFlag: false,
+                  shareFreeTimeScheduleFlag: true,
+                  sharePublicEventFlag: false,
+                };
+                this.eventService
+                  .createPublicShare(requestBody)
+                  .subscribe((response: any) => {
+                    if (response.statusCode === 200) {
+                      const publicShareId: number = response.data.id;
+                      this.eventService
+                        .reschedulePublicSharingSlot(
+                          this.eventId,
+                          '',
+                          publicShareId
+                        )
+                        .subscribe((response: any) => {
+                          if (response.statusCode === 200) {
+                            debugger;
+                            this.toastrService.success(
+                              'Your slots have been re-shared successfully',
+                              'SUCCESS'
+                            );
+                          } else {
+                            let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+                            this.toastrService.warning(
+                              errorMessage,
+                              '',
+                              Utils.toastrConfig
+                            );
+                          }
+                        });
+                    } else {
+                      let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+                      this.toastrService.warning(
+                        errorMessage,
+                        '',
+                        Utils.toastrConfig
+                      );
+                    }
+                  });
+              }
+            } else {
+              let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+              this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
+            }
+          });
+      } catch (error: any) {
+        let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+        this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
+      }
     });
   }
 }

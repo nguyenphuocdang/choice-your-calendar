@@ -162,6 +162,9 @@
             color: rgb(255, 255, 255);
             border: 2px solid #23a669;
           }
+          .out-of-range {
+            opacity: 0.4;
+          }
           mat-card-content:hover {
             background-color: #23a669;
             color: white;

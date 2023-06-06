@@ -66,6 +66,7 @@ export class TimeData {
   endTime!: string;
   event?: boolean;
   eventId?: number | string;
+  inRange?: boolean;
 }
 
 export class BookingSlot {
