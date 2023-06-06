@@ -101,12 +101,12 @@ export class ActiveCalendarComponent implements OnInit {
       const currentYear: number = today.getFullYear();
       const _firstDayOfCurrentMonth: string = this._convertYYYYMMDD(
         1,
-        currentMonth,
+        currentMonth - 1,
         currentYear
       );
       const _firstDayOfNextMonth: string = this._convertYYYYMMDD(
         1,
-        currentMonth + 1,
+        currentMonth + 2,
         currentYear
       );
 

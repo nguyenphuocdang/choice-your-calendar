@@ -542,7 +542,7 @@
                                 <mat-form-field>
                                     <mat-label>Choose a date</mat-label>
                                     <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDatePicker"
-                                        (ngModelChange)="onDateChange($event)">
+                                        (ngModelChange)="onDateChange($event, true)">
                                     <mat-datepicker #picker [min]="minDate"></mat-datepicker>
                                 </mat-form-field>
                                 <button mat-flat-button (click)="picker.open()"><mat-icon>event</mat-icon></button>
@@ -776,7 +776,8 @@
                                         <span>{{weekdays[indexSelectedWeekday].code}}, {{
                                             weekdays[indexSelectedWeekday].date_ddmmyy}}</span>
                                     </div>
-                                    <div class="start-time" *ngIf="bookingSlots.length > 0">
+                                    <div class="start-time"
+                                        *ngIf="bookingSlots.length > 0 && indexSelectedBookingSlot < bookingSlots.length">
                                         <mat-icon>alarm</mat-icon>
                                         <span>From {{
                                             bookingSlots[indexSelectedBookingSlot].timeDatas.startTime}} to {{

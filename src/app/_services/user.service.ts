@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, lastValueFrom } from 'rxjs';
+import { Observable, Subject, lastValueFrom, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   AccountRegister,
@@ -85,6 +85,24 @@ export class UserService {
   //     })
   //   );
   // }
+  logout(): Observable<any> {
+    const requestBody: any = {
+      message: 'logout',
+    };
+    const requestUrl = `${Utils.AUTH_API}/logout}`;
+    debugger;
+    return this.http.post<ApiResponse<any>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else debugger;
+        return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        debugger;
+        return of(new CustomError(error));
+      })
+    );
+  }
 
   roleMatch(allowedRole: string): boolean {
     let isMatch = false;

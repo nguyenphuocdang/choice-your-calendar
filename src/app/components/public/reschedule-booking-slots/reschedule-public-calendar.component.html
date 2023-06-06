@@ -7,7 +7,7 @@
             </span>
         </div>
         <div class="provide-information">
-            <span style="font-weight: 500; color: rgba(15, 4, 165, 0.651); font-size: medium;">
+            <span style="font-weight: 500; color: rgba(179, 12, 26, 0.651); font-size: medium;">
                 Please provide your reason for rescheduling booking slot.
             </span>
             <input type="text" placeholder="Type your reason" [(ngModel)]="reason">
@@ -19,14 +19,14 @@
             </div>
         </div>
         <div class="events-grid-container">
-            <div class="events-grid-item" *ngFor="let element of publicBookingSlots.timeDatas, let index = index">
+            <div class="events-grid-item" *ngFor="let element of publicBookingSlots, let index = index">
                 <mat-card>
                     <mat-card-content appMaterialElevation>
                         <img src="https://res.cloudinary.com/dzri3e9wa/image/upload/v1683194746/website-image/interview_ll0mzx.jpg"
                             alt="">
                         <span class="date">
                             <mat-icon style="color: #23a669;;">date_range</mat-icon>
-                            {{displayBookingDate}}
+                            {{element.day}}
                         </span>
                         <span class="event-name">
                             {{element.freetimeType}}

@@ -31,20 +31,20 @@ export class PublicEventsComponent implements OnInit {
 
   _getAllExternalSlots() {
     const currentDate: Date = new Date();
-    let lastMonthDate: Date = new Date(
+    let lastYearDate: Date = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() - 1,
       currentDate.getDate()
     );
 
-    let nextMonthDate: Date = new Date(
+    let nextYearDate: Date = new Date(
       currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
+      currentDate.getMonth() + 2,
       currentDate.getDate()
     );
     let isoCurrentDate: string = currentDate.toISOString();
-    let isoLastMonthDate: string = lastMonthDate.toISOString();
-    let isoNextMonthDate: string = nextMonthDate.toISOString();
+    let isoLastMonthDate: string = lastYearDate.toISOString();
+    let isoNextMonthDate: string = nextYearDate.toISOString();
     this.eventService
       .getAllExternalSlots(isoLastMonthDate, isoNextMonthDate)
       .subscribe((response: ApiResponse<any>) => {

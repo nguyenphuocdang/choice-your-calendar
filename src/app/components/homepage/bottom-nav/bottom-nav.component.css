@@ -1,5 +1,6 @@
 .nav-bottom {
   background-color: #09ae8a;
+  user-select: none;
 }
 span {
   color: white;

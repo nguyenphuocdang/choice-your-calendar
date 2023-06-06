@@ -7,6 +7,7 @@ import { UserProfile } from 'src/app/_models/user';
 import { LocalStorageService } from 'src/app/_services/local-storage.service';
 import { SocketService } from 'src/app/_services/socket.service';
 import { UserService } from 'src/app/_services/user.service';
+import Utils from 'src/app/_utils/utils';
 
 @Component({
   selector: 'app-wrapper',
@@ -91,6 +92,7 @@ export class WrapperComponent implements OnInit {
 
   profileMouseEnter() {}
   _handleWebsocket(userId: number) {
+    debugger;
     this.socketService.subscribe(
       '/user/notify/private-messages',
       (message: any) => {
@@ -102,6 +104,23 @@ export class WrapperComponent implements OnInit {
       },
       userId
     );
+  }
+
+  logout() {
+    try {
+      this.userService.logout().subscribe((response: any) => {
+        if (response.statusCode === 200) {
+          this.storageService.clearStorage();
+          this.redirectHomepage();
+        } else {
+          let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+          this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
+        }
+      });
+    } catch (error: any) {
+      let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+      this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
+    }
   }
 
   toggleAppMenuSidenav() {
@@ -138,8 +157,12 @@ export class WrapperComponent implements OnInit {
   }
 
   onNotificationClick(notification: NotificationContent) {
+    debugger;
+
+    const link: string =
+      'https://timechoice.solutions/homepage/public-sharing-slots/reschedule-event?eventId=246&fromDate=2023-07-25 09:00&toDate=2023-07-25 12:00';
     window.location.href =
-      'http://localhost:4200/homepage/public-sharing-slots/reschedule-event?eventId=183&fromDate=2023-06-24 15:00&toDate=2023-06-24 17:00';
+      'http://localhost:4200/homepage/public-sharing-slots/reschedule-event?eventId=246&fromDate=2023-07-25 09:00&toDate=2023-07-25 12:00';
   }
 
   removeBadge() {

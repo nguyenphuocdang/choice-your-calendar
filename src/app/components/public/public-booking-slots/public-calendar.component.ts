@@ -5,6 +5,7 @@ import { CalendarOptions, DateSelectArg, EventInput } from '@fullcalendar/core';
 import { ToastrService } from 'ngx-toastr';
 import { BookPublicRequest, EventCreateRequest } from 'src/app/_models/event';
 import {
+  CustomPublicTimeData,
   FreeTimeScheduleSlots,
   ListTimeWorkingDatas,
   PublicScheduleData,
@@ -25,10 +26,7 @@ export class PublicCalendarComponent implements OnInit {
   partnerEmail: string = '';
   partnerPathMapping: string = '';
   shareCode: string = '';
-  publicBookingSlots: PublicScheduleData = {
-    day: '',
-    timeDatas: [],
-  };
+  publicBookingSlots: CustomPublicTimeData[] = [];
   bookFlag: boolean = false;
   bookDay: string = '';
   constructor(
@@ -65,15 +63,14 @@ export class PublicCalendarComponent implements OnInit {
                   response.data.scheduleDatas.forEach(
                     (element: any, index: any) => {
                       if (element.timeDatas.length > 0) {
-                        this.publicBookingSlots = element;
+                        element.timeDatas.forEach((timeData: any) => {
+                          const newPublicSlot: CustomPublicTimeData =
+                            new CustomPublicTimeData(element.day, timeData);
+                          this.publicBookingSlots.push(newPublicSlot);
+                        });
                       }
                     }
                   );
-
-                  this.bookDay = Utils.convertYYYYMMDDtoDateString(
-                    this.publicBookingSlots.day
-                  );
-                  debugger;
                 }
               });
           } else {
@@ -107,10 +104,14 @@ export class PublicCalendarComponent implements OnInit {
             debugger;
             this.toastrService.success('Booking slot successfully', 'SUCCESS');
             this.bookFlag = true;
+          } else {
+            let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+            this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
           }
         });
-    } catch (error) {
-      debugger;
+    } catch (error: any) {
+      let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+      this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
     }
   }
 

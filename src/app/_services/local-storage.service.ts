@@ -59,6 +59,7 @@ export class LocalStorageService {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(ROLE_KEY);
+    localStorage.removeItem(USER);
     localStorage.removeItem(ACTIVE_CALENDAR);
   }
 

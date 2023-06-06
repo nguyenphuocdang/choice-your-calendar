@@ -1,1 +1,74 @@
-<p>reschedule-public-sharing-slots works!</p>
+<div class="container">
+    <div class="container2">
+        <div class="title">
+            <span>
+                Reschedule Public Sharing Slots
+            </span>
+        </div>
+
+        <div class="description">
+            <span>
+                <mat-icon>event_note</mat-icon>
+                You can re-share your public slots to the partner if there are remaining sharing available slots.
+            </span>
+            <span>
+                <mat-icon>event_note</mat-icon>
+                In case there are no sharing slots available, you have to re-share based on your available schedule
+                slots.
+            </span>
+            <span>
+                <mat-icon>event_note</mat-icon>
+                In case there are no available sharing slots and schedule slots, you have to go to Booking Dashboard for
+                generating and sharing
+                other slots.
+            </span>
+        </div>
+        <div class="content">
+            <mat-card>
+                <mat-card-content>
+                    <div style="height: 100%;">
+                        <mat-tab-group [dynamicHeight]="true">
+                            <mat-tab label="Remaining Available Sharing Slots">
+                                <div *ngIf="availableExternalSlots.length === 0, else hasAvailableSlots"
+                                    class='no-available-slots'>
+                                    <span>No Remaining Available Slots</span>
+                                    <img src="assets/images/no-event.png" class="image">
+                                </div>
+                                <ng-template #hasAvailableSlots>
+                                    <div class="container-3">
+                                        <div class="select-all">
+                                            <mat-checkbox [(ngModel)]="allSelectedSlotFlag"
+                                                (change)="selectAllSharingSlot()">Select All</mat-checkbox>
+                                        </div>
+                                        <button mat-raised-button>
+                                            <span>Re-Share Slots</span>
+                                        </button>
+                                        <mat-card>
+                                            <mat-card-content *ngFor="let slot of availableExternalSlots">
+                                                <div>
+                                                    <mat-checkbox [(ngModel)]="slot.selectFlag"></mat-checkbox>
+                                                    <span class="day">
+                                                        {{slot.dayString}}
+                                                    </span>
+                                                    <span class="time">
+                                                        {{slot.timeDatas[0].startTime}} - {{slot.timeDatas[0].endTime}}
+                                                    </span>
+                                                </div>
+                                            </mat-card-content>
+                                        </mat-card>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Other Available Schedule Slots">
+                                <!-- <div class="select-all">
+                                    <mat-checkbox [(ngModel)]="allSelectedSlotFlag"
+                                        (change)="selectAllSharingSlot()">Select All</mat-checkbox>
+                                </div> -->
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

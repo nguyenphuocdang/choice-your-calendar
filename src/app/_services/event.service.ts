@@ -362,7 +362,7 @@ export class EventService {
       }),
       catchError((error: any) => {
         debugger;
-        return throwError(error);
+        return of(new CustomError(error));
       })
     );
   }
@@ -393,7 +393,7 @@ export class EventService {
       }),
       catchError((error: any) => {
         debugger;
-        return throwError(error);
+        return of(new CustomError(error));
       })
     );
   }
@@ -480,7 +480,23 @@ export class EventService {
       }),
       catchError((error: any) => {
         debugger;
-        return throwError(error);
+        return of(new CustomError(error));
+      })
+    );
+  }
+
+  cancelEvent(eventId: number, reason: string): Observable<any> {
+    const requestUrl = `${Utils.ORGANIZATION_API}/event/cancel/${eventId}?reason=${reason}`;
+    debugger;
+    return this.http.delete<ApiResponse<any>>(requestUrl).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else debugger;
+        return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        debugger;
+        return of(new CustomError(error));
       })
     );
   }
@@ -516,7 +532,7 @@ export class EventService {
         else return new CustomError(response.errors);
       }),
       catchError((error: any) => {
-        return throwError(error);
+        return of(new CustomError(error));
       })
     );
   }

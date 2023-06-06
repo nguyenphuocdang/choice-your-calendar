@@ -4,7 +4,11 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ReschedulePublicRequest } from 'src/app/_models/event';
-import { PublicScheduleData, PublicTimeData } from 'src/app/_models/schedule';
+import {
+  CustomPublicTimeData,
+  PublicScheduleData,
+  PublicTimeData,
+} from 'src/app/_models/schedule';
 import { EventService } from 'src/app/_services/event.service';
 import Utils from 'src/app/_utils/utils';
 
@@ -20,10 +24,7 @@ export class ReschedulePublicCalendarComponent implements OnInit {
   partnerEmail: string = '';
   shareCode: string = '';
   reason: string = '';
-  publicBookingSlots: PublicScheduleData = {
-    day: '',
-    timeDatas: [],
-  };
+  publicBookingSlots: CustomPublicTimeData[] = [];
   bookFlag: boolean = false;
   isOpenTimeSuggestionSidenav: boolean = false;
   selectedDate: Date = new Date();
@@ -103,12 +104,13 @@ export class ReschedulePublicCalendarComponent implements OnInit {
           if (response.statusCode === 200) {
             response.data.scheduleDatas.forEach((element: any, index: any) => {
               if (element.timeDatas.length > 0) {
-                this.publicBookingSlots = element;
+                element.timeDatas.forEach((timeData: any) => {
+                  const newPublicSlot: CustomPublicTimeData =
+                    new CustomPublicTimeData(element.day, timeData);
+                  this.publicBookingSlots.push(newPublicSlot);
+                });
               }
             });
-            this.displayBookingDate = Utils.convertYYYYMMDDtoDateString(
-              this.publicBookingSlots.day
-            );
           } else {
             debugger;
           }

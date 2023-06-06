@@ -37,13 +37,17 @@
                                 Offline Meeting
                             </span>
                         </span>
-                        <span class="location with-icon">
+                        <span class="location with-icon" *ngIf="eventInformation.location != ''">
                             <mat-icon>location_on</mat-icon>
                             <span>{{eventInformation.location}}</span>
                         </span>
                         <span class="with-icon">
                             <mat-icon>person</mat-icon>
                             <span>Host: {{eventInformation.hostEmail}}</span>
+                        </span>
+                        <span class="with-icon">
+                            <mat-icon>event_note</mat-icon>
+                            <span>In case you have to reschedule the event, please click on the button below.</span>
                         </span>
                         <div class="button-class">
                             <button mat-raised-button class="reschedule-button" (click)="onRedirectReschedule()">

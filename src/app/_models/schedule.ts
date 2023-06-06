@@ -97,9 +97,28 @@ export class PublicScheduleData {
     this.selectFlag = false;
   }
 }
+
 export class PublicTimeData {
   freetimeType?: string;
   startTime?: string;
   endTime?: string;
   eventId?: number;
+}
+export class CustomPublicTimeData {
+  eventId?: number;
+  freetimeType?: string;
+  startTime?: string;
+  endTime?: string;
+  day?: string;
+  location?: string;
+  onlineEventFlag?: boolean;
+  constructor(day?: string, data?: any) {
+    this.eventId = data?.eventId;
+    this.day = Utils.convertYYYYMMDDtoDateString(day!);
+    this.freetimeType = data?.freetimeType ?? '';
+    this.startTime = data?.startTime ?? '';
+    this.endTime = data?.endTime ?? '';
+    this.location = data?.location ?? '';
+    this.onlineEventFlag = data?.onlineEventFlag ?? false;
+  }
 }

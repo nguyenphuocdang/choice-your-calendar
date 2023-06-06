@@ -9,6 +9,12 @@
     <span class="description" *ngIf="eventInformation.eventDescription">
         {{eventInformation.eventDescription}}
     </span>
+    <span class="with-icon" *ngIf="eventInformation.eventStatus === 'CANCEL'">
+        <mat-icon>event_busy</mat-icon>
+        <span>
+            Reason for cancelling event: {{eventInformation.reason}}
+        </span>
+    </span>
     <span class=" line"></span>
     <span class="time with-icon">
         <mat-icon>alarm</mat-icon>
@@ -34,6 +40,12 @@
             <span class="event-status success" *ngIf="item.status==='ACCEPT'">
                 AVAILABLE TO USE
             </span>
+            <span class="event-status cancel" *ngIf="item.status==='CANCEL'">
+                CANCELLED
+            </span>
+            <span class="event-status cancel" *ngIf="item.status==='DENY'">
+                DENIED
+            </span>
         </span>
     </span>
     <span class="with-icon">
@@ -53,9 +65,14 @@
                 <mat-menu #menu="matMenu" class="mat-menu-user-list">
                     <span style="display: flex; flex-direction: column;" *ngFor="let item of userList">
 
-                        <span style="display: flex;">
+                        <span style="display: flex; gap: 1rem;">
                             <mat-icon style="color: #24931e; width: 2rem;"> mail_outline</mat-icon>
                             <span style="overflow: hidden; word-wrap: break-word;">{{item.email}}</span>
+                        </span>
+
+                        <span style="display: flex; gap: 1rem;" *ngIf="item.email != item.fullname">
+                            <mat-icon style="color: #24931e; width: 2rem;"> person</mat-icon>
+                            <span style="overflow: hidden; word-wrap: break-word;">{{item.fullname}}</span>
                         </span>
                     </span>
                 </mat-menu>
@@ -81,21 +98,38 @@
                     </button>
                 </div>
             </mat-form-field>
+            <mat-icon (click)="onCancelClickShareToPublicPartner()">cancel</mat-icon>
+        </div>
+
+        <div class="cancel-event with-icon" *ngIf="isSelectCancel">
+            <div style="display: flex; justify-content: space-between; gap:2rem">
+                <input placeholder="Enter your reason for cancel ... " type="text" [(ngModel)]="reasonCancel">
+                <button mat-raised-button class="share-button" style="background-color: rgb(149, 38, 11); color: white"
+                    (click)="onCancelEvent()">
+                    Cancel
+                </button>
+            </div>
+            <mat-icon (click)="onCancelClickCancel()">cancel</mat-icon>
         </div>
 
         <div class="button-class">
             <button mat-raised-button class="reschedule-button" *ngIf="eventInformation.hostFlag"
-                (click)="onClickReschedulingEvent()">
+                (click)="onClickReschedulingEvent()" [disabled]="eventInformation.eventStatus === 'CANCEL'">
                 Reschedule Event
             </button>
             <button mat-raised-button class="share-button"
                 *ngIf="!eventInformation.cexternalSlotFlag && eventInformation.hostFlag && eventInformation.publicModeFlag"
-                (click)='onClickShareToPublicPartner()'>
+                (click)='onClickShareToPublicPartner()' [disabled]="eventInformation.eventStatus === 'CANCEL'">
                 Share Public Partner
+            </button>
+            <button mat-raised-button class="cancel-button"
+                *ngIf="!eventInformation.cexternalSlotFlag && eventInformation.hostFlag" (click)="onClickCancel()"
+                [disabled]="eventInformation.eventStatus === 'CANCEL'">
+                Cancel Event
             </button>
             <button mat-raised-button class="join-button"
                 *ngIf="eventInformation.publicModeFlag && !participantFlag && !eventInformation.hostFlag"
-                (click)="joinOrganizationEvent()">
+                (click)="joinOrganizationEvent()" [disabled]="eventInformation.eventStatus === 'CANCEL'">
                 JOIN EVENT
             </button>
             <button mat-raised-button class="participating-button" *ngIf="participantFlag && !eventInformation.hostFlag"

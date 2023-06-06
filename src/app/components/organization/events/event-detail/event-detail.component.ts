@@ -39,6 +39,7 @@ export class EventDetailComponent implements OnInit {
   deviceList: DeviceOfEvent[] = [];
   userList: UserOfEvent[] = [];
   displayLocation: string = '';
+  displayDevices: string = '';
   displayParticipants: string = '';
   participantFlag: boolean = false;
   eventHoster: UserOfEvent = {
@@ -51,7 +52,8 @@ export class EventDetailComponent implements OnInit {
   mailCtrl = new FormControl();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   isSelectSharingEvent: boolean = false;
-
+  isSelectCancel: boolean = false;
+  reasonCancel: string = '';
   constructor(
     public dialogRef: MatDialogRef<EventDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -190,22 +192,60 @@ export class EventDetailComponent implements OnInit {
     this.isSelectSharingEvent = true;
   }
 
+  onCancelClickShareToPublicPartner() {
+    this.isSelectSharingEvent = false;
+  }
+
+  onClickCancel() {
+    this.isSelectCancel = true;
+  }
+
+  onCancelClickCancel() {
+    this.isSelectCancel = false;
+  }
+
   onSharingEventToPartner() {
     try {
+      debugger;
       this.eventService
         .sharePublicEventToPartner(this.eventInformation.id, this.emails)
-        .subscribe((response: ApiResponse<any>) => {
+        .subscribe((response: any) => {
           if (response.statusCode === 200) {
             debugger;
             this.toastrService.success(
               'Your event has been shared to your partner'
             );
           } else {
-            debugger;
+            let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+            this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
           }
         });
-    } catch (error) {
+    } catch (error: any) {
+      let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+      this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
+    }
+  }
+
+  onCancelEvent() {
+    try {
+      this.eventService
+        .cancelEvent(this.eventId, this.reasonCancel)
+        .subscribe((response: any) => {
+          if (response.statusCode === 200) {
+            debugger;
+            this.eventInformation.eventStatus = 'CANCEL';
+            this.toastrService.success('Event has been cancel successfully');
+            this.dialogRef.close();
+            this.triggerEvent.emit(this.eventInformation);
+          } else {
+            let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+            this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
+          }
+        });
+    } catch (error: any) {
       debugger;
+      let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+      this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
     }
   }
 }

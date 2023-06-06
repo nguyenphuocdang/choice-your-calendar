@@ -96,8 +96,7 @@
 
         <mat-menu #menu="matMenu" style="border-radius: 10px;">
           <button mat-menu-item [routerLink]="'user-profile'">Your Profile</button>
-          <button mat-menu-item>Change Password</button>
-          <button mat-menu-item>Log Out</button>
+          <button mat-menu-item (click)="logout()">Log Out</button>
         </mat-menu>
 
       </mat-nav-list>

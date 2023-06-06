@@ -169,7 +169,6 @@ export class BookingResourcesComponent implements OnInit {
           }
         });
     } catch (error) {
-      debugger;
       this.toastrService.error('Error in getting resources type', 'ERROR');
     }
   }
@@ -202,13 +201,11 @@ export class BookingResourcesComponent implements OnInit {
                 }
               });
             } else {
-              debugger;
               this.toastrService.error('Error in getting resources', 'ERROR');
             }
           }
         );
     } catch (error) {
-      debugger;
       this.toastrService.error('Error in getting resources', 'ERROR');
     }
   }
@@ -229,13 +226,11 @@ export class BookingResourcesComponent implements OnInit {
                 }
               });
             } else {
-              debugger;
               this.toastrService.error('Error in getting users', 'ERROR');
             }
           }
         );
     } catch (error) {
-      debugger;
       this.toastrService.error('Error in getting users', 'ERROR');
     }
   }
@@ -275,10 +270,12 @@ export class BookingResourcesComponent implements OnInit {
           if (response.statusCode === 200) {
             response.data.content.forEach((element: any) => {
               const event: EventDetail = new EventDetail(element);
-              this.previousEvents.push(event);
-              if (event.publicModeFlag && !event.cexternalEventFlag)
-                this.organizationEvents.push(event);
-              if (event.cexternalEventFlag) this.externalEvents.push(event);
+              if (event.eventStatus != 'CANCEL') {
+                this.previousEvents.push(event);
+                if (event.publicModeFlag && !event.cexternalEventFlag)
+                  this.organizationEvents.push(event);
+                if (event.cexternalEventFlag) this.externalEvents.push(event);
+              } else this.cancelEvents.push(event);
             });
           }
         });
@@ -303,15 +300,18 @@ export class BookingResourcesComponent implements OnInit {
           if (response.statusCode === 200) {
             response.data.content.forEach((element: any) => {
               const event: EventDetail = new EventDetail(element);
-              this.upcomingEvents.push(event);
-              if (event.publicModeFlag && !event.cexternalEventFlag)
-                this.organizationEvents.push(event);
-              if (event.cexternalEventFlag) this.externalEvents.push(event);
+              if (event.eventStatus != 'CANCEL') {
+                this.upcomingEvents.push(event);
+                if (event.publicModeFlag && !event.cexternalEventFlag)
+                  this.organizationEvents.push(event);
+                if (event.cexternalEventFlag) this.externalEvents.push(event);
+              } else {
+                this.cancelEvents.push(event);
+              }
             });
           }
         });
     } catch (error) {
-      debugger;
       // this.toastrService.error('Error in getting events', 'ERROR');
     }
   }
@@ -328,23 +328,25 @@ export class BookingResourcesComponent implements OnInit {
       //Handle Time
       let selectedDate: Date = new Date(this.weekdays[index].date);
       let fromDate: string = '';
-      if (index == 0) {
-        let currentDate: Date = new Date();
-        currentDate.setHours(currentDate.getHours() + 7);
-        currentDate.setMinutes(
-          Math.ceil(currentDate.getMinutes() / eventDuration) * eventDuration
-        );
-        currentDate.setSeconds(1);
-        currentDate.setMilliseconds(0);
-        fromDate = currentDate.toISOString();
-      } else {
-        selectedDate.setHours(0, 0, 0, 0);
-        const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
-        fromDate = newDate.toISOString();
-      }
+      // if (index == 0) {
+      //   let currentDate: Date = new Date();
+      //   currentDate.setHours(currentDate.getHours() + 7);
+      //   currentDate.setMinutes(
+      //     Math.ceil(currentDate.getMinutes() / eventDuration) * eventDuration
+      //   );
+      //   currentDate.setSeconds(1);
+      //   currentDate.setMilliseconds(0);
+      //   fromDate = currentDate.toISOString();
+      // }
+      // else {
+
+      // }
+      selectedDate.setHours(0, 0, 0, 0);
+      const _fromDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
+      fromDate = _fromDate.toISOString();
       selectedDate.setHours(23, 59, 0, 0);
-      const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
-      let toDate: string = newDate.toISOString();
+      const _toDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
+      let toDate: string = _toDate.toISOString();
       //Handle Request
       let requestBody: BookingSlotRequest = {
         eventDuration: eventDuration,
@@ -354,6 +356,7 @@ export class BookingResourcesComponent implements OnInit {
         listDeviceId: this.makeEventForm.get('listDeviceId')!.value,
         listPartnerId: this.makeEventForm.get('listPartnerId')!.value,
       };
+
       this.eventService
         .getBookingSlots(requestBody)
         .subscribe((response: ApiResponse<ScheduleDatas>) => {
@@ -386,11 +389,9 @@ export class BookingResourcesComponent implements OnInit {
               });
             } else this.bookingSlots = tempBookingSlots;
           } else {
-            debugger;
           }
         });
     } catch (error) {
-      debugger;
       if (this.selectedResourceFormControl.value == null) {
         this.toastrService.warning(
           'Please select resource for booking request.',
@@ -419,24 +420,32 @@ export class BookingResourcesComponent implements OnInit {
     selectedDate.setHours(23, 59, 0, 0);
     const newDate = new Date(selectedDate.getTime() + 7 * 60 * 60 * 1000);
     let toDate: string = newDate.toISOString();
+
     try {
       this.eventService
         .getSlotsForReschedule(fromDate, toDate, eventId)
-        .subscribe((response: ApiResponse<ScheduleDatas>) => {
-          const tempBookingSlots: BookingSlot[] = [];
-          response.data.scheduleDatas[0].timeDatas.forEach(
-            (element: TimeData) => {
-              const bookingSlot: BookingSlot = {
-                selectFlag: false,
-                timeDatas: element,
-              };
-              tempBookingSlots.push(bookingSlot);
-            }
-          );
-          this.rescheduleBookingSlots = tempBookingSlots;
+        .subscribe((response: any) => {
+          debugger;
+          if (response.statusCode === 200) {
+            const tempBookingSlots: BookingSlot[] = [];
+            response.data.scheduleDatas[0].timeDatas.forEach(
+              (element: TimeData) => {
+                const bookingSlot: BookingSlot = {
+                  selectFlag: false,
+                  timeDatas: element,
+                };
+                tempBookingSlots.push(bookingSlot);
+              }
+            );
+            this.rescheduleBookingSlots = tempBookingSlots;
+          } else {
+            let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+            this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
+          }
         });
-    } catch (error) {
-      debugger;
+    } catch (error: any) {
+      let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+      this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
     }
   }
 
@@ -474,9 +483,15 @@ export class BookingResourcesComponent implements OnInit {
     }
   }
 
-  onDateChange(date: Date) {
+  onDateChange(date: Date, flag?: boolean) {
     this.weekdays = [];
+    this.indexSelectedWeekday = 0;
     this._handleWeekdays(date);
+    if (flag) {
+      this._getBookingSlots(this.indexSelectedWeekday, flag);
+    } else {
+      this._getBookingSlots(this.indexSelectedWeekday);
+    }
   }
 
   dateSelect(index: number) {
@@ -536,15 +551,17 @@ export class BookingResourcesComponent implements OnInit {
     this._handleCreateEventForm();
     const currentDate: Date = new Date();
     this._handleWeekdays(currentDate);
+    this.selectedDatePicker = currentDate;
     this.makeEventForm!.get('listPartnerId')!.setValue([this.currentIdUser]);
     this._handleResourceSelection();
-    this._getBookingSlots(0);
+    this._getBookingSlots(this.indexSelectedBookingSlot);
     this.isShowingBookSidenav = true;
   }
 
   triggerPublicSharingSlotSidenav() {
     const currentDate: Date = new Date();
     this._handleWeekdays(currentDate);
+    this.selectedDatePicker = currentDate;
     this.makeEventForm!.get('listPartnerId')!.setValue([this.currentIdUser]);
     this._handleResourceSelection();
     const isOpeningPublicSchedule: boolean = true;
@@ -555,6 +572,7 @@ export class BookingResourcesComponent implements OnInit {
     const currentDate: Date = new Date();
     // const selectedDate: Date = new Date(event.date!);
     this._handleWeekdays(currentDate);
+    this.selectedDatePicker = currentDate;
     this.rescheduleEventId = event.id;
     this.rescheduleEventForm.get('eventName')!.setValue(event.eventName);
     this.rescheduleEventForm
@@ -583,14 +601,27 @@ export class BookingResourcesComponent implements OnInit {
   }
 
   closeBookingSidenav() {
+    this.indexSelectedBookingSlot = 0;
+    this.weekdays = [];
+    this.bookingSlots = [];
+    this.makeEventForm.get('eventName')!.setValue('');
+    this.makeEventForm.get('eventDescription')!.setValue('');
     if (this.isShowingBookSidenav) this.isShowingBookSidenav = false;
   }
   closePublicSharingSlotSidenav() {
+    this.weekdays = [];
+    this.makeEventForm.get('eventName')!.setValue('');
+    this.makeEventForm.get('eventDescription')!.setValue('');
     if (this.isShowingGenerateExternalSlotsSidenav)
       this.isShowingGenerateExternalSlotsSidenav = false;
   }
 
   closeRescheduleSidenav() {
+    this.indexSelectedBookingSlot = 0;
+    this.weekdays = [];
+    this.bookingSlots = [];
+    this.rescheduleEventForm.get('eventName')!.setValue('');
+    this.rescheduleEventForm.get('eventDescription')!.setValue('');
     if (this.isShowingRescheduleOrganizationEventSidenav)
       this.isShowingRescheduleOrganizationEventSidenav = false;
   }
@@ -730,13 +761,11 @@ export class BookingResourcesComponent implements OnInit {
               this.organizationEvents.unshift(newEvent);
             this.onCloseConfirmSidenav();
           } else {
-            debugger;
             let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
             this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
           }
         });
     } catch (error: any) {
-      debugger;
       let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
       this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
     }
@@ -770,11 +799,13 @@ export class BookingResourcesComponent implements OnInit {
             this.isShowingConfirmRescheduleBookSidenav = false;
             this.isShowingRescheduleOrganizationEventSidenav = false;
           } else {
-            debugger;
+            let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+            this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
           }
         });
-    } catch (error) {
-      debugger;
+    } catch (error: any) {
+      let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+      this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
     }
   }
 
@@ -789,7 +820,11 @@ export class BookingResourcesComponent implements OnInit {
     });
     dialogRef.componentInstance.triggerEvent.subscribe(
       (event: SingleEventDetail) => {
-        this.triggerReschedulingSidenav(event);
+        if (event.eventStatus !== 'CANCEL') {
+          this.triggerReschedulingSidenav(event);
+        } else {
+          this._getEventList();
+        }
       }
     );
   }
@@ -823,11 +858,9 @@ export class BookingResourcesComponent implements OnInit {
       try {
         this.eventService
           .createExternalSlots(requestBody)
-          .subscribe((response: ApiResponse<any>) => {
+          .subscribe((response: any) => {
             if (response.statusCode === 200) {
               flag++;
-              console.log(flag);
-              console.log(length);
               if (flag == length) {
                 this.toastrService.success(
                   'All slots have been generated. Check Public Sharing Slots for more information.',
@@ -835,11 +868,13 @@ export class BookingResourcesComponent implements OnInit {
                 );
               }
             } else {
-              debugger;
+              let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+              this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
             }
           });
       } catch (error: any) {
-        debugger;
+        let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+        this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
       }
     });
   }
@@ -896,31 +931,32 @@ export class BookingResourcesComponent implements OnInit {
     this.makeEventForm.get('eventType')?.setValue(defaultEventType);
   }
   _handleWeekdays(selectedDate: Date) {
-    if (this.weekdays.length > 0) {
-      if (this.weekdays[this.indexSelectedWeekday])
-        this.weekdays[this.indexSelectedWeekday].selectFlag = false;
-      this.indexSelectedWeekday = 0;
-      this.weekdays[0].selectFlag = true;
-    } else {
-      for (let i = 0; i < 7; i++) {
-        let dateFormat = new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          selectedDate.getDate() + i
-        );
-        const weekday: DateBookingSlot = {
-          code: dateFormat.toLocaleString('en-US', { weekday: 'short' }),
-          day:
-            dateFormat.getDate() < 10
-              ? `0${dateFormat.getDate()}`
-              : `${dateFormat.getDate()}`,
-          date_ddmmyy: Utils.convertFromDatetoDDMMYY(dateFormat),
-          date: dateFormat,
-          selectFlag: false,
-        };
-        this.weekdays.push(weekday);
-        this.weekdays[this.indexSelectedWeekday].selectFlag = true;
-      }
+    // if (this.weekdays.length > 0)
+    // {
+    //
+    //   if (this.weekdays[this.indexSelectedWeekday])
+    //     this.weekdays[this.indexSelectedWeekday].selectFlag = false;
+    //   this.indexSelectedWeekday = 0;
+    //   this.weekdays[0].selectFlag = true;
+    // }
+    for (let i = 0; i < 7; i++) {
+      let dateFormat = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate() + i
+      );
+      const weekday: DateBookingSlot = {
+        code: dateFormat.toLocaleString('en-US', { weekday: 'short' }),
+        day:
+          dateFormat.getDate() < 10
+            ? `0${dateFormat.getDate()}`
+            : `${dateFormat.getDate()}`,
+        date_ddmmyy: Utils.convertFromDatetoDDMMYY(dateFormat),
+        date: dateFormat,
+        selectFlag: false,
+      };
+      this.weekdays.push(weekday);
+      this.weekdays[this.indexSelectedWeekday].selectFlag = true;
     }
   }
 
@@ -963,7 +999,6 @@ export class BookingResourcesComponent implements OnInit {
     this.socketService.subscribe(
       '/user/notify/private-messages',
       (message: any) => {
-        debugger;
         const messageData = JSON.parse(message.body);
         console.log(messageData);
       },
