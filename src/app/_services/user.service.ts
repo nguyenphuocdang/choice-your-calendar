@@ -87,7 +87,7 @@ export class UserService {
   // }
   logout(): Observable<any> {
     const requestBody: any = {
-      message: 'logout',
+      temp: 'string',
     };
     const requestUrl = `${Utils.AUTH_API}/logout}`;
     debugger;

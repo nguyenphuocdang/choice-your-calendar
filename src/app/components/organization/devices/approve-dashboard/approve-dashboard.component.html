@@ -57,6 +57,10 @@
                                 [ngClass]="{'success-event': element.borrowState === 'ACCEPT'}">
                                 ACCEPTED
                             </span>
+                            <span *ngIf="element.borrowState === 'CANCEL'"
+                                [ngClass]="{'cancel-event': element.borrowState === 'CANCEL'}">
+                                CANCELLED
+                            </span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="approval" class="approval">

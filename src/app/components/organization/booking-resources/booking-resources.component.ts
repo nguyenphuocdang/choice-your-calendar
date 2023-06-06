@@ -820,6 +820,7 @@ export class BookingResourcesComponent implements OnInit {
     });
     dialogRef.componentInstance.triggerEvent.subscribe(
       (event: SingleEventDetail) => {
+        debugger;
         if (event.eventStatus !== 'CANCEL') {
           this.triggerReschedulingSidenav(event);
         } else {

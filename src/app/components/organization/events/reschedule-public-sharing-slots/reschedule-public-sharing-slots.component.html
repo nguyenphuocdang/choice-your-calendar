@@ -17,10 +17,11 @@
                 slots.
             </span>
             <span>
-                <mat-icon>event_note</mat-icon>
-                In case there are no available sharing slots and schedule slots, you have to go to Booking Dashboard for
-                generating and sharing
-                other slots.
+                <mat-icon>alarm</mat-icon>
+                Partner's suggest time range:
+                <span style="color: #270f93;">
+                    {{displayStartDate}} - {{displayEndDate}}
+                </span>
             </span>
         </div>
         <div class="content">
@@ -40,7 +41,8 @@
                                             <mat-checkbox [(ngModel)]="allSelectedSlotFlag"
                                                 (change)="selectAllSharingSlot()">Select All</mat-checkbox>
                                         </div>
-                                        <button mat-raised-button>
+                                        <button mat-raised-button
+                                            (click)="onClickConfirmRescheduleAvailableExternalSlots()">
                                             <span>Re-Share Slots</span>
                                         </button>
                                         <mat-card>

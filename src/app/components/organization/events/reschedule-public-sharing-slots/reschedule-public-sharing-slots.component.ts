@@ -18,6 +18,8 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
   eventId: number = 0;
   fromDate: string = '';
   toDate: string = '';
+  displayStartDate: string = '';
+  displayEndDate: string = '';
   availableExternalSlots: PublicScheduleData[] = [];
   eventInformation: SingleEventDetail = {
     id: 0,
@@ -52,6 +54,12 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
       this.eventId = parseInt(params.get('eventId')!);
       this.fromDate = params.get('fromDate') ?? '';
       this.toDate = params.get('toDate') ?? '';
+      this.displayStartDate = `${Utils.convertYYYYMMDDtoDateString(
+        this.fromDate
+      )} at ${this.convertDateQueryParamReturnTime(this.fromDate)}`;
+      this.displayEndDate = `${Utils.convertYYYYMMDDtoDateString(
+        this.toDate
+      )} at ${this.convertDateQueryParamReturnTime(this.toDate)}`;
       this.fromDate = this.convertDateQueryParam(this.fromDate);
       this.toDate = this.convertDateQueryParam(this.toDate);
 
@@ -65,6 +73,11 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
   convertDateQueryParam(dateStr: string) {
     const [date, time] = dateStr.split(' ');
     return `${date}T${time}:00`;
+  }
+
+  convertDateQueryParamReturnTime(dateStr: string) {
+    const [date, time] = dateStr.split(' ');
+    return `${time}`;
   }
 
   _getAvailableExternalSlot() {
@@ -96,7 +109,7 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
   }
 
   selectAllSharingSlot() {
-    this.renderedPublicSlots.forEach((slot: PublicScheduleData) => {
+    this.availableExternalSlots.forEach((slot: PublicScheduleData) => {
       slot.selectFlag = this.allSelectedSlotFlag;
     });
   }
@@ -135,4 +148,6 @@ export class ReschedulePublicSharingSlotsComponent implements OnInit {
       this.emails.splice(index, 1);
     }
   }
+
+  onClickConfirmRescheduleAvailableExternalSlots() {}
 }
