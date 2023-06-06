@@ -133,6 +133,42 @@
           color: white;
         }
       }
+      .booking-slot {
+        padding: 3%;
+        .slots-grid-container {
+          margin-top: 3%;
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 20px;
+        }
+
+        mat-card {
+          mat-card-content {
+            height: 2.5rem;
+            width: 10rem;
+            display: flex;
+            border: 2px solid rgb(221, 212, 212);
+            background-color: rgb(250, 248, 248);
+            border-radius: 7px;
+            span {
+              font-size: medium;
+              text-align: center;
+              font-weight: 500;
+              margin: auto;
+            }
+          }
+          .selected-booking-slot {
+            background-color: #23a669;
+            color: rgb(255, 255, 255);
+            border: 2px solid #23a669;
+          }
+          mat-card-content:hover {
+            background-color: #23a669;
+            color: white;
+            border: 2px solid #23a669;
+          }
+        }
+      }
     }
   }
 }

@@ -425,7 +425,7 @@ export class EventService {
       }),
       catchError((error: any) => {
         debugger;
-        return throwError(error);
+        return of(new CustomError(error));
       })
     );
   }
@@ -447,7 +447,7 @@ export class EventService {
       }),
       catchError((error: any) => {
         debugger;
-        return throwError(error);
+        return of(new CustomError(error));
       })
     );
   }
@@ -554,6 +554,30 @@ export class EventService {
   suggestTimeForRescheduleByPublicPartner(requestBody: any): Observable<any> {
     debugger;
     const requestUrl = `${Utils.PUBLIC_EVENT_API}/suggest-new-time-for-reschedule`;
+    return this.http.put<ApiResponse<any>>(requestUrl, requestBody).pipe(
+      map((response: ApiResponse<any>) => {
+        if (response.statusCode === 200) return response;
+        else return new CustomError(response.errors);
+      }),
+      catchError((error: any) => {
+        debugger;
+        return of(new CustomError(error));
+      })
+    );
+  }
+
+  reschedulePublicSharingSlot(
+    eventId: number,
+    note: string,
+    publicShareId: number
+  ): Observable<any> {
+    debugger;
+    const requestUrl = `${Utils.ORGANIZATION_API}/event/change-reschedule-slot-of-event`;
+    const requestBody: any = {
+      eventId: eventId,
+      note: note,
+      publicShareId: publicShareId,
+    };
     return this.http.put<ApiResponse<any>>(requestUrl, requestBody).pipe(
       map((response: ApiResponse<any>) => {
         if (response.statusCode === 200) return response;

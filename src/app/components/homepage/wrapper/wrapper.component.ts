@@ -92,7 +92,6 @@ export class WrapperComponent implements OnInit {
 
   profileMouseEnter() {}
   _handleWebsocket(userId: number) {
-    debugger;
     this.socketService.subscribe(
       '/user/notify/private-messages',
       (message: any) => {
@@ -158,11 +157,9 @@ export class WrapperComponent implements OnInit {
 
   onNotificationClick(notification: NotificationContent) {
     debugger;
-
-    const link: string =
-      'https://timechoice.solutions/homepage/public-sharing-slots/reschedule-event?eventId=246&fromDate=2023-07-25 09:00&toDate=2023-07-25 12:00';
+    // window.location.href = notification.notifyLink;
     window.location.href =
-      'http://localhost:4200/homepage/public-sharing-slots/reschedule-event?eventId=246&fromDate=2023-07-25 09:00&toDate=2023-07-25 12:00';
+      'http://localhost:4200/homepage/public-sharing-slots/reschedule-event?eventId=249&fromDate=2023-07-25 09:00&toDate=2023-07-25 13:00';
   }
 
   removeBadge() {

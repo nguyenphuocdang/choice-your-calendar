@@ -43,7 +43,7 @@
                                         </div>
                                         <button mat-raised-button
                                             (click)="onClickConfirmRescheduleAvailableExternalSlots()">
-                                            <span>Re-Share Slots</span>
+                                            <span>Re-share Slots</span>
                                         </button>
                                         <mat-card>
                                             <mat-card-content *ngFor="let slot of availableExternalSlots">
@@ -62,10 +62,38 @@
                                 </ng-template>
                             </mat-tab>
                             <mat-tab label="Other Available Schedule Slots">
-                                <!-- <div class="select-all">
-                                    <mat-checkbox [(ngModel)]="allSelectedSlotFlag"
-                                        (change)="selectAllSharingSlot()">Select All</mat-checkbox>
-                                </div> -->
+                                <div *ngIf="bookingSlots.length === 0, else hasAvailableBookingSlots"
+                                    class='no-available-slots'>
+                                    <span>No Remaining Active Slots In Schedule</span>
+                                    <img src="assets/images/no-event.png" class="image">
+                                </div>
+                                <ng-template #hasAvailableBookingSlots>
+                                    <div class="booking-slot">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="font-weight: 500; font-size: large;">
+                                                Slots Available
+                                            </span>
+                                            <button mat-raised-button style="background-color: #0b13aa;
+                                            color: white; margin-right: 1rem;"
+                                                (click)="onClickConfirmRescheduleAvailableBookingSlots()">Re-book and
+                                                Share Slots</button>
+                                        </div>
+                                        <div class="slots-grid-container">
+                                            <div class="slots-card"
+                                                *ngFor="let slot of bookingSlots, let index = index">
+                                                <mat-card>
+                                                    <mat-card-content
+                                                        [ngClass]="{'selected-booking-slot': slot.selectFlag}"
+                                                        (click)="onSelectPublicBookingSlotClicked(index)">
+                                                        <span>
+                                                            {{slot.timeDatas.startTime}} - {{slot.timeDatas.endTime}}
+                                                        </span>
+                                                    </mat-card-content>
+                                                </mat-card>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
                             </mat-tab>
                         </mat-tab-group>
                     </div>

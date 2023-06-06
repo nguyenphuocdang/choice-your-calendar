@@ -7,6 +7,7 @@ import { EventService } from 'src/app/_services/event.service';
 import { FormControl } from '@angular/forms';
 import { MakePublicShareRequest } from 'src/app/_models/event';
 import { MatChipInputEvent } from '@angular/material/chips';
+import Utils from 'src/app/_utils/utils';
 @Component({
   selector: 'app-public-events',
   templateUrl: './public-events.component.html',
@@ -131,14 +132,27 @@ export class PublicEventsComponent implements OnInit {
                         'Your slots have been shared successfully',
                         'SUCCESS'
                       );
+                    } else {
+                      let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+                      this.toastrService.warning(
+                        errorMessage,
+                        '',
+                        Utils.toastrConfig
+                      );
                     }
                   });
               } else {
-                debugger;
+                let errorMessage: string = `${response.fieldError} ${response.errorMessage}`;
+                this.toastrService.warning(
+                  errorMessage,
+                  '',
+                  Utils.toastrConfig
+                );
               }
             });
-        } catch (error) {
-          debugger;
+        } catch (error: any) {
+          let errorMessage: string = `${error.fieldError} ${error.errorMessage}`;
+          this.toastrService.warning(errorMessage, '', Utils.toastrConfig);
         }
       }
     }
